@@ -1,0 +1,24 @@
+.app{
+    width: 100%;
+    height: auto;
+}
+/* .row{
+    border-bottom-style: 1px solid;
+    overflow-y: auto;
+    width: 20%;
+    background-color: aqua;
+    height: 36pc;
+    overflow-x: hidden;
+    margin: 5px;
+    border: 1px solid;
+    border-radius: 10px
+}    */
+
+.row{
+    margin: 0px;
+    margin-top: 3px;
+    width: 100%;
+    background-color: black;
+    height: 4pc;
+    overflow: hidden;
+}
