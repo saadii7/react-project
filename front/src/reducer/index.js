@@ -16,4 +16,3 @@ export default combineReducers({
     
 
 });
-console.log('Reducer----->',userReducer)

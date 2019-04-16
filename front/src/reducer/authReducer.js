@@ -5,7 +5,7 @@ import isEmpty from '../is-empty';
 
 const initialState = {
     isAuthenticated: false,
-    users: {},
+    user: {},
 }
 
 export default function(state = initialState, action ) {
@@ -14,7 +14,7 @@ export default function(state = initialState, action ) {
             return {   
                 ...state,
                 isAuthenticated: !isEmpty(action.payload),
-                users: action.payload
+                user: action.payload
             }
         default:
             return state;

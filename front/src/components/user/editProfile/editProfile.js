@@ -12,6 +12,7 @@ class EditProfile extends Component {
    constructor() {
         super();
         this.state = {
+            user:{
             id:'',
             name: '',
             userName:'',
@@ -20,8 +21,8 @@ class EditProfile extends Component {
             email: '',
             password: '',
             password_confirm: '',
+            },
             errors: {},
-            user:[]
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,24 +38,28 @@ class EditProfile extends Component {
         e.preventDefault();
         }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.auth.isAuthenticated) {
-            this.props.history.push('/')
-        }
-        if(nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     console.log('hey next props'+nextProps);
+    //     if(nextProps.auth.isAuthenticated) {
+    //     }
+    //     if(nextProps.errors) {
+    //         this.setState({
+    //             errors: nextProps.errors
+    //         });
+    //     }
+    // }
 
     componentDidMount() {
-        if(this.props.auth.isAuthenticated){
-            this.props.onGetUser(this.props.auth.users.id);
-            console.log('userId Api Hit',this.props.auth.users.id);
-
-    }
-    }
+            this.props.onGetUser(this.props.auth.user.id);
+            console.log('userId Api Hit',this.props.auth.user.id);
+            console.log('user CAll',this.props.user);
+            // this.setState({
+            //     user:{
+            //         ...this.state.user,
+            //         name: this.props.user.name
+            //     }
+            // });
+        }
     render() {
         const { errors } = this.state;
         return(
@@ -70,7 +75,7 @@ class EditProfile extends Component {
                     })}
                     name="name"
                     onChange={ this.handleInputChange }
-                    value={ this.state.name }
+                    value={ this.state.user.name }
                     />
                     {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                 </div>
@@ -83,7 +88,7 @@ class EditProfile extends Component {
                     })}
                     name="userName"
                     onChange={ this.handleInputChange }
-                    value={ this.state.userName }
+                    value={ this.state.user.userName }
                     />
                     {errors.userName && (<div className="invalid-feedback">{errors.userName}</div>)}
                 </div>
@@ -96,7 +101,7 @@ class EditProfile extends Component {
                     })}
                     name="email"
                     onChange={ this.handleInputChange }
-                    value={ this.state.email }
+                    value={ this.state.user.email }
                     />
                     {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
                 </div>
@@ -109,7 +114,7 @@ class EditProfile extends Component {
                     })}
                     name="password"
                     onChange={ this.handleInputChange }
-                    value={ this.state.password }
+                    value={ this.state.user.password }
                     />
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
@@ -139,10 +144,11 @@ class EditProfile extends Component {
 
 EditProfile.propTypes = {
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state,ownProps) => {
+const mapStateToProps = (state) => {
     return {
     auth: state.auth,
     errors: state.errors,

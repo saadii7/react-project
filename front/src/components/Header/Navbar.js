@@ -28,19 +28,19 @@ class Navbar extends Component {
     }
 
     render() {
-        const {isAuthenticated, users} = this.props.auth;
+        const {isAuthenticated, user} = this.props.auth;
         const authLinks = (
             <ul className="navbar-nav ml-auto">
             {/* <a href="#" className="nav-link" onClick={this.onLogout.bind(this)}> */}
                 <ButtonDropdown direction="left" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                     <DropdownToggle caret color="warning">
-                    <img src={users.avatar} alt={users.name} title={users.name}
+                    <img src={user.avatar} alt={user.name} title={user.name}
                         className="rounded-circle"
                         style={{ width: '40px',height:'40px', marginRight: '5px'}} />
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem tag={Link} href="/profile" to="/profile">My Profile</DropdownItem>
-                        <DropdownItem tag={Link} href="/editProfile" to="editProfile">Edit Profile</DropdownItem>
+                        <DropdownItem tag={Link} href={"/users/id"+this.props.auth.user.id+"/edit"} to={"/users/id"+this.props.auth.user.id+"/edit"}>Edit Profile</DropdownItem>
                         <DropdownItem>Another Action</DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem onClick={this.onLogout.bind(this)}>Logout</DropdownItem>

@@ -11,12 +11,10 @@ import {FETCH_USER_BY_ID } from '../actions/types';
 //     }
 // }
 
-// const initialState = {
-//     isAuthenticated: false,
-//     users: {},
-// }
+const initialState = {
+}
 //For Getting user by Id
-export default function(state =[], action){
+export default function(state =initialState, action){
     switch (action.type) {
       // Handle fetch by Id
       case FETCH_USER_BY_ID:
