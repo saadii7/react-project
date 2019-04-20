@@ -1,13 +1,12 @@
-import { ADD_POST, DELETE_POST, FETCH_POST } from '../actions/types';
+import { ADD_SPORT, DELETE_SPORT, FETCH_ALL_SPORTS } from '../actions/types';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:4000/posts';
 
-export const createPost = ({ sportName}) => {
+export const createSport = ({ sportName}) => {
   return (dispatch) => {
     return axios.post(`/api/sports/add`, {sportName})
       .then(response => {
-        dispatch(createPostSuccess(response.data))
+        dispatch(createSportSuccess(response.data))
       })
       .catch(error => {
         throw(error);
@@ -15,30 +14,28 @@ export const createPost = ({ sportName}) => {
   };
 };
 
-export const createPostSuccess =  (data) => {
+export const createSportSuccess =  (data) => {
   return {
-    type: ADD_POST,
-    payload: {
-      _id: data._id,
-      sportName: data.sportName
-    }
+    type: ADD_SPORT,
+    payload:data
   }
 };
 
-export const deletePostSuccess = id => {
+export const deleteSportSuccess = id => {
   return {
-    type: DELETE_POST,
+    type: DELETE_SPORT,
     payload: {
       id
     }
   }
 }
 
-export const deletePost = id => {
+export const deleteSport = id => {
   return (dispatch) => {
-    return axios.get(`${apiUrl}/delete/${id}`)
+    console.log(id)
+    return axios.delete("/api/sports/delete/"+id)
       .then(response => {
-        dispatch(deletePostSuccess(response.data))
+        dispatch(deleteSportSuccess(response.data))
       })
       .catch(error => {
         throw(error);
@@ -46,18 +43,18 @@ export const deletePost = id => {
   };
 };
 
-export const fetchPosts = (posts) => {
+export const fetchSports = (sports) => {
   return {
-    type: FETCH_POST,
-    posts
+    type: FETCH_ALL_SPORTS,
+    sports
   }
 };
 
-export const fetchAllPosts = () => {
+export const fetchAllSports = () => {
   return (dispatch) => {
     return axios.get("/api/sports/getall")
       .then(response => {
-        dispatch(fetchPosts(response.data))
+        dispatch(fetchSports(response.data))
       })
       .catch(error => {
         throw(error);

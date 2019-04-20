@@ -5,15 +5,15 @@ import store from './store';
 import { connect } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { setCurrentUser, logoutUser } from './actions/authentication';
 
 import Navbar from './components/Header/Navbar';
 import Register from './components/Registration/Register';
 import Login from './components/Registration/Login';
 import Home from './components/Home/Home';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from './components/user/Profile/Profile';
+import CreateSport from './components/Sports/Create-Sport/Create-Sport';
 import {Error404} from './Error404';
 import editProfile from './components/user/editProfile/editProfile';
 if(localStorage.jwtToken) {
@@ -39,6 +39,7 @@ class App extends Component {
                     <Route exact path="/" component={ Home } />
                     <Route exact path="/profile" component={ Profile } />
                     <Route exact path={"/users/id"+this.props.auth.user.id+"/edit"} component={ editProfile } />
+                    <Route exact path={"/sports/add"} component={ CreateSport } />
                     <Route exact path="/register" component={ Register } />
                     <Route exact path="/login" component={ Login } />
                     <Route exact path="/Error404" component={ Error404 } />
