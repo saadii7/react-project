@@ -1,58 +1,103 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route,Switch,Redirect} from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import store from './store';
 import { connect } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
-import { setCurrentUser, logoutUser } from './actions/authentication';
+import { withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Navbar from './components/Header/Navbar';
-import Register from './components/Registration/Register';
-import Login from './components/Registration/Login';
+
+
+import Navbar from './components/Header/header';
+import Register from './components/Auth/Register';
+import Login from './components/Auth/Login';
 import Home from './components/Home/Home';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from './components/user/Profile/Profile';
-import {Error404} from './Error404';
-import editProfile from './components/user/editProfile/editProfile';
-if(localStorage.jwtToken) {
-  setAuthToken(localStorage.jwtToken);
-  const decoded = jwt_decode(localStorage.jwtToken);
-  store.dispatch(setCurrentUser(decoded));
+import editProfile from './components/user/edit';
+import { setCurrentUser, logoutUser } from './actions/auth';
+import { Error404 } from './404';
+import Sidebar from './components/Drawer/drawer';
 
-  const currentTime = Date.now() / 1000;
-  if(decoded.exp < currentTime) {
-    store.dispatch(logoutUser());
-    window.location.href = '/login'
-  }
+
+if (localStorage.jwtToken) {
+	setAuthToken(localStorage.jwtToken);
+	const decoded = jwt_decode(localStorage.jwtToken);
+	store.dispatch(setCurrentUser(decoded));
+
+	const currentTime = Date.now() / 1000;
+	if (decoded.exp < currentTime) {
+		store.dispatch(logoutUser());
+		window.location.href = '/login'
+	}
 }
 
+const styles = theme => ({
+	root: {
+		display: 'flex',
+	},
+	toolbar: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
+		padding: '0 8px',
+		...theme.mixins.toolbar,
+	},
+	content: {
+		flexGrow: 1,
+		padding: theme.spacing.unit * 3,
+	},
+});
+
 class App extends Component {
-  render() {
-    return (
-      <Provider store = { store }>
-        <Router>
-          <div>
-              <Navbar />
-              <Switch>
-                    <Route exact path="/" component={ Home } />
-                    <Route exact path="/profile" component={ Profile } />
-                    <Route exact path={"/users/id"+this.props.auth.user.id+"/edit"} component={ editProfile } />
-                    <Route exact path="/register" component={ Register } />
-                    <Route exact path="/login" component={ Login } />
-                    <Route exact path="/Error404" component={ Error404 } />
-                    <Redirect from='*' to="/Error404"/>
-              </Switch>
-          </div>
-        </Router>
-      </Provider>
-    );
-  }
+	state = {
+		open: false,
+	};
+
+	handleDrawerOpen = () => {
+		this.setState({ open: true });
+	};
+
+	handleDrawerClose = () => {
+		this.setState({ open: false });
+	};
+	render() {
+		const PrivateRoute = ({ component: Component, ...rest }) => (
+			<Route {...rest} render={(props) => (
+				this.props.auth.isAuthenticated === true
+					? <Component {...props} />
+					: <Redirect to='/login' />
+			)} />
+		)
+		const { classes } = this.props;
+		return (
+			<Router>
+				<div className={classes.root}>
+					<CssBaseline />
+					<Navbar open={this.state.open} handleDrawerOpen={this.handleDrawerOpen} />
+					<Sidebar open={this.state.open} handleDrawerClose={this.handleDrawerClose} />
+					<main className={classes.content}>
+						<div className={classes.toolbar} />
+						<Switch>
+							<Route exact path="/" component={Home} />
+							<Route exact path="/login" component={Login} />
+							<Route exact path="/register" component={Register} />
+							<Route exact path="/Error404" component={Error404} />
+
+							<PrivateRoute path='/profile' component={Profile} />
+							<PrivateRoute path={"/users/" + this.props.auth.user.id + "/edit"} component={editProfile} />
+
+							<Redirect from='*' to="/Error404" />
+						</Switch>
+					</main>
+				</div>
+			</Router>
+		);
+	}
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth
+	auth: state.auth
 })
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(App));

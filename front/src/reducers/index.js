@@ -13,6 +13,5 @@ export default combineReducers({
     sports:sportsReducer,
     posts: posts,
     user:userReducer
-    
 
 });

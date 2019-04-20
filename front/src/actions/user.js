@@ -32,7 +32,6 @@ export const getUserByIdSuccess = (user) => {
         .then(response => {
           // Handle data with sync action
           dispatch(getUserByIdSuccess(response.data));
-          console.log('User DAta Get Success Action',response.data)
         })
         .catch(error => {
           throw(error);
