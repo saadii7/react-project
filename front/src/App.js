@@ -74,8 +74,8 @@ class App extends Component {
 			<Router>
 				<div className={classes.root}>
 					<CssBaseline />
-					<Navbar open={this.state.open} handleDrawerOpen={this.handleDrawerOpen} />
-					<Sidebar open={this.state.open} handleDrawerClose={this.handleDrawerClose} />
+					<Navbar open={this.state.open} handleDrawerOpen={this.handleDrawerOpen} handleDrawerClose={this.handleDrawerClose}/>
+					<Sidebar open={this.state.open}  />
 					<main className={classes.content}>
 						<div className={classes.toolbar} />
 						<Switch>

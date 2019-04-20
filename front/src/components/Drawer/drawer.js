@@ -82,9 +82,7 @@ class Sidebar extends React.Component {
                 open={this.state.open}
             >
                 <div className={classes.toolbar}>
-                    <IconButton onClick={this.props.handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
+                    {/* type something here */}
                 </div>
                 <Divider />
                 <List>

@@ -133,6 +133,13 @@ class Navbar extends React.Component {
         e.preventDefault();
         this.props.logoutUser(this.props.history);
     };
+    clickDrawer = () => {
+        if(this.state.open){
+            this.props.handleDrawerClose();
+        }else{
+            this.props.handleDrawerOpen();
+        }
+    }
     componentDidMount() {
         this.setState({ open: this.props.open })
     }
@@ -205,7 +212,7 @@ class Navbar extends React.Component {
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
-                            onClick={this.props.handleDrawerOpen}
+                            onClick={this.clickDrawer}
                             className={classNames(classes.menuButton, {
                                 [classes.hide]: this.state.open,
                             })}
