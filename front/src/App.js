@@ -7,8 +7,6 @@ import setAuthToken from './setAuthToken';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-
-
 import Navbar from './components/Header/header';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
@@ -18,6 +16,7 @@ import editProfile from './components/user/edit';
 import { setCurrentUser, logoutUser } from './actions/auth';
 import { Error404 } from './404';
 import Sidebar from './components/Drawer/drawer';
+import CreateSport from './components/Sports/Create-Sport/Create-Sport';
 
 
 if (localStorage.jwtToken) {
@@ -31,6 +30,7 @@ if (localStorage.jwtToken) {
 		window.location.href = '/login'
 	}
 }
+
 
 const styles = theme => ({
 	root: {
@@ -86,8 +86,11 @@ class App extends Component {
 
 							<PrivateRoute path='/profile' component={Profile} />
 							<PrivateRoute path={"/users/" + this.props.auth.user.id + "/edit"} component={editProfile} />
+                    		<PrivateRoute exact path={"/sports/add"} component={ CreateSport } />
 
 							<Redirect from='*' to="/Error404" />
+
+
 						</Switch>
 					</main>
 				</div>
