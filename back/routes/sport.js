@@ -72,8 +72,8 @@ router.put('/update/:id',(req,res)=>{
           });
       });
 
-router.get('/getall',(req,res)=>{
-  Sport.find().then(sport=>{
+router.get('/getAll',(req,res)=>{
+  Sport.find({isDeleted:false}).then(sport=>{
     if(!sport) res.status(404).send({message:'sport not found'})
     res.status(200).send(sport);
   }).catch(err=>res.status(400).send(err));
@@ -81,7 +81,7 @@ router.get('/getall',(req,res)=>{
 
 router.get('/get/:id',(req,res)=>{
   let id=req.params.id;
-  Sport.findById(id).then(sport=>{  
+  Sport.findById(id).then(sport=>{
       if(!sport) {
           console.log('----------------',sport);
           return res.status(404).send({message:'Sport not found'});}

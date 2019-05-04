@@ -38,11 +38,11 @@ const UserSchema=new Schema({
   },
   available:{
     type:Boolean,
-    default:false,   
+    default:false,
   },
   isDeleted:{
     type:Boolean,
-    default:false,   
+    default:false,
   },
   deletedAt:{
    type:Date,
@@ -59,14 +59,20 @@ const UserSchema=new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sport",
     // required: 'Sport is required',
+}],
+team: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Team",
+  // required: 'Sport is required',
 }]
+
 });
 
 UserSchema.methods.toJSON=function(){
   var user=this;
   var userObject=user.toObject();
 
-  return _.pick(userObject,['_id','sports','name','email','userName','avatar','date','available','isDeleted','privacy','updatedAt']);
+  return _.pick(userObject,['_id','sports','name','email','userName','avatar','date','available','sport','team','isDeleted','privacy','updatedAt']);
 };
 
 const User=mongoose.model('users',UserSchema);

@@ -1,4 +1,5 @@
 const { Team } = require('../models/Team');
+const User=require('../models/User');
 const multer = require('multer');
 const express = require('express');
 const router = express.Router();
@@ -9,7 +10,6 @@ const _ = require('lodash');
 
 
 router.post('/add'/*, upload.single('teamImage')*/, (req, res) => {
-  // console.log(req.file);
 
   const newTeam = new Team;
   newTeam.teamName = req.body.teamName;
@@ -27,14 +27,23 @@ router.post('/add'/*, upload.single('teamImage')*/, (req, res) => {
 });
 router.put('/update/:id', (req, res) => {
   let id = req.params.id;
-  var body = _.pick(req.body, ['teamName', 'captain', 'description']);
+  let body = _.pick(req.body, ['teamName', 'captain', 'description','userId']);
   // body.updatedAt=new Date().getTime();
 
-  Team.findByIdAndUpdate(id, { $set: body }, { new: true }).then((team) => {
+  Team.findByIdAndUpdate(id, { $set: body }, { new: true }).then(async (team) => {
     //console.log('++++++++++++++',team);
     if (!team) {
       res.status(404).send({ message: 'Team not found' });
     }
+await User.findById(req.body.userId).then(user=>{
+  if(user)
+  {
+    user.team.push(user._id);
+    user.save().then(()=>console.log('++++++++'));
+    team.user.push(team._id);
+    team.save().then(()=>console.log('------------ done at team save'));
+  }
+}).catch(()=>res.status(400).send({message:'something went wrong '}));
     res.status(200).send(team);
   }).catch((e) => {
     res.status(400).send(e);

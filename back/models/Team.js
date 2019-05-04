@@ -24,6 +24,12 @@ const TeamSchema = new mongoose.Schema({
     type: Boolean,
     default:false,
     },
+    user:[
+      { type:mongoose.Schema.Types.ObjectId,
+          ref:"User",
+      }
+    ],
+
     deletedAt:{
     type:Date,
     default:null,
