@@ -57,7 +57,7 @@
 
 // 1 api / teams / add
 // method: POST    Discription: register the user
-// required::: teamName  , captain   
+// required::: teamName  , captain
 
 //  list of attributes ::: teamName ,captain ,teamImage (data, contentType ,imageName),discription , isDeleted , deletedAt
 

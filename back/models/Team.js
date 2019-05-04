@@ -7,12 +7,12 @@ const _ = require('lodash');
 const TeamSchema = new mongoose.Schema({
     teamName: {
         type: String,
-        required:true,
-
+        required: true,
     },
     captain: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required:true
     },
     teamImage: {
         data: Buffer, contentType: String, imageName: String
@@ -20,18 +20,18 @@ const TeamSchema = new mongoose.Schema({
     discription: {
         type: String,
     },
-    isDeleted:{
-    type: Boolean,
-    default:false,
+    isDeleted: {
+        type: Boolean,
+        default: false,
     },
-    deletedAt:{
-    type:Date,
-    default:null,
+    deletedAt: {
+        type: Date,
+        default: null,
     },
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 const Team = mongoose.model('team', TeamSchema);
 module.exports = { Team };
