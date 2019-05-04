@@ -24,8 +24,8 @@
 // method: get  Discription   authenticate the user
 
 
-//  list of attributes ::::: sportName , links , sportImage ,  isDeleted , deletedAt 
- 
+//  list of attributes ::::: sportName , links , sportImage ,  isDeleted , deletedAt
+
 // ////////////
 
 // 1 api / sports / add
@@ -47,13 +47,13 @@
 // 4  api / sports / delete /:id
 // method: Delete   Discription: Delete a delete a sport
 // required: id
-    
+
 // /////////////
 
 
 // for Team table routes
 
-//  list of attributes ::: teamName ,captain ,teamImage ,Discription , isDeleted , deletedAt 
+//  list of attributes ::: teamName ,captain ,teamImage ,Discription , isDeleted , deletedAt
 
 // 1 api / teams / add
 // method: POST    Discription: register the user
@@ -150,3 +150,9 @@
 
 
 // ///////////////
+
+// new route for add player in team
+ // api/userteam/teamid/:tid/userid/:uid
+
+ // method :post Discription : add player in team
+// required teamid and userid

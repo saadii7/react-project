@@ -116,7 +116,7 @@ router.post('/login', (req, res) => {
 
 router.get('/get/:id', (req, res) => {
     let id = req.params.id;
-    User.findById(id).then(user => {
+    User.findById(id).populate('Team').then(user => {
         if (!user) {
             // console.log('----------------',user);
             return res.status(404).send({ message: 'user not found' });
@@ -153,6 +153,19 @@ router.put('/get/:id', async (req, res) => {
     });
 
 });
+
+///////////
+          // GET ALL USER ///////////////
+
+          router.get('/getAll',(req,res)=>{
+            User.find().then(usr=>{
+              if(!usr) res.status(404).send({message:'User not found'})
+              res.status(200).send(usr);
+            }).catch(err=>res.status(400).send(err));
+          });
+
+
+
 router.delete('/delete/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['deletedAt', 'isDeleted']);

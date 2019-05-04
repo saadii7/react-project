@@ -12,12 +12,12 @@ const TeamSchema = new mongoose.Schema({
     captain: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required:true
+        required: true
     },
     teamImage: {
         data: Buffer, contentType: String, imageName: String
     },
-    discription: {
+    description: {
         type: String,
     },
     isDeleted: {
@@ -28,6 +28,10 @@ const TeamSchema = new mongoose.Schema({
         type: Date,
         default: null,
     },
+    user: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
 },
 {
     timestamps: true
