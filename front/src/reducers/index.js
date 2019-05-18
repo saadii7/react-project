@@ -7,11 +7,13 @@ import sportsReducer from './sportsReducer';
 import userReducer from './userReducer';
 import teamReducer from './teamReducer';
 import eventReducer from './eventReducer';
+import usersReducer from './usersReducer';
 export default combineReducers({
     errors: errorReducer,
     auth: authReducer,
     sports:sportsReducer,
-    users:userReducer,
+    user:userReducer,
     team:teamReducer,
-    event:eventReducer
+    event:eventReducer,
+    users:usersReducer
 });

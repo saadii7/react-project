@@ -52,7 +52,6 @@ export const getUserByIdSuccess = (user) => {
       return axios.get("/api/users/all")
         .then(response => {
           dispatch(fetchUsers(response.data))
-          console.log("------ALL Users-------->",response.data)
         })
         .catch(error => {
           throw(error);
@@ -69,7 +68,6 @@ export const getUserByIdSuccess = (user) => {
   }
   export const deleteUser = id => {
     return (dispatch) => {
-      console.log("Sports-------id-------------"+id)
       return axios.delete('/api/users/delete/'+id)
         .then(response =>{
           dispatch(deleteUserSuccess(response.data))

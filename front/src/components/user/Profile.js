@@ -17,24 +17,31 @@ class Profile extends Component {
         // this.setState({
         //     user: this.props.auth.user
         //     }),
-        this.props.onGetUser(this.props.auth.user.id);
-        console.log('------->'+this.props.auth.user._id);
+        this.props.onGetUser(this.props.auth.user.id)
     };
-    render() {   
+    render() {
+        // const teamList = this.props.user.team
+        // .map((tea) =>
+        // <li key={tea.team}>{tea.team}</li> 
+    // );
         return (
             <Card>
-                <CardImg top width="100%" height='350px' src={this.props.auth.user.avatar} alt={this.props.auth.user.name} title={this.props.auth.user.name} />
+                <CardImg top width="100%" height='350px' src={this.props.user.avatar} alt={this.props.user.name} title={this.props.user.name} />
                 <CardBody>
-                    <CardTitle>{this.props.auth.user._id}</CardTitle>                    
-                    <CardTitle>{this.props.auth.user.name}</CardTitle>
-                    <CardTitle>{this.props.auth.user.userName}</CardTitle>
-                    <CardTitle>{this.props.auth.user.email}</CardTitle>
+                    {/* <CardTitle>{teamList}</CardTitle> */}
+                    <CardTitle>{this.props.user._id}</CardTitle>                    
+                    <CardTitle>{this.props.user.name}</CardTitle>
+                    <CardTitle>{this.props.user.userName}</CardTitle>
+                    <CardTitle>{this.props.user.email}</CardTitle>
                 </CardBody>
             </Card>
         );
     }
+}
+Profile.propTypes = {
+    auth: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
 };
-
 const mapStateToProps = (state) => {
     return {
         auth: state.auth,
