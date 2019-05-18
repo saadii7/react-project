@@ -1,25 +1,18 @@
 // authReducer.js
 
-import {FETCH_USER_BY_ID } from '../actions/types';
+import { FETCH_ALL_USERS,DELETE_USER} from '../actions/types';
 
-// export default function(state = [], action ) {
-//     switch(action.type) {
-//         case GET_CURRENT_USER:
-//             return  action.user
-//         default:    
-//             return state;
-//     }
+// const initialState = {
+//     users: {},
 // }
 
-const initialState = {
+export default function (state = [], action) {
+  switch (action.type) {
+    case FETCH_ALL_USERS:
+      return action.payload
+    case DELETE_USER:
+      return state.filter(user => user._id !== user.id);
+    default:
+      return state;
+  }
 }
-//For Getting user by Id
-export default function(state =initialState, action){
-    switch (action.type) {
-      // Handle fetch by Id
-      case FETCH_USER_BY_ID:
-        return action.payload
-      default:
-        return state;
-    }
-  };

@@ -14,6 +14,18 @@ const _ = require('lodash');
 const User = require('../models/User');
 const { Sport } = require('../models/Sport');
 
+
+router.get('/all',(req,res)=>{
+    let query = req.query || {}
+    query.isDeleted = false;
+    console.log(query)
+    User.find(query).then(users=>{
+      if(!users) res.status(404).send({message:'No User found'})
+      res.status(200).send(users);
+    }).catch(err=>res.status(400).send(err));
+  });
+
+
 router.post('/register', function (req, res) {
 
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -154,15 +166,24 @@ router.put('/get/:id', async (req, res) => {
 
 });
 
+router.get('/getall',(req,res)=>{
+    let query = req.params || {}
+    query.isDeleted = false;
+    console.log(req.query)
+    User.find(req.query).then(user=>{
+      if(!user) res.status(404).send({message:'No Event found'})
+      res.status(200).send(user);
+    }).catch(err=>res.status(400).send(err));
+  });
 ///////////
           // GET ALL USER ///////////////
 
-          router.get('/getAll',(req,res)=>{
-            User.find().then(usr=>{
-              if(!usr) res.status(404).send({message:'User not found'})
-              res.status(200).send(usr);
-            }).catch(err=>res.status(400).send(err));
-          });
+        //   router.get('/getAll',(req,res)=>{
+        //     User.find().then(usr=>{
+        //       if(!usr) res.status(404).send({message:'User not found'})
+        //       res.status(200).send(usr);
+        //     }).catch(err=>res.status(400).send(err));
+        //   });
 
 
 

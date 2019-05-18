@@ -6,13 +6,10 @@ const schema = new mongoose.Schema({
         ref: "Team",
         // required: true,
     }],
-    user: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-        }
-    ]
-
+    user: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }]
 },
 {
    timestamps: true

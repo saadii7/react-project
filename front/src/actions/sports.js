@@ -1,10 +1,11 @@
-import { ADD_SPORT, DELETE_SPORT, FETCH_ALL_SPORTS } from '../actions/types';
+import { ADD_SPORT, DELETE_SPORT, FETCH_ALL_SPORTS,UPDATE_SPORT } from '../actions/types';
 import axios from 'axios';
 
 
-export const createSport = ({ sportName}) => {
+export const createSport = ({sportName}) => {
   return (dispatch) => {
-    return axios.post(`/api/sports/add`, {sportName})
+    console.log("Sport Name-------------->",sportName)
+    return axios.post('/api/sports/add',{sportName})
       .then(response => {
         dispatch(createSportSuccess(response.data))
       })
@@ -24,24 +25,35 @@ export const createSportSuccess =  (data) => {
 export const deleteSportSuccess = id => {
   return {
     type: DELETE_SPORT,
-    payload: {
-      id
-    }
+    id: id
+    
   }
 }
-
 export const deleteSport = id => {
   return (dispatch) => {
-    console.log(id)
-    return axios.delete("/api/sports/delete/"+id)
-      .then(response => {
+    console.log("Sports-------id-------------"+id)
+    return axios.delete('/api/sports/delete/'+id)
+      .then(response =>{
         dispatch(deleteSportSuccess(response.data))
+        console.log("Success")
       })
       .catch(error => {
         throw(error);
       });
   };
 };
+// export const deleteSport = id => {
+//   return (dispatch) => {
+//     console.log(id)
+//     return axios.delete("/api/sports/delete/"+id)
+//       .then(response => {
+//         dispatch(deleteSportSuccess(response.data))
+//       })
+//       .catch(error => {
+//         throw(error);
+//       });
+//   };
+// };
 
 export const fetchSports = (sports) => {
   return {
@@ -60,4 +72,24 @@ export const fetchAllSports = () => {
         throw(error);
       });
   };
+};
+
+export const updateSport = ({sportName}) => {
+  return (dispatch) => {
+    console.log("Sport Name-------------->",sportName)
+    return axios.post('/api/sports/update',{sportName})
+      .then(response => {
+        dispatch(updateSportSuccess(response.data))
+      })
+      .catch(error => {
+        throw(error);
+      });
+  };
+};
+
+export const updateSportSuccess =  (data) => {
+  return {
+    type: UPDATE_SPORT,
+    payload:data
+  }
 };

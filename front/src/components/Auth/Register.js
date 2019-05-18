@@ -25,19 +25,25 @@ class Register extends Component {
 
     handleInputChange = (e) => {
         this.setState({
-            [e.target.name]: e.target.value
-        })
+            user: {
+                ...this.state.user,
+                [e.target.name]: e.target.value
+            }
+        });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
+        // console.log('asdasdasd')
+
         const user = {
-            name: this.state.name,
-            userName: this.state.userName,
-            email: this.state.email,
-            password: this.state.password,
-            password_confirm: this.state.password_confirm
+            name: this.state.user.name,
+            userName: this.state.user.userName,
+            email: this.state.user.email,
+            password: this.state.user.password,
+            password_confirm: this.state.user.password_confirm
         }
+        console.log(this.state.user);
         this.props.registerUser(user, this.props.history);
     }
 

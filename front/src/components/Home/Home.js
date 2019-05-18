@@ -1,21 +1,24 @@
-// Home.js
-
 import React, { Component } from 'react';
-// import { Button } from 'reactstrap';
-import Button from '@material-ui/core/Button';
 
-// import New from './new';
-// import Slider from './slider/slider';
+// import Temperature from '../Temperature';
+// import Carousel  from './Carousel';
+import Features from './Features';
+// import Headlines from './Headlines';
 
-export default class Home extends Component {
+
+class Home extends Component {
     render() {
-        return (
-            <div>
-                <h1>Home</h1>
-                <Button variant="contained" color="primary">
-                    Hello World
-                </Button>
+      return (
+        <div>
+            {/* <Carousel /> */}
+            <div className="container">
+                <Features />
+                {/* <Headlines /> */}
             </div>
-        );
+        </div>
+      
+      );
     }
 }
+
+export default Home;

@@ -7,24 +7,82 @@ const fs = require('fs');
 const _ = require('lodash');
 //
 
+// router.post('/add'/*, upload.single('teamImage')*/, (req, res) => {
 
+//   const newTeam = new Team;
+//   newTeam.teamName = req.body.teamName;
+//   newTeam.captain = req.body.captain;
+//   newTeam.discription = req.body.discription;
+//   // let buff = fs.readFileSync(req.file.path);
+//   newTeam.teamImage.data = req.body.data;
+//   newTeam.teamImage.contentType = req.body.contentType;
+//   newTeam.teamImage.imageName = req.body.imageName;
+//   ////////////////
+//   if(req.body.userId){
+//   newTeam.save().then(async (team )=> {
+//   await User.findById(req.body.userId).then(user=>{
+//   if(user){
+//   user.team.push(user._id);
+//   user.save();
+//   team.user.push(team._id);
+//   team.save();
+//   }
+//   })
+//   res.status(200).send(team);
+//   }).catch(err => res.status(400).send(err))
+//   }
+//   else {
+//   res.status(400).send({message:'Please Enter user'})
+//   }
+//   });
+// router.post('/add'/*, upload.single('teamImage')*/, (req, res) => {
 
+//   const newTeam = new Team;
+//   newTeam.teamName = req.body.teamName;
+//   newTeam.captain = req.body.captain;
+//   newTeam.description = req.body.description;
+//   // let buff = fs.readFileSync(req.file.path);
+//   newTeam.teamImage.data = req.body.data;
+//   newTeam.teamImage.contentType = req.body.contentType;
+//   newTeam.teamImage.imageName = req.body.imageName;
+//   ////////////////
+//   newTeam.save().then(team => {
+//     res.status(200).send(team);
+//   }).catch(err => res.status(400).send(err))
+
+// });
 router.post('/add'/*, upload.single('teamImage')*/, (req, res) => {
 
   const newTeam = new Team;
   newTeam.teamName = req.body.teamName;
-  newTeam.captain = req.body.captain;
+  // newTeam.captain = req.body.captain;
   newTeam.discription = req.body.discription;
   // let buff = fs.readFileSync(req.file.path);
   newTeam.teamImage.data = req.body.data;
   newTeam.teamImage.contentType = req.body.contentType;
   newTeam.teamImage.imageName = req.body.imageName;
   ////////////////
-  newTeam.save().then(team => {
-    res.status(200).send(team);
+  // console.log(req.body.captain);
+  if(req.body.captain){
+  newTeam.save().then(async (team )=> {
+  await User.findById(req.body.captain).then(user=>{
+  if(user){
+  user.team.push(user._id);
+  user.save();
+  team.user.push(team._id);
+  team.save();
+  }
+  })
+  res.status(200).send(team);
   }).catch(err => res.status(400).send(err))
+  }
+  else {
+  res.status(400).send({message:'Please Enter user'})
+  }
+  
+  
+  });
 
-});
 router.put('/update/:id', (req, res) => {
   let id = req.params.id;
   let body = _.pick(req.body, ['teamName', 'captain', 'description','userId']);

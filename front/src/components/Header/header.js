@@ -3,7 +3,7 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/auth';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +16,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+// import { Avatar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -104,6 +106,11 @@ const styles = theme => ({
             display: 'none',
         },
     },
+    bigAvatar: {
+        margin: 10,
+        width: 60,
+        height: 60,
+    },
 });
 
 class Navbar extends React.Component {
@@ -134,9 +141,9 @@ class Navbar extends React.Component {
         this.props.logoutUser(this.props.history);
     };
     clickDrawer = () => {
-        if(this.state.open){
+        if (this.state.open) {
             this.props.handleDrawerClose();
-        }else{
+        } else {
             this.props.handleDrawerOpen();
         }
     }
@@ -149,6 +156,7 @@ class Navbar extends React.Component {
     }
 
     render() {
+        const { isAuthenticated } = this.props.auth;
         const { anchorEl, mobileMoreAnchorEl } = this.state;
         const { classes } = this.props;
         const isMenuOpen = Boolean(anchorEl);
@@ -162,8 +170,10 @@ class Navbar extends React.Component {
                 open={isMenuOpen}
                 onClose={this.handleMenuClose}
             >
-                <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+                <MenuItem component={Link} to='/profile' onClick={this.handleMenuClose}>Profile</MenuItem>
+                <MenuItem component={Link} to={"/user/" + this.props.auth.user.id + "/edit"} onClick={this.handleMenuClose}>Update Profile</MenuItem>
                 <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+                <MenuItem component={Link} to='/logout' onClick={this.onLogout.bind(this)}>Logout</MenuItem>
             </Menu>
         );
 
@@ -197,9 +207,50 @@ class Navbar extends React.Component {
                     </IconButton>
                     <p>Profile</p>
                 </MenuItem>
+
             </Menu>
         );
-
+        const authLinks = (
+            <React.Fragment>
+                <div className={classes.grow} />
+                <div className={classes.sectionDesktop}>
+                    <IconButton color="inherit">
+                        <Badge badgeContent={4} color="secondary">
+                            <MailIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                        aria-haspopup="true"
+                        onClick={this.handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                </div>
+                <div className={classes.sectionMobile}>
+                    <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+                        <MoreIcon />
+                    </IconButton>
+                </div>
+                {renderMenu}
+                {renderMobileMenu}
+            </React.Fragment>
+        )
+        const guestLinks = (
+            <React.Fragment >
+                <div className={classes.grow} />
+                <div className={classes.sectionDesktop}>
+                    <Button component={Link} to='/register' variant="contained" > Signup </Button>
+                    <Button component={Link} to='/login' variant="contained" > Login </Button>
+                </div>
+            </React.Fragment>
+        )
         return (
             <div>
                 <AppBar
@@ -219,8 +270,8 @@ class Navbar extends React.Component {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                            Material-UI
+                        <Typography component={Link} to='/' className={classes.title} variant="h6" color="inherit" noWrap>
+                            Game On
                         </Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
@@ -234,36 +285,11 @@ class Navbar extends React.Component {
                                 }}
                             />
                         </div>
-                        <div className={classes.grow} />
-                        <div className={classes.sectionDesktop}>
-                            <IconButton color="inherit">
-                                <Badge badgeContent={4} color="secondary">
-                                    <MailIcon />
-                                </Badge>
-                            </IconButton>
-                            <IconButton color="inherit">
-                                <Badge badgeContent={17} color="secondary">
-                                    <NotificationsIcon />
-                                </Badge>
-                            </IconButton>
-                            <IconButton
-                                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                                aria-haspopup="true"
-                                onClick={this.handleProfileMenuOpen}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                        </div>
-                        <div className={classes.sectionMobile}>
-                            <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                                <MoreIcon />
-                            </IconButton>
-                        </div>
+                        {isAuthenticated ? authLinks : guestLinks}
+
                     </Toolbar>
                 </AppBar>
-                {renderMenu}
-                {renderMobileMenu}
+
             </div>
         );
     }

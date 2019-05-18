@@ -1,8 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+// import { Home, AccountCircle, ZoomOutTwoTone } from '@material-ui/icons';
+import { MenuList, MenuItem } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -11,11 +14,29 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Icon from '@material-ui/core/Icon';
+import red from '@material-ui/core/colors/red';
+import TeamIndex from '../Team/Index';
+import SportsIndex from '../Sports/Index';
+import EventIndex from '../Event/index';
+import UsersList from '../user/list';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    icon: {
+        margin: theme.spacing.unit * 2,
+    },
+    iconHover: {
+        margin: theme.spacing.unit * 2,
+        '&:hover': {
+            color: red[800],
+        },
     },
     drawer: {
         width: drawerWidth,
@@ -48,11 +69,67 @@ const styles = theme => ({
         ...theme.mixins.toolbar,
     }
 });
-class Sidebar extends React.Component {
-    state = {
-        open: false,
-    };
 
+
+const guestRoutes = [
+    {
+        link: '/team/add',
+        text: 'Extra',
+        title: 'team',
+        icon: 'toys',
+        component: TeamIndex
+    },
+    {
+        link: '/team/profile',
+        text: 'Extra',
+        title: 'Profile',
+        icon: 'toys',
+        component: TeamIndex
+    }
+];
+
+const authRoutes = [
+    {
+        link: '/team',
+        text: 'Teams',
+        title: 'team',
+        icon: 'toll',
+        component: TeamIndex
+    },
+    {
+        link: '/sports',
+        text: 'Sports',
+        title: 'sports',
+        icon: 'videogame_asset',
+        component: SportsIndex
+    }, 
+    {
+        link: '/event',
+        text: 'Events',
+        title: 'event',
+        icon: 'videogame_asset',
+        component: EventIndex
+    },
+    {
+        link: '/users',
+        text: 'Users',
+        title: 'users',
+        icon: 'videogame_asset',
+        component: UsersList
+    }
+];
+class Sidebar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        };
+        // this.activeRoute = this.activeRoute.bind(this);
+    }
+
+    activeRoute = (routeName) => {
+        return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
+    }
     componentDidMount() {
         this.setState({ open: this.props.open })
     }
@@ -62,7 +139,31 @@ class Sidebar extends React.Component {
     }
     render() {
         const { classes } = this.props;
-
+        const { isAuthenticated } = this.props.auth;
+        const authLinks = (
+            authRoutes.map((route, index) => (
+                <Link className={classes.root} to={route.link} style={{ textDecoration: 'none' }} key={index}>
+                    <MenuItem button key={route}>
+                        <ListItemIcon>
+                            <Icon >{route.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={route.text} />
+                    </MenuItem>
+                </Link>
+            ))
+        );
+        const guestLinks = (
+            guestRoutes.map((route, index) => (
+                <Link className={classes.root} to={route.link} style={{ textDecoration: 'none' }} key={index}>
+                    <MenuItem button key={route}>
+                        <ListItemIcon>
+                            <Icon >{route.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={route.text} />
+                    </MenuItem>
+                </Link>
+            ))
+        );
         return (
             <Drawer
                 variant="permanent"
@@ -82,14 +183,10 @@ class Sidebar extends React.Component {
                     {/* type something here */}
                 </div>
                 <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
+
+                <MenuList>
+                    {isAuthenticated ? authLinks : guestLinks}
+                </MenuList>
                 <Divider />
                 <List>
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
@@ -103,4 +200,7 @@ class Sidebar extends React.Component {
         );
     }
 }
-export default (withStyles(styles, { withTheme: true })(withRouter(Sidebar)));
+const mapStateToProps = (state) => ({
+    auth: state.auth
+})
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(withRouter(Sidebar)));

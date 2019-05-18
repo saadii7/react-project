@@ -5,21 +5,35 @@ export const GET_ERRORS = 'GET_ERRORS';
 
 //CURRENT USER
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
-export const GET_CURRENT_USER = 'GET_CURRENT_USER';
-export const FETCH_USER_BY_ID = 'GET_CURRENT_USER';
+export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
+export const FETCH_USER_BY_ID = 'FETCH_USER_BY_ID';
+export const FETCH_ALL_USERS= 'FETCH_ALL_USERS';
+export const DELETE_USER = 'DELETE_USER';
+export const UPDATE_USER = 'UPDATE_USER';
 
 //
 export const GET_ALL_USER = 'GET_ALL_USER';
 ////SPORTS
-export const ADD_SPORT = 'SET_SPORTS';
-export const FETCH_SPORT = 'GET_SPORTS';
-export const FETCH_ALL_SPORTS = 'GET_ALL_SPORTS';
-export const DELETE_SPORT = 'DELETE_SPORTS';
+export const ADD_SPORT = 'ADD_SPORT';
+export const FETCH_SPORT = 'FETCH_SPORT';
+export const FETCH_ALL_SPORTS = 'FETCH_ALL_SPORTS';
+export const DELETE_SPORT = 'DELETE_SPORT';
+export const UPDATE_SPORT = 'UPDATE_SPORT';
 
+//EVENT
+export const ADD_EVENT = 'ADD_EVENT';
+export const FETCH_EVENT = 'GET_EVENT';
+export const FETCH_ALL_EVENTS = 'FETCH_ALL_EVENTS';
+export const UPDATE_EVENT = 'UPDATE_EVENT';
+export const DELETE_EVENT = 'DELETE_EVENT';
 
 //PROFILE
 export const SET_UPDATE_PROFILE = 'SET_UPDATE_PROFILE';
 export const GET_UPDATE_PROFILE = 'GET_UPDATE_PROFILE';
+
+//Team
+export const ADD_TEAM = 'ADD_TEAM';
+export const FETCH_TEAM = 'FETCH_TEAM';
 
 
 

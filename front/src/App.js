@@ -11,13 +11,16 @@ import Navbar from './components/Header/header';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Home from './components/Home/Home';
-import Profile from './components/user/Profile/Profile';
+import Profile from './components/user/Profile';
 import editProfile from './components/user/edit';
 import { setCurrentUser, logoutUser } from './actions/auth';
 import { Error404 } from './404';
 import Sidebar from './components/Drawer/drawer';
-import CreateSport from './components/Sports/Create-Sport/Create-Sport';
-
+// import CreateSport from './components/Sports/Create-Sport/Create-Sport';
+import TeamIndex from './components/Team/Index';
+import SportsIndex from './components/Sports/Index';
+import EventIndex from './components/Event/index';
+import UsersList from './components/user/list';
 
 if (localStorage.jwtToken) {
 	setAuthToken(localStorage.jwtToken);
@@ -30,8 +33,6 @@ if (localStorage.jwtToken) {
 		window.location.href = '/login'
 	}
 }
-
-
 const styles = theme => ({
 	root: {
 		display: 'flex',
@@ -85,12 +86,13 @@ class App extends Component {
 							<Route exact path="/Error404" component={Error404} />
 
 							<PrivateRoute path='/profile' component={Profile} />
-							<PrivateRoute path={"/users/" + this.props.auth.user.id + "/edit"} component={editProfile} />
-                    		<PrivateRoute exact path={"/sports/add"} component={ CreateSport } />
-
+							<PrivateRoute path={"/user/" + this.props.auth.user.id + "/edit"} component={editProfile} />
+							<PrivateRoute path={'/team'} component={TeamIndex} />
+							<PrivateRoute path={'/sports'} component={SportsIndex} />
+							<PrivateRoute path={'/event'} component={EventIndex}/>
+							<PrivateRoute path={'/users'} component={UsersList}/>
+							
 							<Redirect from='*' to="/Error404" />
-
-
 						</Switch>
 					</main>
 				</div>
@@ -100,7 +102,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	auth: state.auth
+	auth: state.auth,
+	team:state.team
 })
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(App));

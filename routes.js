@@ -75,11 +75,7 @@
 // required: id
 
 
-// ///////////////
-
-
-
-// for " events " table routes
+/////////////////// for " events " table routes
 
 //  list of attributes ::: date,location, sport, maker , eventName , status , duration , description , isDeleted , deletedAt
 
