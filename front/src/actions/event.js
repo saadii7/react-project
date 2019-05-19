@@ -5,7 +5,7 @@ import axios from 'axios';
 export const createEvent = (event) => {
   return (dispatch) => {
     console.log(event);
-    return axios.post('/api/events/add',event)
+    return axios.post('/events/create',event)
       .then(response => {
         dispatch(createEventSuccess(response.data))
         console.log(response.data)
@@ -41,8 +41,7 @@ export const fetchEvents = (event) => {
           if(index !== keys.length -1)query += '&';
         })
       }
-      console.log('----User Id TO Get Evets---->',query)
-      return axios.get("/api/events/all"+ "?" + query)
+      return axios.get("/events/all"+ "?" + query)
         .then(response => {
           dispatch(fetchEvents(response.data))
           console.log('----->',response.data)

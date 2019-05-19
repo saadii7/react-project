@@ -17,8 +17,8 @@ const Schema = new mongoose.Schema({
         required:true
     },
     content: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     isDeleted: {
         type: Boolean,
@@ -30,9 +30,9 @@ const Schema = new mongoose.Schema({
     },
 
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 var Notification = mongoose.model('Notification', Schema);
 module.exports = { Notification };

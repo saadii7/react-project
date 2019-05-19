@@ -11,8 +11,6 @@ router.post('/teamid/:tid/userid/:uid', (req, res) => {
     let userid = req.params.uid;
     const userteam = new User_Team;
 
-    //   const newSport = new Sport;
-
     Team.findById(teamid).then(team => {
         if (!team) {
             res.status(404).send({ message: 'team not found' })
@@ -29,8 +27,6 @@ router.post('/teamid/:tid/userid/:uid', (req, res) => {
             })
         }
     })
-
-
 });
 
 module.exports = router;
