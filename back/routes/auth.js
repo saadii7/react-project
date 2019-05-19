@@ -77,6 +77,7 @@ router.post('/login', (req, res, next) => {
                     const payload = {
                         id: user.id,
                         name: user.name,
+                        isAdmin: user.isAdmin,
                         avatar: user.avatar
                     }
                     jwt.sign(payload, 'secret', {
