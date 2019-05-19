@@ -25,9 +25,9 @@ const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
+        display: '100%',
+        // justifyContent: 'space-around',
+        // alignItems: 'flex-end',
     },
     icon: {
         margin: theme.spacing.unit * 2,
@@ -175,7 +175,7 @@ class Sidebar extends React.Component {
                     paper: classNames({
                         [classes.drawerOpen]: this.state.open,
                         [classes.drawerClose]: !this.state.open,
-                    }),
+                    })
                 }}
                 open={this.state.open}
             >
