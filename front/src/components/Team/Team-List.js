@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import store from '../../store';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,11 +10,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import { deleteSport } from '../../actions/sports';
-
+import { fetchAllTeams, deleteTeam } from '../../actions/team';
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -27,8 +28,13 @@ const styles = theme => ({
         padding: theme.spacing.unit * 4,
         outline: 'none',
     },
+    bigAvatar: {
+        margin: 10,
+        width: 60,
+        height: 60,
+    },
 });
-class SportsList extends Component {
+class UsersList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,33 +43,45 @@ class SportsList extends Component {
         this.editModal = props.editModal;
         this.closeModal = props.closeModal;
     }
-    editModal = (e) => {}
-    closeModal = (e) => {}
-    
-    deleteSport(e, index) {
+    editModal = (e) => { }
+    closeModal = (e) => { }
+
+    deleteUser(e, index) {
         e.preventDefault();
         this.props.onDelete(index);
     }
-
+    componentDidMount() {
+        // this.props.onGetUsers();
+        store.dispatch(fetchAllTeams());
+    }
+    refreshPage=()=>{ 
+        window.location.reload(); 
+    };
+    
     listView(data, index) {
         const { classes } = this.props;
         return (
-                <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                        {data.sportName}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                        {data._id}
-                    </TableCell>
-                    <TableCell>
-                        <IconButton className={classes.button} key={index} onClick={ () =>this.editModal(data) } aria-label="Edit">
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton className={classes.button} aria-label="Delete" onClick={(e) => this.deleteSport(e, data._id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
+            <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                    <Avatar alt="Remy Sharp" src={data.avatar} className={classes.bigAvatar} />                </TableCell>
+                <TableCell component="th" scope="row">
+                    {data.teamName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {data._id}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {data.discription}
+                </TableCell>
+                <TableCell>
+                    <IconButton className={classes.button} key={index} onClick={() => this.editModal(data)} aria-label="Edit">
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => {this.deleteUser(e, data._id);this.refreshPage()}}>
+                        <DeleteIcon />
+                    </IconButton>
+                </TableCell>
+            </TableRow>
         )
     };
     render() {
@@ -71,7 +89,7 @@ class SportsList extends Component {
 
         return (
             <div>
-            <main className={classes.root}>
+                <main className={classes.root}>
                     <div className={classes.toolbar} />
                     <Grid container spacing={24}>
                         <Grid item xs={6}>
@@ -84,12 +102,15 @@ class SportsList extends Component {
                             <Table className={classes.table}>
                                 <TableHead>
                                     <TableRow>
+                                        <TableCell>Image</TableCell>
                                         <TableCell>Name</TableCell>
+                                        <TableCell>Id</TableCell>
+                                        <TableCell>Email</TableCell>
                                         <TableCell>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.props.sports.map((sport, i) => this.listView(sport, i))}
+                                    {this.props.team.map((team, i) => this.listView(team, i))}
                                 </TableBody>
                             </Table>
                         </Paper>
@@ -102,18 +123,20 @@ class SportsList extends Component {
 
 const mapStateToProps = state => {
     return {
-        sports: state.sports
+        sports: state.sports,
+        users: state.users,
+        team:state.team
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onDelete: id => {
-            dispatch(deleteSport(id));
+            dispatch(deleteTeam(id));
         }
     };
 };
 
 
-const SimpleModalWrapped = connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(SportsList)));
+const SimpleModalWrapped = connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(UsersList)));
 export default SimpleModalWrapped;

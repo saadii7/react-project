@@ -10,7 +10,6 @@ const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 const _ = require('lodash');
 
-
 const User = require('../models/User');
 const { Sport } = require('../models/Sport');
 

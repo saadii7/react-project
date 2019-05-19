@@ -1,52 +1,95 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CreateTeam from './Create-Team';
-// import TeamProfile from './Team-Profile';
-
+import TeamList from './Team-List'; 
 const styles = theme => ({
-  root: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-  },
-
+    root: {
+        width: '100%'
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(23),
+        flexBasis: '33.33%',
+        flexShrink: 0,
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    },
 });
 
-function PaperSheet(props) {
-  const { classes } = props;
+class TeamIndex extends Component {
+    state = {
+        expanded: null,
+    };
 
-  return (
-    <div>
-      <div>
-        <Paper className={classes.root} elevation={1}>
-          <Typography variant="h5" component="h3">
-            Create New Team
-          <CreateTeam />
-          </Typography>
-          <Typography component="p" color='secondary'>
-            On the time of submition the creator of team assume as captain of team.
-        </Typography>
-        </Paper>
-      </div>
-      <div>
-        <Paper className={classes.root} elevation={1}>
-          <Typography variant="h5" component="h3">
-            My Teams
-          </Typography>          
-          <Typography component="p" color='secondary'>
-            {/* <TeamProfile/> */}
-        </Typography>
-        </Paper>
-      </div>
-    </div>
-  );
-}
+    handleChange = panel => (event, expanded) => {
+        this.setState({
+            expanded: expanded ? panel : false,
+        });
+    };
 
-PaperSheet.propTypes = {
-  classes: PropTypes.object.isRequired,
+    render() {
+        const { classes } = this.props;
+        const { expanded } = this.state;
+
+        return (
+
+            <div className={classes.root}>
+                <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={classes.heading}>Create New Team</Typography>
+                        <Typography className={classes.secondaryHeading}>Register Team Section</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                    <CreateTeam/>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+
+                <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={classes.heading}>Registered Events</Typography>
+                        <Typography className={classes.secondaryHeading}>
+                            Your Registered Events
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                       <TeamList/>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                
+                <ExpansionPanel expanded={expanded === 'panel3'} onChange={this.handleChange('panel3')}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={classes.heading}>All Events</Typography>
+                        <Typography className={classes.secondaryHeading}>
+                            All upcoming Events are Enlisted Here
+                        </Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Typography>
+                           Upcoming Events
+                       </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <ExpansionPanel expanded={expanded === 'panel4'} onChange={this.handleChange('panel4')}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={classes.heading}>Personal data</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Typography>
+                            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas
+                            eros, vitae egestas augue. Duis vel est augue.
+                        </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            </div>
+        );
+    }
 };
 
-export default withStyles(styles)(PaperSheet);
+
+export default withStyles(styles)(TeamIndex);

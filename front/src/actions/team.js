@@ -1,7 +1,12 @@
-import { ADD_TEAM,FETCH_TEAM} from '../actions/types';
+import { ADD_TEAM,FETCH_TEAM,FETCH_ALL_TEAMS,DELETE_TEAM} from '../actions/types';
 import axios from 'axios';
 
-
+export const createTeamSuccess =  (data) => {
+  return {
+    type: ADD_TEAM,
+    payload:data
+  }
+};
 export const createTeam = (team) => {
   return (dispatch) => {
     console.log(team);
@@ -16,13 +21,26 @@ export const createTeam = (team) => {
   };
 };
 
-export const createTeamSuccess =  (data) => {
+
+
+
+export const fetchTeams = (teams) => {
   return {
-    type: ADD_TEAM,
-    payload:data
+    type: FETCH_ALL_TEAMS,
+    payload: teams
   }
 };
-
+export const fetchAllTeams = () => {
+  return (dispatch) => {
+    return axios.get("/api/teams/all")
+      .then(response => {
+        dispatch(fetchTeams(response.data))
+      })
+      .catch(error => {
+        throw(error);
+      });
+  };
+};
 
 
 export const getTeamByIdSuccess = (team) => {
@@ -44,3 +62,26 @@ export const getTeamByIdSuccess = (team) => {
         });
     };
   };
+
+
+  export const deleteTeamSuccess = id => {
+    return {
+      type: DELETE_TEAM,
+      id: id
+      
+    }
+  }
+  export const deleteTeam = id => {
+    return (dispatch) => {
+      console.log("Sports-------id-------------"+id)
+      return axios.delete('/api/sports/delete/'+id)
+        .then(response =>{
+          dispatch(deleteTeamSuccess(response.data))
+          console.log("Success")
+        })
+        .catch(error => {
+          throw(error);
+        });
+    };
+  };
+  
