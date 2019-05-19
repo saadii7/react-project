@@ -5,7 +5,7 @@ import axios from 'axios';
 export const createSport = ({sportName}) => {
   return (dispatch) => {
     console.log("Sport Name-------------->",sportName)
-    return axios.post('/api/sports/add',{sportName})
+    return axios.post('/sports/create',{sportName})
       .then(response => {
         dispatch(createSportSuccess(response.data))
       })
@@ -32,7 +32,7 @@ export const deleteSportSuccess = id => {
 export const deleteSport = id => {
   return (dispatch) => {
     console.log("Sports-------id-------------"+id)
-    return axios.delete('/api/sports/delete/'+id)
+    return axios.delete('/sports/delete/'+id)
       .then(response =>{
         dispatch(deleteSportSuccess(response.data))
         console.log("Success")
@@ -45,7 +45,7 @@ export const deleteSport = id => {
 // export const deleteSport = id => {
 //   return (dispatch) => {
 //     console.log(id)
-//     return axios.delete("/api/sports/delete/"+id)
+//     return axios.delete("/sports/delete/"+id)
 //       .then(response => {
 //         dispatch(deleteSportSuccess(response.data))
 //       })
@@ -64,7 +64,7 @@ export const fetchSports = (sports) => {
 
 export const fetchAllSports = () => {
   return (dispatch) => {
-    return axios.get("/api/sports/getall")
+    return axios.get("/sports/all")
       .then(response => {
         dispatch(fetchSports(response.data))
       })
@@ -77,7 +77,7 @@ export const fetchAllSports = () => {
 export const updateSport = ({sportName}) => {
   return (dispatch) => {
     console.log("Sport Name-------------->",sportName)
-    return axios.post('/api/sports/update',{sportName})
+    return axios.post('/sports/update',{sportName})
       .then(response => {
         dispatch(updateSportSuccess(response.data))
       })

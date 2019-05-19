@@ -2,7 +2,7 @@ import {FETCH_USER_BY_ID,FETCH_ALL_USERS,DELETE_USER} from '../actions/types';
 import axios from 'axios';
 
 // export const getUser = (id) => dispatch => {
-//     axios.get('/api/users/get/'+id)
+//     axios.get('/users/get/'+id)
 //     .then(res =>{
 //         console.log('GET_USER_DATA_FETCH_OK>'+JSON.stringify(res.data))
 //         const data=JSON.stringify(res.data)
@@ -28,7 +28,7 @@ export const getUserByIdSuccess = (user) => {
   // Async Action
   export const getUser = (Id) => {
     return (dispatch) => {
-      return axios.get('/api/users/get/'+Id)
+      return axios.get('/users/get/'+Id)
         .then(response => {
           // Handle data with sync action
           dispatch(getUserByIdSuccess(response.data));
@@ -49,7 +49,7 @@ export const getUserByIdSuccess = (user) => {
   };
   export const fetchAllUsers = () => {
     return (dispatch) => {
-      return axios.get("/api/users/all")
+      return axios.get("/users/all")
         .then(response => {
           dispatch(fetchUsers(response.data))
         })
@@ -68,7 +68,7 @@ export const getUserByIdSuccess = (user) => {
   }
   export const deleteUser = id => {
     return (dispatch) => {
-      return axios.delete('/api/users/delete/'+id)
+      return axios.delete('/users/delete/'+id)
         .then(response =>{
           dispatch(deleteUserSuccess(response.data))
           console.log("Success")

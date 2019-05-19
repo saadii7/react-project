@@ -10,7 +10,7 @@ export const createTeamSuccess =  (data) => {
 export const createTeam = (team) => {
   return (dispatch) => {
     console.log(team);
-    return axios.post('/api/teams/add',team)
+    return axios.post('/teams/create',team)
       .then(response => {
         dispatch(createTeamSuccess(response.data))
         console.log(response.data)
@@ -52,7 +52,7 @@ export const getTeamByIdSuccess = (team) => {
   // Async Action
   export const getTeam = (id) => {
     return (dispatch) => {
-      return axios.get('/api/teams/get/'+id)
+      return axios.get('/teams/get/'+id)
         .then(response => {
           // Handle data with sync action
           dispatch(getTeamByIdSuccess(response.data));

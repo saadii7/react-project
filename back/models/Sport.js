@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const sportSchema = new mongoose.Schema({
-    sportName: {
+    name: {
         type: String,
         required: true,
         unique: true
@@ -12,10 +12,10 @@ const sportSchema = new mongoose.Schema({
     links: {
         type: String,
     },
-    sportImage: {
+    image: {
         data: Buffer,
         contentType: String,
-        imageName: String,
+        name: String,
     },
     isDeleted: {
         type: Boolean,
@@ -31,9 +31,9 @@ const sportSchema = new mongoose.Schema({
         //required:true
     }]
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 var Sport = mongoose.model('sport', sportSchema);
 module.exports = { Sport };

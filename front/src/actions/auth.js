@@ -6,7 +6,7 @@ import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
 
 export const registerUser = (user, history) => dispatch => {
-    axios.post('/api/users/register', user)
+    axios.post('/auth/register', user)
         // console.log('------------->',user)
         .then(res => history.push('/login'))
         .catch(err => {
@@ -15,10 +15,10 @@ export const registerUser = (user, history) => dispatch => {
                 payload: err.response.data
             });
         });
-}
+    }
 
-export const loginUser = (user) => dispatch => {
-    axios.post('/api/users/login', user)
+    export const loginUser = (user) => dispatch => {
+        axios.post('/auth/login', user)
         .then(res => {
             const { token } = res.data;
             localStorage.setItem('jwtToken', token);
@@ -36,18 +36,36 @@ export const loginUser = (user) => dispatch => {
                 payload: err.response.data
             });
         });
-}
-
-export const setCurrentUser = decoded => {
-    return {
-        type: SET_CURRENT_USER,
-        payload: decoded
     }
-}
 
-export const logoutUser = (history) => dispatch => {
-    localStorage.removeItem('jwtToken');
-    setAuthToken(false);
-    dispatch(setCurrentUser({}));
-    history.push('/login');
-}
+    export const setCurrentUser = decoded => {
+        return {
+            type: SET_CURRENT_USER,
+            payload: decoded
+        }
+    }
+
+    export const logoutUser = (history) => dispatch => {
+        axios.get('/auth/logout')
+        .then(res => {
+            localStorage.removeItem('jwtToken');
+            setAuthToken(false);
+            dispatch(setCurrentUser({}));
+            history.push('/login');
+            // const { token } = res.data;
+            // localStorage.setItem('jwtToken', token);
+            // setAuthToken(token);
+            // const decoded = {
+            //     token,
+            //     ...jwt_decode(token)
+            // };
+            // // decoded.token = token;
+            // dispatch(setCurrentUser(decoded));
+        })
+        .catch(err => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+        });
+    }

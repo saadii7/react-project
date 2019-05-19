@@ -207,7 +207,6 @@ class Navbar extends React.Component {
                     </IconButton>
                     <p>Profile</p>
                 </MenuItem>
-
             </Menu>
         );
         const authLinks = (

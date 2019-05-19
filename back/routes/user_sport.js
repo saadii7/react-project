@@ -11,8 +11,6 @@ router.post('/sportid/:sid/userid/:uid', (req, res) => {
     userid = req.params.uid;
     const usersport = new User_Sport;
 
-    //   const newSport = new Sport;
-
     Sport.findById(sportid).then(sport => {
         if (!sport) {
             res.status(404).send({ message: 'Sport not found' })
