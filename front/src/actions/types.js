@@ -34,7 +34,8 @@ export const GET_UPDATE_PROFILE = 'GET_UPDATE_PROFILE';
 //Team
 export const ADD_TEAM = 'ADD_TEAM';
 export const FETCH_TEAM = 'FETCH_TEAM';
-
+export const FETCH_ALL_TEAMS = 'FETCH_ALL_TEAMS';
+export const DELETE_TEAM = 'DELETE_TEAM';
 
 
 export const ADD_POST = 'ADD_POST';
