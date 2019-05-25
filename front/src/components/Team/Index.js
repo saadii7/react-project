@@ -32,7 +32,9 @@ class TeamIndex extends Component {
             expanded: expanded ? panel : false,
         });
     };
-
+    componentDidMount(){
+        
+    }
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
@@ -52,9 +54,9 @@ class TeamIndex extends Component {
 
                 <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>Registered Events</Typography>
+                        <Typography className={classes.heading}>Registered Teams</Typography>
                         <Typography className={classes.secondaryHeading}>
-                            Your Registered Events
+                            Your Registered Teams
                         </Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
@@ -64,14 +66,14 @@ class TeamIndex extends Component {
                 
                 <ExpansionPanel expanded={expanded === 'panel3'} onChange={this.handleChange('panel3')}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>All Events</Typography>
+                        <Typography className={classes.heading}>All Teams</Typography>
                         <Typography className={classes.secondaryHeading}>
-                            All upcoming Events are Enlisted Here
+                            All upcoming Teams are Enlisted Here
                         </Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <Typography>
-                           Upcoming Events
+                           Upcoming Teams
                        </Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>

@@ -88,7 +88,7 @@ const guestRoutes = [
     }
 ];
 
-const authRoutes = [
+const adminRoutes = [
     {
         link: '/team',
         text: 'Teams',
@@ -102,7 +102,7 @@ const authRoutes = [
         title: 'sports',
         icon: 'videogame_asset',
         component: SportsIndex
-    }, 
+    },
     {
         link: '/event',
         text: 'Events',
@@ -117,6 +117,23 @@ const authRoutes = [
         icon: 'videogame_asset',
         component: UsersList
     }
+];
+const userRoutes = [
+    {
+        link: '/team',
+        text: 'Teams',
+        title: 'team',
+        icon: 'toll',
+        component: TeamIndex
+    },
+    {
+        link: '/event',
+        text: 'Events',
+        title: 'event',
+        icon: 'videogame_asset',
+        component: EventIndex
+    },
+    
 ];
 class Sidebar extends React.Component {
     constructor(props) {
@@ -140,8 +157,21 @@ class Sidebar extends React.Component {
     render() {
         const { classes } = this.props;
         const { isAuthenticated } = this.props.auth;
-        const authLinks = (
-            authRoutes.map((route, index) => (
+        // let isAdmin = this.props.user.isAdmin;
+        let authLinks = null;
+        if (this.props.user.isAdmin) {
+            authLinks = adminRoutes.map((route, index) => (
+                <Link className={classes.root} to={route.link} style={{ textDecoration: 'none' }} key={index}>
+                    <MenuItem button key={route}>
+                        <ListItemIcon>
+                            <Icon >{route.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={route.text} />
+                    </MenuItem>
+                </Link>
+            ));
+        }else{
+            authLinks=userRoutes.map((route, index) => (
                 <Link className={classes.root} to={route.link} style={{ textDecoration: 'none' }} key={index}>
                     <MenuItem button key={route}>
                         <ListItemIcon>
@@ -151,7 +181,7 @@ class Sidebar extends React.Component {
                     </MenuItem>
                 </Link>
             ))
-        );
+        }
         const guestLinks = (
             guestRoutes.map((route, index) => (
                 <Link className={classes.root} to={route.link} style={{ textDecoration: 'none' }} key={index}>
@@ -186,6 +216,7 @@ class Sidebar extends React.Component {
 
                 <MenuList>
                     {isAuthenticated ? authLinks : guestLinks}
+                    {this.props.user.isAdmin ? "1" : "2"}
                 </MenuList>
                 <Divider />
                 <List>
@@ -201,6 +232,7 @@ class Sidebar extends React.Component {
     }
 }
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.auth,
+    user: state.user
 })
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(withRouter(Sidebar)));

@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { createEvent } from '../../actions/event';
+import { fetchAllSports } from "../../actions/sports";
 
 const styles = theme => ({
     button: {
@@ -84,10 +85,8 @@ class Event extends React.Component {
         // }
     };
     componentDidMount() {
-        // this.setState({
-        //     sports: this.props.sports
-        // });
-    };
+        this.props.onFetchAllSports();
+      };
     render() {
         const { classes } = this.props;
         return (
@@ -231,6 +230,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddEvent: event => {
             dispatch(createEvent(event));
+        },
+        onFetchAllSports:()=>{ 
+            dispatch (fetchAllSports())
         }
     };
 };

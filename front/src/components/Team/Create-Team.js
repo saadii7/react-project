@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-
 import { createTeam } from '../../actions/team';
+import { fetchAllSports } from "../../actions/sports";
 
 
 
@@ -61,9 +61,8 @@ class CreateTeam extends React.Component {
             Discription: this.state.Discription,
             sportName: this.state.selectedSport,
             captain:this.props.auth.user.id
-            // userId: this.props.auth.user.id
+
         }
-        console.log(team);
         this.props.onAddTeam(team);
         // let props = this.props;
         // if(e.target && e.target.image && e.target.image.files.length > 0){
@@ -71,19 +70,17 @@ class CreateTeam extends React.Component {
         //     var reader = new FileReader();
         //     reader.onloadend = function() {
         //         console.log('RESULT', reader.result)
-        //         user.avatar  = reader.result;
-        //         props.updateUser(team);
+        //         this.state.teamImage = reader.result;
+        //         props.onAddTeam(team);;
         //     }
         //     reader.readAsDataURL(file);
-
+        //     console.log(team);
         // }else{
-        //     this.props.registerUser(user);
+        //     this.props.onAddTeam(team);
         // }
     };
     componentDidMount() {
-        // this.setState({
-        //     sports: this.props.sports
-        // });
+      this.props.onFetchAllSports();
     };
     render() {
         const { classes } = this.props;
@@ -183,6 +180,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onAddTeam: team => {
             dispatch(createTeam(team));
+        },
+        onFetchAllSports:()=>{ 
+            dispatch (fetchAllSports())
         }
     };
 };

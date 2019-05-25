@@ -15,6 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { fetchAllTeams, deleteTeam } from '../../actions/team';
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -51,8 +52,8 @@ class UsersList extends Component {
         this.props.onDelete(index);
     }
     componentDidMount() {
-        // this.props.onGetUsers();
-        store.dispatch(fetchAllTeams());
+        // store.dispatch(fetchAllTeams());
+        this.props.onFetchAllTeams();
     }
     refreshPage=()=>{ 
         window.location.reload(); 
@@ -133,6 +134,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onDelete: id => {
             dispatch(deleteTeam(id));
+        },
+        onFetchAllTeams:()=>{ 
+            dispatch (fetchAllTeams())
         }
     };
 };
