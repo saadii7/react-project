@@ -6,6 +6,18 @@ const router = express.Router();
 const fs = require('fs');
 const _ = require('lodash');
 
+
+
+router.get('/all',(req,res)=>{
+    let query = req.query || {}
+    query.isDeleted = false;
+    Team.find(query).then(teams=>{
+        if(!teams) res.status(404).send({message:'No Team Found'})
+            res.status(200).send(teams);
+    }).catch(err=>res.status(400).send(err));
+});
+
+
 router.post('/create'/*, upload.single('teamImage')*/, (req, res) => {
     const newTeam = new Team;
     newTeam.name = req.body.name;

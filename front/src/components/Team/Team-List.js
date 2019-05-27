@@ -34,10 +34,10 @@ const styles = theme => ({
     height: 60
   }
 });
-class UsersList extends Component {
+class TeamList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {  
       sports: []
     };
     this.editModal = props.editModal;
@@ -156,5 +156,5 @@ const mapDispatchToProps = dispatch => {
 const SimpleModalWrapped = connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(withRouter(UsersList)));
+)(withStyles(styles, { withTheme: true })(withRouter(TeamList)));
 export default SimpleModalWrapped;

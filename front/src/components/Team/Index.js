@@ -32,9 +32,6 @@ class TeamIndex extends Component {
             expanded: expanded ? panel : false,
         });
     };
-    componentDidMount(){
-        
-    }
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
