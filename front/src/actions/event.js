@@ -41,7 +41,7 @@ export const fetchAllEvents = (ids, keys) => {
             });
         }
         return axios
-            .get('/events/all' + '?' + query)
+            .get('/events/all?' + query)
             .then(response => {
                 dispatch(fetchEvents(response.data));
             })

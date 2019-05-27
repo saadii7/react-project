@@ -24,220 +24,215 @@ import UsersList from '../user/list';
 const drawerWidth = 240;
 
 const styles = theme => ({
-  root: {
-    display: '100%'
-    // justifyContent: 'space-around',
-    // alignItems: 'flex-end',
-  },
-  icon: {
-    margin: theme.spacing.unit * 2
-  },
-  iconHover: {
-    margin: theme.spacing.unit * 2,
-    '&:hover': {
-      color: red[800]
+    root: {
+        display: '100%'
+        // justifyContent: 'space-around',
+        // alignItems: 'flex-end',
+    },
+    icon: {
+        margin: theme.spacing.unit * 2
+    },
+    iconHover: {
+        margin: theme.spacing.unit * 2,
+        '&:hover': {
+            color: red[800]
+        }
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap'
+    },
+    drawerOpen: {
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen
+        })
+    },
+    drawerClose: {
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing.unit * 7 + 1,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing.unit * 9 + 1
+        }
+    },
+    toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar
     }
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap'
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing.unit * 7 + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing.unit * 9 + 1
-    }
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar
-  }
 });
 
 const guestRoutes = [
-  {
-    link: '/team/add',
-    text: 'Extra',
-    title: 'team',
-    icon: 'toys',
-    component: TeamIndex
-  },
-  {
-    link: '/team/profile',
-    text: 'Extra',
-    title: 'Profile',
-    icon: 'toys',
-    component: TeamIndex
-  }
+    {
+        link: '/teams/add',
+        title: 'Add team',
+        icon: 'toys',
+        component: TeamIndex
+    },
+    {
+        link: '/teams/profile',
+        title: 'Profile',
+        icon: 'toys',
+        component: TeamIndex
+    }
 ];
 
 const adminRoutes = [
-  {
-    link: '/team',
-    text: 'Teams',
-    title: 'team',
-    icon: 'toll',
-    component: TeamIndex
-  },
-  {
-    link: '/sports',
-    text: 'Sports',
-    title: 'sports',
-    icon: 'videogame_asset',
-    component: SportsIndex
-  },
-  {
-    link: '/event',
-    text: 'Events',
-    title: 'event',
-    icon: 'videogame_asset',
-    component: EventIndex
-  },
-  {
-    link: '/users',
-    text: 'Users',
-    title: 'users',
-    icon: 'videogame_asset',
-    component: UsersList
-  }
+    {
+        link: '/teams',
+        title: 'Teams',
+        icon: 'toll',
+        component: TeamIndex
+    },
+    {
+        link: '/sports',
+        title: 'Sports',
+        icon: 'videogame_asset',
+        component: SportsIndex
+    },
+    {
+        link: '/event',
+        title: 'Events',
+        icon: 'videogame_asset',
+        component: EventIndex
+    },
+    {
+        link: '/users',
+        title: 'Users',
+        icon: 'videogame_asset',
+        component: UsersList
+    }
 ];
 const userRoutes = [
-  {
-    link: '/team',
-    text: 'Teams',
-    title: 'team',
-    icon: 'toll',
-    component: TeamIndex
-  },
-  {
-    link: '/event',
-    text: 'Events',
-    title: 'event',
-    icon: 'videogame_asset',
-    component: EventIndex
-  }
+    {
+        link: '/teams',
+        title: 'Teams',
+        icon: 'toll',
+        component: TeamIndex
+    },
+    {
+        link: '/events',
+        title: 'Events',
+        icon: 'videogame_asset',
+        component: EventIndex
+    }
 ];
 class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false
-    };
-    // this.activeRoute = this.activeRoute.bind(this);
-  }
-
-  activeRoute = routeName => {
-    return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
-  };
-  componentDidMount() {
-    this.setState({ open: this.props.open });
-  }
-
-  componentWillReceiveProps = props => {
-    this.setState({ open: props.open });
-  };
-  render() {
-    const { classes } = this.props;
-    const { isAuthenticated, user } = this.props.auth;
-    let { isAdmin } = user;
-    let authLinks = null;
-    if (isAdmin) {
-      authLinks = adminRoutes.map((route, index) => (
-        <Link
-          className={classes.root}
-          to={route.link}
-          style={{ textDecoration: 'none' }}
-          key={index}>
-          <MenuItem button key={route}>
-            <ListItemIcon>
-              <Icon>{route.icon}</Icon>
-            </ListItemIcon>
-            <ListItemText primary={route.text} />
-          </MenuItem>
-        </Link>
-      ));
-    } else {
-      authLinks = userRoutes.map((route, index) => (
-        <Link
-          className={classes.root}
-          to={route.link}
-          style={{ textDecoration: 'none' }}
-          key={index}>
-          <MenuItem button key={route}>
-            <ListItemIcon>
-              <Icon>{route.icon}</Icon>
-            </ListItemIcon>
-            <ListItemText primary={route.text} />
-          </MenuItem>
-        </Link>
-      ));
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        };
+        // this.activeRoute = this.activeRoute.bind(this);
     }
-    const guestLinks = guestRoutes.map((route, index) => (
-      <Link
-        className={classes.root}
-        to={route.link}
-        style={{ textDecoration: 'none' }}
-        key={index}>
-        <MenuItem button key={route}>
-          <ListItemIcon>
-            <Icon>{route.icon}</Icon>
-          </ListItemIcon>
-          <ListItemText primary={route.text} />
-        </MenuItem>
-      </Link>
-    ));
-    return (
-      <Drawer
-        variant='permanent'
-        className={classNames(classes.drawer, {
-          [classes.drawerOpen]: this.state.open,
-          [classes.drawerClose]: !this.state.open
-        })}
-        classes={{
-          paper: classNames({
-            [classes.drawerOpen]: this.state.open,
-            [classes.drawerClose]: !this.state.open
-          })
-        }}
-        open={this.state.open}>
-        <div className={classes.toolbar}>{/* type something here */}</div>
-        <Divider />
 
-        <MenuList>{isAuthenticated ? authLinks : guestLinks}</MenuList>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    );
-  }
+    activeRoute = routeName => {
+        return this.props.location.pathname.indexOf(routeName) > -1
+            ? true
+            : false;
+    };
+    componentDidMount() {
+        this.setState({ open: this.props.open });
+    }
+    componentWillReceiveProps = props => {
+        this.setState({ open: props.open });
+    };
+    render() {
+        const { classes } = this.props;
+        const { isAuthenticated, user } = this.props.auth;
+        let { isAdmin } = user;
+        let authLinks = null;
+        if (isAdmin) {
+            authLinks = adminRoutes.map((route, index) => (
+                <Link
+                    className={classes.root}
+                    to={route.link}
+                    style={{ textDecoration: 'none' }}
+                    key={index}>
+                    <MenuItem button key={route}>
+                        <ListItemIcon title={route.title}>
+                            <Icon>{route.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={route.title} />
+                    </MenuItem>
+                </Link>
+            ));
+        } else {
+            authLinks = userRoutes.map((route, index) => (
+                <Link
+                    className={classes.root}
+                    to={route.link}
+                    style={{ textDecoration: 'none' }}
+                    key={index}>
+                    <MenuItem button key={index}>
+                        <ListItemIcon title={route.title}>
+                            <Icon>{route.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={route.title} />
+                    </MenuItem>
+                </Link>
+            ));
+        }
+        const guestLinks = guestRoutes.map((route, index) => (
+            <Link
+                className={classes.root}
+                to={route.link}
+                style={{ textDecoration: 'none' }}
+                key={index}>
+                <MenuItem button key={route}>
+                    <ListItemIcon>
+                        <Icon>{route.icon}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary={route.text} />
+                </MenuItem>
+            </Link>
+        ));
+        return (
+            <Drawer
+                variant='permanent'
+                className={classNames(classes.drawer, {
+                    [classes.drawerOpen]: this.state.open,
+                    [classes.drawerClose]: !this.state.open
+                })}
+                classes={{
+                    paper: classNames({
+                        [classes.drawerOpen]: this.state.open,
+                        [classes.drawerClose]: !this.state.open
+                    })
+                }}
+                open={this.state.open}>
+                <div className={classes.toolbar}>
+                    {/* type something here */}
+                </div>
+                <Divider />
+
+                <MenuList>{isAuthenticated ? authLinks : guestLinks}</MenuList>
+                <Divider />
+                <List>
+                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                        <ListItem button key={text}>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItem>
+                    ))}
+                </List>
+            </Drawer>
+        );
+    }
 }
 const mapStateToProps = state => ({
-  auth: state.auth
+    auth: state.auth
 });
 export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(withRouter(Sidebar))
+    withStyles(styles, { withTheme: true })(withRouter(Sidebar))
 );
