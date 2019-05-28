@@ -14,7 +14,9 @@ import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import { fetchAllUsers, deleteUser } from '../../actions/user';
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -54,10 +56,10 @@ class UsersList extends Component {
         // this.props.onGetUsers();
         store.dispatch(fetchAllUsers());
     }
-    refreshPage=()=>{ 
-        window.location.reload(); 
+    refreshPage = () => {
+        window.location.reload();
     };
-    
+
     listView(data, index) {
         const { classes } = this.props;
         return (
@@ -77,7 +79,7 @@ class UsersList extends Component {
                     <IconButton className={classes.button} key={index} onClick={() => this.editModal(data)} aria-label="Edit">
                         <EditIcon />
                     </IconButton>
-                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => {this.deleteUser(e, data._id);this.refreshPage()}}>
+                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => { this.deleteUser(e, data._id); this.refreshPage() }}>
                         <DeleteIcon />
                     </IconButton>
                 </TableCell>

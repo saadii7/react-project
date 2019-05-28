@@ -1,4 +1,4 @@
-import { ADD_EVENT, FETCH_ALL_EVENTS } from '../actions/types';
+import { ADD_EVENT, FETCH_ALL_EVENTS,DELETE_EVENT } from '../actions/types';
 import axios from 'axios';
 
 export const createEvent = event => {
@@ -41,9 +41,28 @@ export const fetchAllEvents = (ids, keys) => {
             });
         }
         return axios
-            .get('/events/all' + '?' + query)
+            .get('/events/all?' + query)
             .then(response => {
                 dispatch(fetchEvents(response.data));
+            })
+            .catch(error => {
+                throw error;
+            });
+    };
+};
+export const deleteEventSuccess = id => {
+    return {
+        type: DELETE_EVENT,
+        id: id
+    };
+};
+export const deleteEvent = id => {
+    return dispatch => {
+        return axios
+            .delete('/events/delete/' + id)
+            .then(response => {
+                dispatch(deleteEventSuccess(response.data));
+                console.log('Success');
             })
             .catch(error => {
                 throw error;

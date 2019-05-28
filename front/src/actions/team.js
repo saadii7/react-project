@@ -46,6 +46,37 @@ export const fetchAllTeams = () => {
     };
 };
 
+
+// export const fetchTeams = teams => {
+//     return {
+//         type: FETCH_ALL_TEAMS,
+//         payload: teams
+//     };
+// };
+
+// export const fetchAllTeams = (ids, keys) => {
+//     return dispatch => {
+//         let query = '';
+//         if (keys.length > 0) {
+//             //for loop
+//             keys.forEach((key, index) => {
+//                 query += key + '=' + ids[index];
+//                 if (index !== keys.length - 1) query += '&';
+//             });
+//         }
+//         return axios
+//             .get('/teams/all?' + query)
+//             .then(response => {
+//                 dispatch(fetchTeams(response.data));
+//             })
+//             .catch(error => {
+//                 throw error;
+//             });
+//     };
+// };
+
+
+
 export const getTeamByIdSuccess = team => {
     return {
         type: FETCH_TEAM,
@@ -75,9 +106,9 @@ export const deleteTeamSuccess = id => {
 };
 export const deleteTeam = id => {
     return dispatch => {
-        console.log('Sports-------id-------------' + id);
+        console.log('Team----------id----------' + id);
         return axios
-            .delete('/sports/delete/' + id)
+            .delete('/teams/delete/' + id)
             .then(response => {
                 dispatch(deleteTeamSuccess(response.data));
                 console.log('Success');

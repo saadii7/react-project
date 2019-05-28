@@ -28,7 +28,8 @@ class EditSport extends React.Component {
         super(props);
         this.state = {
             sport: {    
-                sportName: ''
+                sportName:'',
+                id:''
             }
         }
 
@@ -38,7 +39,8 @@ class EditSport extends React.Component {
         this.setState({
             sport: {
                 ...this.state.sport,
-                [e.target.name]: e.target.value
+                [e.target.name]: e.target.value,
+                id:this.props.sports._id
             }
         });
     };
@@ -46,7 +48,7 @@ class EditSport extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.onUpdateSport(this.state.sport);
-        console.log(this.props.sports._id);
+        console.log("---------->",this.state.sport)
     };
     componentDidMount() {
         let props = this.props;

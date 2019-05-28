@@ -110,9 +110,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onDelete: id => {
-            dispatch(deleteSport(id));
-        },
+        onDelete: (id) => {dispatch(deleteSport(id))},
         onFetchAllSports:()=>{dispatch(fetchAllSports())}
     };
 };

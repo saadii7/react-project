@@ -9,11 +9,11 @@ import teamReducer from './teamReducer';
 import eventReducer from './eventReducer';
 import usersReducer from './usersReducer';
 export default combineReducers({
-  errors: errorReducer,
-  auth: authReducer,
-  sports: sportsReducer,
-  user: userReducer,
-  team: teamReducer,
-  event: eventReducer,
-  users: usersReducer
+    errors: errorReducer,
+    auth: authReducer,
+    sports: sportsReducer,
+    user: userReducer,
+    team: teamReducer,
+    event: eventReducer,
+    users: usersReducer
 });

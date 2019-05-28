@@ -13,10 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import { fetchAllEvents } from '../../actions/event';
-import cricket from "../../assets/cricket.jpeg";
+import { fetchAllEvents,deleteEvent } from '../../actions/event';
 
 const styles = theme => ({
 
@@ -31,30 +28,33 @@ const styles = theme => ({
     //     boxShadow: theme.shadows[5],
     //     padding: theme.spacing.unit * 4,
     // },
-     paper: {
+    paper: {
         padding: theme.spacing.unit * 2,
         margin: 'auto',
         maxWidth: 500,
-      },
-      image: {
+    },
+    image: {
         width: 128,
         height: 128,
-      },
-      img: {
+    },
+    img: {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
-      },
+    },
 });
 
 class EventList extends Component {
 
 
-    deleteSport(e, index) {
+    deleteEvent(e, index) {
         e.preventDefault();
         this.props.onDelete(index);
-    }
+    };
+    refreshPage=()=>{ 
+        window.location.reload(); 
+    };
 
     listView(data, index) {
         const { classes } = this.props;
@@ -70,7 +70,7 @@ class EventList extends Component {
                     <IconButton className={classes.button} aria-label="Edit" component='a' href={`/edit-vendor/${data._id}`}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => this.deleteSport(e, data._id)}>
+                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => {this.deleteEvent(e, data._id);this.refreshPage()}}>
                         <DeleteIcon />
                     </IconButton>
                 </TableCell>
@@ -85,66 +85,30 @@ class EventList extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <div>
-                    <main className={classes.root}>
-                        <div className={classes.toolbar} />
-                        <Grid container spacing={24}>
-                            <Grid item xs={6}>
-                            </Grid>
-                            <Grid item xs={3} container justify="flex-end">
-                            </Grid>
+                <main className={classes.root}>
+                    <div className={classes.toolbar} />
+                    <Grid container spacing={24}>
+                        <Grid item xs={6}>
                         </Grid>
-                        <Grid container spacing={24}>
-                            <Paper className={classes.root}>
-                                <Table className={classes.table}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Name</TableCell>
-                                            <TableCell>Action</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {this.props.event.map((event, i) => this.listView(event, i))}
-                                    </TableBody>
-                                </Table>
-                            </Paper>
+                        <Grid item xs={3} container justify="flex-end">
                         </Grid>
-                    </main>
-                </div>
-                <br/>
-                <div>
-                    <div className={classes.root}>
-                        <Paper className={classes.paper}>
-                            <Grid container spacing={16}>
-                                <Grid item>
-                                    <ButtonBase className={classes.image}>
-                                        <img className={classes.img} alt="complex" src={cricket} />
-                                    </ButtonBase>
-                                </Grid>
-                                <Grid item xs={12} sm container>
-                                    <Grid item xs container direction="column" spacing={16}>
-                                        <Grid item xs>
-                                            <Typography gutterBottom variant="subtitle1">
-                                                Standard license
-                                            </Typography>
-                                            <Typography variant="title" gutterBottom align="center">VS</Typography>
-                                            
-                                            <Typography color="textSecondary">ID: 1030114</Typography>
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography style={{ cursor: 'pointer' }}>Remove</Typography>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item>
-                                    <ButtonBase className={classes.image}>
-                                        <img className={classes.img} alt="complex" src={cricket} />
-                                    </ButtonBase>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+                    </Grid>
+                    <Grid container spacing={24}>
+                        <Paper className={classes.root}>
+                            <Table className={classes.table}>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Action</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {this.props.event.map((event, i) => this.listView(event, i))}
+                                </TableBody>
+                            </Table>
                         </Paper>
-                    </div>
-                </div>
+                    </Grid>
+                </main>
             </div>
         );
     }
@@ -162,7 +126,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onGetEvents: id => {
-            dispatch(fetchAllEvents([id],['maker']))
+            dispatch(fetchAllEvents([id], ['maker']))
+        },
+        onDelete: id => {
+            dispatch(deleteEvent(id));
         }
     };
 };

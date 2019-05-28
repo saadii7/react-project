@@ -21,7 +21,7 @@ function getModalStyle() {
     return {
         top: `${top}%`,
         left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
+        transform: `translate(-${top}%, -${left}%)`
     };
 }
 
@@ -29,16 +29,16 @@ const styles = theme => ({
     root: {
         ...theme.mixins.gutters(),
         paddingTop: theme.spacing.unit * 2,
-        paddingBottom: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit * 2
     },
     fab: {
         margin: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3,
+        right: theme.spacing.unit * 3
     },
     absolute: {
         position: 'absolute',
         bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3,
+        right: theme.spacing.unit * 3
     },
     paper: {
         position: 'absolute',
@@ -46,23 +46,22 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing.unit * 4,
-        outline: 'none',
-    },
-
+        outline: 'none'
+    }
 });
 
 class Index extends React.Component {
     state = {
         open: false,
-        add : true,
+        add: true,
         sport: {}
     };
     openModal = () => {
         this.setState({ open: true });
     };
-    editModal = (sport) => {
+    editModal = sport => {
         this.setState({ open: true, add: false, sport });
-    }
+    };
     closeModal = () => {
         this.setState({ open: false });
     };
@@ -71,44 +70,48 @@ class Index extends React.Component {
         return (
             <div className={classes.root}>
                 <Paper className={classes.root}>
-                    <Typography variant="h5" component="h3">
+                    <Typography variant='h5' component='h3'>
                         Sports
                     </Typography>
-                    <Typography component="h3">
-                        <SportsList editModal = {this.editModal} closeModal = {this.closeModal}/>
+                    <Typography component='h3'>
+                        <SportsList
+                            editModal={this.editModal}
+                            closeModal={this.closeModal}
+                        />  
                     </Typography>
                     <div>
-                        <Tooltip title="Add" aria-label="Add">
-                            <Fab color="primary" onClick={this.openModal} className={classes.absolute}>
+                        <Tooltip title='Add' aria-label='Add'>
+                            <Fab
+                                color='primary'
+                                onClick={this.openModal}
+                                className={classes.absolute}>
                                 <AddIcon />
                             </Fab>
                         </Tooltip>
-
                     </div>
                 </Paper>
                 <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
+                    aria-labelledby='simple-modal-title'
+                    aria-describedby='simple-modal-description'
                     open={this.state.open}
                     onClose={this.closeModal}
-                    center="true"   
-                >
+                    center='true'>
                     <div style={getModalStyle()} className={classes.paper}>
-                        <Typography variant="h6" id="modal-title">
+                        <Typography variant='h6' id='modal-title'>
                             {this.state.add && <p>Add New Sport</p>}
                             {this.state.add && <CreateSport />}
 
                             {!this.state.add && <p>Update Sport</p>}
-                            {!this.state.add && <EditSport sport={this.state.sport}/>}
+                            {!this.state.add && (
+                                <EditSport sport={this.state.sport} />
+                            )}
                         </Typography>
-                                
-                        
                     </div>
                 </Modal>
             </div>
         );
     }
-};
+}
 // We need an intermediary variable for handling the recursive nesting.
 const SimpleModalWrapped = withStyles(styles)(Index);
 export default SimpleModalWrapped;

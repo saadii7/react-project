@@ -161,7 +161,6 @@ class CreateTeam extends React.Component {
                     <Button type="submit" variant="contained" color="primary" className={classes.button}>
                         Submit
                     </Button>
-                    {/* <button type="submit" className="btn btn-primary">Add Team</button> */}
                 </div>
             </form>
         );
