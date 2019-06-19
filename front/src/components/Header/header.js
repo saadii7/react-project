@@ -111,15 +111,19 @@ const styles = theme => ({
         width: 60,
         height: 60,
     },
+    button:{
+        marginRight: theme.spacing.unit * 3,   
+    }
 });
 
 class Navbar extends React.Component {
     state = {
         anchorEl: null,
         mobileMoreAnchorEl: null,
-        open: false
+        open: false,
+        search:''
     };
-
+    
     handleProfileMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
@@ -140,6 +144,10 @@ class Navbar extends React.Component {
         e.preventDefault();
         this.props.logoutUser(this.props.history);
     };
+    
+    onChange=(e)=>{
+        this.setState({ search:e.target.value });
+    }
     clickDrawer = () => {
         if (this.state.open) {
             this.props.handleDrawerClose();
@@ -245,8 +253,8 @@ class Navbar extends React.Component {
             <React.Fragment >
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <Button component={Link} to='/register' variant="contained" > Signup </Button>
-                    <Button component={Link} to='/login' variant="contained" > Login </Button>
+                    <Button className={classes.button} component={Link} to='/register' variant="contained" color="primary" > Signup </Button>
+                    <Button className={classes.button} component={Link}  to='/login'variant="contained" color="primary"> Login </Button>
                 </div>
             </React.Fragment>
         )
@@ -278,6 +286,7 @@ class Navbar extends React.Component {
                             </div>
                             <InputBase
                                 placeholder="Search…"
+                                onChange={this.onChange}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,

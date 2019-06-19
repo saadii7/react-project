@@ -4,7 +4,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Button from '@material-ui/core/Button';
 import classnames from 'classnames';
+
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit * 2,
+        marginLeft: theme.spacing.unit,
+
+    },
+    input: {
+        display: 'none',
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit * 10,
+        marginRight: theme.spacing.unit,
+    },
+});
 
 class UserForm extends Component {
 
@@ -18,8 +42,8 @@ class UserForm extends Component {
         this.inputChange = props.inputChange;
         this.onSubmit = props.onSubmit;
     }
-    inputChange = (e) => {}
-    onSubmit = (e) => {}
+    inputChange = (e) => { }
+    onSubmit = (e) => { }
 
     componentDidMount() {
         console.log(this.props);
@@ -29,86 +53,117 @@ class UserForm extends Component {
         this.setState({ user: props.user, registration: props.registration })
     }
     render() {
+        const { classes } = this.props;
         const { errors } = this.state;
         return (
             <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="Name"
-                        className={classnames('form-control form-control-lg', {
-                            'is-invalid': errors.name
-                        })}
-                        name="name"
-                        onChange={this.inputChange}
-                        value={this.state.user.name}
-                    />
-                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        className={classnames('form-control form-control-lg', {
-                            'is-invalid': errors.userName
-                        })}
-                        name="userName"
-                        onChange={this.inputChange}
-                        value={this.state.user.userName}
-                    />
-                    {errors.userName && (<div className="invalid-feedback">{errors.userName}</div>)}
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        className={classnames('form-control form-control-lg', {
-                            'is-invalid': errors.email
-                        })}
-                        name="email"
-                        onChange={this.inputChange}
-                        value={this.state.user.email}
-                    />
-                    {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                </div>
-                {
-                    this.state.registration &&
                     <div className="form-group">
-                        <input
-                            type="password"
-                            placeholder="Password"
+                        <TextField
+                            id="outlined-name"
+                            type="text"
+                            name="name"
+                            label="Name"
                             className={classnames('form-control form-control-lg', {
-                                'is-invalid': errors.password
+                                'is-invalid': errors.name,
                             })}
-                            name="password"
                             onChange={this.inputChange}
-                            value={this.state.password}
+                            value={this.state.user.name}
+                            margin="normal"
+                            variant="outlined"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            }}
                         />
-                        {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                        {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                     </div>
-                }
-                {
-                    this.state.registration &&
                     <div className="form-group">
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
+                        <TextField
+                            id="outlined-name"
+                            type="text"
+                            name="userName"
+                            label="Username"
                             className={classnames('form-control form-control-lg', {
-                                'is-invalid': errors.password_confirm
+                                'is-invalid': errors.userName,
                             })}
-                            name="password_confirm"
                             onChange={this.inputChange}
-                            value={this.state.password_confirm}
+                            value={this.state.user.userName}
+                            margin="normal"
+                            variant="outlined"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            }}
                         />
-                        {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
+                        {errors.userName && (<div className="invalid-feedback">{errors.userName}</div>)}
                     </div>
-                }
+                    <div className="form-group">
+                        <TextField
+                            id="outlined-name"
+                            type="email"
+                            name="email"
+                            label="Email"
+                            className={classnames('form-control form-control-lg', {
+                                'is-invalid': errors.email,
+                            })}
+                            onChange={this.inputChange}
+                            value={this.state.user.email}
+                            margin="normal"
+                            variant="outlined"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            }}
+                        />
+                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                    </div>
+                    {
+                        this.state.registration &&
+                        <div className="form-group">
+                            <TextField
+                                id="outlined-name"
+                                type="password"
+                                name="password"
+                                label="Password"
+                                className={classnames('form-control form-control-lg', {
+                                    'is-invalid': errors.password,
+                                })}
+                                onChange={this.inputChange}
+                                value={this.state.user.password}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                }}
+                            />
+                            {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                        </div>
+                    }
+                    {
+                        this.state.registration &&
+                        <div className="form-group">
+                            <TextField
+                                id="outlined-name"
+                                type="password"
+                                name='password_confirm'
+                                label="Confirm Password"
+                                className={classnames('form-control form-control-lg', {
+                                    'is-invalid': errors.password_confirm,
+                                })}
+                                onChange={this.inputChange}
+                                value={this.state.user.password_confirm}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                }}
+                            />
+                            {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
+                        </div>
+                    }
 
-                <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                        Save
-                    </button>
-                </div>
+                    <div className="form-group">
+                        <Button className={classes.button} color='primary' type="submit" variant="contained">
+                            Save
+                        </Button>
+                    </div>
             </form>
         )
     }
@@ -126,5 +181,4 @@ const mapStateToProps = (state) => {
         errors: state.errors,
     };
 };
-
-export default connect(mapStateToProps)(withRouter(UserForm));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(withRouter(UserForm)));

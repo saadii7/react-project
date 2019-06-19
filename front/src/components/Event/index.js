@@ -36,11 +36,16 @@ const styles = theme => ({
         // paddingTop: theme.spacing.unit * 2,
         // paddingBottom: theme.spacing.unit * 2
     },
-    modal: {
-        // ...theme.mixins.gutters(),
-        justifyContent: 'space-around',
-        alignItems: 'flex-end',
-    },
+    modalStyle1:{
+        position:'absolute',
+        top:'10%',
+        left:'10%',
+        overflow:'scroll',
+        height:'100%',
+        display:'block',
+        // overflow: 'hidden',
+        // overflow-y: auto !important 
+      },
     heading: {
         fontSize: theme.typography.pxToRem(23),
         flexBasis: '33.33%',
@@ -142,6 +147,7 @@ class EditIndex extends Component {
                         aria-describedby='simple-modal-description'
                         open={this.state.open}
                         onClose={this.closeModal}
+                        className={classes.modalStyle1}
                         center='true'>
                         <div style={getModalStyle()} className={classes.paper}>
                             <Typography variant='h6' id='modal-title'>

@@ -8,6 +8,7 @@ import userReducer from './userReducer';
 import teamReducer from './teamReducer';
 import eventReducer from './eventReducer';
 import usersReducer from './usersReducer';
+import friendReducer from './friendReducer';
 export default combineReducers({
     errors: errorReducer,
     auth: authReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
     user: userReducer,
     team: teamReducer,
     event: eventReducer,
-    users: usersReducer
+    users: usersReducer,
+    friend:friendReducer
 });

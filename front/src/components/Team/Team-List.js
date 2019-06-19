@@ -46,9 +46,10 @@ class TeamList extends Component {
     // editModal = e => {};
     // closeModal = e => {};
 
-    deleteUser(e, index) {
+    deleteTeam(e, index) {
         e.preventDefault();
         this.props.onDelete(index);
+        console.log('-----delete Team---->',index)
     }
     componentDidMount() {
         // store.dispatch(fetchAllTeams());
@@ -90,7 +91,7 @@ class TeamList extends Component {
                         className={classes.button}
                         aria-label='Delete'
                         onClick={e => {
-                            this.deleteUser(e, data._id);
+                            this.deleteTeam(e, data._id);
                             // this.refreshPage();
                         }}>
                         <DeleteIcon />

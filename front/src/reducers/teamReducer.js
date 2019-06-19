@@ -27,7 +27,7 @@ export default function postReducer(state = initialState, action) {
                 teams: action.payload
             };
         case DELETE_TEAM:
-            return state.filter(team => team._id !== action.payload.id);
+            return state.filter(team => team._id !== team.id);
         default:
             return state;
     }
