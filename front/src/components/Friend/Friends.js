@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { fetchAllUsers, deleteUser } from '../../actions/user';
 import { createFriendRequest } from '../../actions/friend';
+import FriendButton from './Friend-Button';
 
 const styles = theme => ({
     root: {
@@ -41,7 +42,6 @@ class Friends extends Component {
         super(props);
         this.state = {
             users: [],
-            authId: '',
             spacing: '24',
         };
         this.editModal = props.editModal;
@@ -68,15 +68,7 @@ class Friends extends Component {
     refreshPage = () => {
         window.location.reload();
     };
-    friendRequestHandler = (e) => {
-        const rId = this.props.auth.user.id
-        const id = {
-            senderId: e,
-            receiverId: rId
-        }
-        console.log(id);
-        this.props.onRequest(id);
-    }
+    
     // renderUser=(user)=>{
     //     const {search}=this.state.search;
     //     var code = user.code.toLowerCase()
@@ -84,6 +76,11 @@ class Friends extends Component {
     //         return null
     //     }
     // }
+    onSubmit = (e) => {
+        e.preventDefault();
+        console.log('chalo'+e)
+    }
+
     listView(data, index) {
         const { classes } = this.props;
         return (
@@ -112,7 +109,7 @@ class Friends extends Component {
                                 </CardActionArea>
                                 <CardActions>
                                     <Button variant="contained" color="primary">Message</Button>
-                                    <Button variant="contained" color="primary" onClick={() => this.friendRequestHandler(data._id)}>Send Request</Button>
+                                    <FriendButton onClick={(data._id)}/>
                                 </CardActions>
                             </Card>
                         </Grid>
