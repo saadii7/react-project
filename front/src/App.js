@@ -6,6 +6,8 @@ import {
     Redirect
 } from 'react-router-dom';
 import store from './store';
+import socket from './socket';
+
 import { connect } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';

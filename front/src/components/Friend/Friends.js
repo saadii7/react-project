@@ -17,7 +17,7 @@ import FriendButton from './Friend-Button';
 
 const styles = theme => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     toolbar: theme.mixins.toolbar,
     paper: {
@@ -26,29 +26,29 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing.unit * 4,
-        outline: 'none',
+        outline: 'none'
     },
     bigAvatar: {
         margin: 10,
         width: 60,
-        height: 60,
+        height: 60
     },
     card: {
-        maxWidth: 345,
-    },
+        maxWidth: 345
+    }
 });
 class Friends extends Component {
     constructor(props) {
         super(props);
         this.state = {
             users: [],
-            spacing: '24',
+            spacing: '24'
         };
         this.editModal = props.editModal;
         this.closeModal = props.closeModal;
     }
-    editModal = (e) => { }
-    closeModal = (e) => { }
+    editModal = e => {};
+    closeModal = e => {};
 
     deleteUser(e, index) {
         e.preventDefault();
@@ -60,15 +60,14 @@ class Friends extends Component {
         this.setState({
             users: this.props.users,
             authId: this.props.auth.user._id
-        })
+        });
         console.log('------state users----->' + this.state.users);
         console.log('------ user ID----->' + this.props.auth.user.id);
-
     }
     refreshPage = () => {
         window.location.reload();
     };
-    
+
     // renderUser=(user)=>{
     //     const {search}=this.state.search;
     //     var code = user.code.toLowerCase()
@@ -76,10 +75,10 @@ class Friends extends Component {
     //         return null
     //     }
     // }
-    onSubmit = (e) => {
+    onSubmit = e => {
         e.preventDefault();
-        console.log('chalo'+e)
-    }
+        console.log('chalo' + e);
+    };
 
     listView(data, index) {
         const { classes } = this.props;
@@ -87,45 +86,53 @@ class Friends extends Component {
             <div key={index}>
                 {console.log('$$$$' + data.userName)}
                 <div>
-                    <Grid container className={classes.root} justify='center' spacing={24}>
+                    <Grid
+                        container
+                        className={classes.root}
+                        justify='center'
+                        spacing={24}>
                         <Grid item xs={12} sm={6} md={4}>
                             <Card className={classes.card}>
                                 <CardActionArea>
                                     <CardMedia
-                                        component="img"
+                                        component='img'
                                         alt={data.userName}
-                                        height="140"
+                                        height='140'
                                         src={data.avatar}
                                         title={data.userName}
                                     />
                                     <CardContent>
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <Typography
+                                            gutterBottom
+                                            variant='h5'
+                                            component='h2'>
                                             {data.userName}
                                         </Typography>
-                                        <Typography component="p">
-                                            Explore latest exclusive updates on cricket all over the world.
+                                        <Typography component='p'>
+                                            Explore latest exclusive updates on
+                                            cricket all over the world.
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
                                 <CardActions>
-                                    <Button variant="contained" color="primary">Message</Button>
-                                    <FriendButton onClick={(data._id)}/>
+                                    <Button variant='contained' color='primary'>
+                                        Message
+                                    </Button>
+                                    <FriendButton onClick={data._id} />
                                 </CardActions>
                             </Card>
                         </Grid>
                     </Grid>
                 </div>
             </div>
-        )
-    };
+        );
+    }
     render() {
         // const { classes } = this.props;
 
         return (
             <div>
-                {this.props.users.map((user, i) =>
-                    this.listView(user, i))
-                }
+                {this.props.users.map((user, i) => this.listView(user, i))}
             </div>
         );
     }
@@ -150,6 +157,8 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-
-const SimpleModalWrapped = connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(Friends)));
+const SimpleModalWrapped = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(withRouter(Friends)));
 export default SimpleModalWrapped;

@@ -25,6 +25,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import socket from '../../socket';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -185,6 +186,14 @@ class Navbar extends React.Component {
         }
     };
     componentDidMount() {
+        console.log(
+            'Listening to notifications_for_' + this.props.auth.user.id
+        );
+        socket.on('notifications_for_' + this.props.auth.user.id, data =>
+            // this.setState({ response: data })
+            console.log('----------------------------', data)
+        );
+
         this.setState({ open: this.props.open });
     }
 

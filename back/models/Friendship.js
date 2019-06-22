@@ -3,30 +3,14 @@ const validator = require('validator');
 
 const Schema = new mongoose.Schema(
     {
-        // status: {
-        //     type: String,
-        //     required: true
-        // },
-        from: {
+        ffrom: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'Users',
             required: true
         },
         to: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
-        },
-        type: {
-            type: String,
-            required: true
-        },
-        seen: {
-            type: Boolean,
-            default: false
-        },
-        content: {
-            type: String,
+            ref: 'Users',
             required: true
         },
         isDeleted: {
@@ -43,5 +27,5 @@ const Schema = new mongoose.Schema(
     }
 );
 
-var Notification = mongoose.model('Notification', Schema);
-module.exports = { Notification };
+var Friendship = mongoose.model('Friendship', Schema);
+module.exports = { Friendship };
