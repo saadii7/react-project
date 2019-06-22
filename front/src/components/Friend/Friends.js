@@ -87,6 +87,30 @@ class Friends extends Component {
             <div key={index}>
                 {console.log('$$$$' + data.userName)}
                 <div>
+                <Paper className={classes.root}>
+            <Table className={classes.table}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Players</TableCell>
+                        <TableCell align='right'>Calories</TableCell>
+                        <TableCell align='right'>Fat&nbsp;(g)</TableCell>
+                        <TableCell align='right'>Carbs&nbsp;(g)</TableCell>
+                        <TableCell align='right'>Protein&nbsp;(g)</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                        <TableRow key={row.name}>
+                            <TableCell component='th' scope='row'>
+                                {row.name}
+                            </TableCell>
+                            <TableCell align='right'>{data.userName}</TableCell>
+                            <TableCell align='right'>{row.fat}</TableCell>
+                            <TableCell align='right'>{row.carbs}</TableCell>
+                            <TableCell align='right'>{row.protein}</TableCell>
+                        </TableRow>
+                </TableBody>
+            </Table>
+        </Paper>
                     <Grid container className={classes.root} justify='center' spacing={24}>
                         <Grid item xs={12} sm={6} md={4}>
                             <Card className={classes.card}>
