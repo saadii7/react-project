@@ -1,10 +1,52 @@
-// Login.js
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { loginUser } from '../../actions/auth';
 import classnames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit * 2,
+        marginLeft: theme.spacing.unit,
+
+    },
+    input: {
+        display: 'none',
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    dense: {
+        marginTop: 16,
+    },
+    menu: {
+        width: 200,
+    },
+    paper: {
+        position: 'absolute',
+        width: theme.spacing.unit * 50,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing.unit * 4,
+        outline: 'none',
+        marginLeft: theme.spacing.unit*45,
+        marginRight: theme.spacing.unit,
+    },
+});
+
+
 
 class Login extends Component {
 
@@ -48,44 +90,57 @@ class Login extends Component {
         }
     }
     render() {
+        const { classes } = this.props;
         const { errors } = this.state;
         return (
-            <div className="container" style={{ marginTop: '50px', width: '700px' }}>
-                <h2 style={{ marginBottom: '40px' }}>Login</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className={classnames('form-control form-control-lg', {
-                                'is-invalid': errors.email
-                            })}
-                            name="email"
-                            onChange={this.handleInputChange}
-                            value={this.state.email}
-                        />
-                        {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className={classnames('form-control form-control-lg', {
-                                'is-invalid': errors.password
-                            })}
-                            name="password"
-                            onChange={this.handleInputChange}
-                            value={this.state.password}
-                        />
-                        {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                    </div>
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-primary">
-                            Login User
-                    </button>
-                    </div>
-                </form>
-            </div>
+                <Paper className={classes.paper}>
+                    <Typography variant='h4' align='center'>Login</Typography>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <TextField
+                                id="outlined-name"
+                                type="email"
+                                name="email"
+                                label="Email"
+                                className={classnames('form-control form-control-lg', {
+                                    'is-invalid': errors.email
+                                })}
+                                onChange={this.handleInputChange}
+                                value={this.state.email}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                }}
+                            />
+                            {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+                        </div>
+                        <div className="form-group">
+                            <TextField
+                                id="outlined-name"
+                                type="password"
+                                name="password"
+                                label="Password"
+                                className={classnames('form-control form-control-lg', {
+                                    'is-invalid': errors.password
+                                })}
+                                onChange={this.handleInputChange}
+                                value={this.state.password}
+                                margin="normal"
+                                variant="outlined"
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                }}
+                            />
+                            {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+                        </div>
+                        <div className="form-group">
+                            <Button className={classes.button} color='primary' type="submit" variant="contained">
+                                Login
+                        </Button>
+                        </div>
+                    </form>
+                </Paper>
         )
     };
 };
@@ -101,6 +156,6 @@ const mapStateToProps = (state) => ({
     errors: state.errors
 })
 
-export default connect(mapStateToProps, { 
-    loginUser
- })(Login)
+export default connect(mapStateToProps, { loginUser })(withStyles(styles, { withTheme: true })(withRouter(Login)));
+
+// export default connect(mapStateToProps, )(Login)

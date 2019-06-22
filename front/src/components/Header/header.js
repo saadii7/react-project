@@ -16,12 +16,14 @@ import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-// import { Avatar } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import { grey } from '@material-ui/core/colors';
 import MenuIcon from '@material-ui/icons/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 const drawerWidth = 240;
@@ -109,6 +111,27 @@ const styles = theme => ({
         margin: 10,
         width: 60,
         height: 60
+    },
+    button: {
+        marginRight: theme.spacing.unit * 3
+    },
+    root: {
+        position: 'relative'
+    },
+    paper: {
+        position: 'absolute',
+        top: 36,
+        right: 0,
+        left: 0
+    },
+    fake: {
+        backgroundColor: grey[200],
+        height: theme.spacing.unit * 1,
+        margin: theme.spacing.unit * 2,
+        // Selects every two elements among any group of siblings.
+        '&:nth-child(2n)': {
+            marginRight: theme.spacing.unit * 3
+        }
     }
 });
 
@@ -116,9 +139,20 @@ class Navbar extends React.Component {
     state = {
         anchorEl: null,
         mobileMoreAnchorEl: null,
-        open: false
+        open: false,
+        search: ''
+    };
+    handleClick = () => {
+        this.setState(state => ({
+            open: !state.open
+        }));
     };
 
+    handleClickAway = () => {
+        this.setState({
+            open: false
+        });
+    };
     handleProfileMenuOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
@@ -139,6 +173,10 @@ class Navbar extends React.Component {
         e.preventDefault();
         this.props.logoutUser(this.props.history);
     };
+
+    onChange = e => {
+        this.setState({ search: e.target.value });
+    };
     clickDrawer = () => {
         if (this.state.open) {
             this.props.handleDrawerClose();
@@ -158,6 +196,8 @@ class Navbar extends React.Component {
         const { isAuthenticated } = this.props.auth;
         const { anchorEl, mobileMoreAnchorEl } = this.state;
         const { classes } = this.props;
+        const { open } = this.state;
+        const fake = <div className={classes.fake} />;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -211,7 +251,7 @@ class Navbar extends React.Component {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    <p>Notifications</p>
+                    <p>NOtification</p>
                 </MenuItem>
                 <MenuItem onClick={this.handleProfileMenuOpen}>
                     <IconButton color='inherit'>
@@ -259,11 +299,21 @@ class Navbar extends React.Component {
             <React.Fragment>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <Button component={Link} to='/register' variant='contained'>
+                    <Button
+                        className={classes.button}
+                        component={Link}
+                        to='/register'
+                        variant='contained'
+                        color='primary'>
                         {' '}
                         Signup{' '}
                     </Button>
-                    <Button component={Link} to='/login' variant='contained'>
+                    <Button
+                        className={classes.button}
+                        component={Link}
+                        to='/login'
+                        variant='contained'
+                        color='primary'>
                         {' '}
                         Login{' '}
                     </Button>
@@ -302,6 +352,7 @@ class Navbar extends React.Component {
                             </div>
                             <InputBase
                                 placeholder="Search…"
+                                onChange={this.onChange}
                                 classes={{
                                     root: classes.inputRoot,
                                     input: classes.inputInput,

@@ -76,7 +76,7 @@ export const fetchAllSports = () => {
 
 export const updateSport = (sport) => {
   return (dispatch) => {
-    console.log("Sport Name-------------->",sport)
+    console.log("Edit Sport-------------->",sport)
     return axios.post('/sports/update',sport)
       .then(response => {
         dispatch(updateSportSuccess(response.data))

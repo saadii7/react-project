@@ -27,6 +27,7 @@ import SportsIndex from './components/Sports/Index';
 // import EventIndex from './components/Old-Events/index';
 import UsersList from './components/Users/list';
 import EventIndex from './components/Events';
+import Fiends from './components/Friend/Friends';
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -134,6 +135,10 @@ class App extends Component {
                             <PrivateRoute
                                 path={'/users'}
                                 component={UsersList}
+                            />
+                            <PrivateRoute
+                                path={'/friends'}
+                                component={Fiends}
                             />
 
                             <Redirect from='*' to='/Error404' />

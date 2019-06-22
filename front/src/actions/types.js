@@ -42,3 +42,11 @@ export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
 
 export const FETCH_POST = 'FETCH_POST';
+///////// Friends
+export const SEND_FRIEND_REQUEST = 'SEND_FRIEND_REQUEST';
+export const RECEIVE_FRIEND_REQUEST = 'RECEIVE_FRIEND_REQUEST';
+export const REJECT_FRIEND_REQUEST = 'REJECT_FRIEND_REQUEST';
+export const CHECK_FRIENDSHIP = 'CHECK_FRIENDSHIP';
+
+
+ 

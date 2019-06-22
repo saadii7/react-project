@@ -20,6 +20,7 @@ import TeamIndex from '../Teams/Index';
 import SportsIndex from '../Sports/Index';
 import EventIndex from '../Old-Events/index';
 import UsersList from '../Users/list';
+import Friends from '../Friend/Friends.js';
 
 const drawerWidth = 240;
 
@@ -123,6 +124,12 @@ const userRoutes = [
         title: 'Events',
         icon: 'videogame_asset',
         component: EventIndex
+    },
+    {
+        link: '/friends',
+        title: 'Find Friends',
+        icon: 'videogame_asset',
+        component: Friends
     }
 ];
 class Sidebar extends React.Component {
