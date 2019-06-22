@@ -43,30 +43,28 @@ const styles = theme => ({
         color: theme.palette.text.secondary
     },
     fab: {
-        margin: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3
+        margin: theme.spacing(2),
+        right: theme.spacing(3)
     },
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3
+        bottom: theme.spacing(2),
+        right: theme.spacing(3)
     },
     paper: {
         position: 'absolute',
-        width: theme.spacing.unit * 50,
+        width: theme.spacing(50),
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
+        padding: theme.spacing(4),
         outline: 'none'
     },
-    modal:{
+    modal: {
         justifyContent: 'space-around',
         alignItems: 'flex-end',
         display: 'flex',
-        flexWrap: 'wrap',
-
+        flexWrap: 'wrap'
     }
-
 });
 
 class TeamIndex extends Component {
@@ -87,7 +85,7 @@ class TeamIndex extends Component {
     };
     handleChange = panel => (event, expanded) => {
         this.setState({
-            expanded: expanded ? panel : false,
+            expanded: expanded ? panel : false
         });
     };
 
@@ -96,7 +94,7 @@ class TeamIndex extends Component {
             expanded: expanded ? panel : false
         });
     };
-    componentDidMount() { }
+    componentDidMount() {}
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
@@ -167,9 +165,9 @@ class TeamIndex extends Component {
                         </div>
                     </Modal>
                 </div>
-                </div>
-                );
-            }
-        }
-        
-        export default withStyles(styles)(TeamIndex);
+            </div>
+        );
+    }
+}
+
+export default withStyles(styles)(TeamIndex);

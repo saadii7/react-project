@@ -16,10 +16,10 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Icon from '@material-ui/core/Icon';
 import red from '@material-ui/core/colors/red';
-import TeamIndex from '../Team/Index';
+import TeamIndex from '../Teams/Index';
 import SportsIndex from '../Sports/Index';
-import EventIndex from '../Event/index';
-import UsersList from '../user/list';
+import EventIndex from '../Old-Events/index';
+import UsersList from '../Users/list';
 
 const drawerWidth = 240;
 
@@ -30,10 +30,10 @@ const styles = theme => ({
         // alignItems: 'flex-end',
     },
     icon: {
-        margin: theme.spacing.unit * 2
+        margin: theme.spacing(2)
     },
     iconHover: {
-        margin: theme.spacing.unit * 2,
+        margin: theme.spacing(2),
         '&:hover': {
             color: red[800]
         }
@@ -56,9 +56,9 @@ const styles = theme => ({
             duration: theme.transitions.duration.leavingScreen
         }),
         overflowX: 'hidden',
-        width: theme.spacing.unit * 7 + 1,
+        width: theme.spacing(7) + 1,
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing.unit * 9 + 1
+            width: theme.spacing(9) + 1
         }
     },
     toolbar: {

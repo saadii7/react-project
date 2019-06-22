@@ -16,38 +16,35 @@ import IconButton from '@material-ui/core/IconButton';
 import { fetchEvents } from '../../actions/event';
 
 const styles = theme => ({
-
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     toolbar: theme.mixins.toolbar,
     // paper: {
     //     position: 'absolute',
-    //     width: theme.spacing.unit * 50,
+    //     width: theme.spacing(50),
     //     backgroundColor: theme.palette.background.paper,
     //     boxShadow: theme.shadows[5],
-    //     padding: theme.spacing.unit * 4,
+    //     padding: theme.spacing(4),
     // },
     paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         margin: 'auto',
-        maxWidth: 500,
+        maxWidth: 500
     },
     image: {
         width: 128,
-        height: 128,
+        height: 128
     },
     img: {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
-        maxHeight: '100%',
-    },
+        maxHeight: '100%'
+    }
 });
 
 class AllEventList extends Component {
-
-
     deleteSport(e, index) {
         e.preventDefault();
         this.props.onDelete(index);
@@ -57,27 +54,34 @@ class AllEventList extends Component {
         const { classes } = this.props;
         return (
             <TableRow key={index}>
-                <TableCell component="th" scope="row">
+                <TableCell component='th' scope='row'>
                     {data.eventName}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component='th' scope='row'>
                     {data._id}
                 </TableCell>
                 <TableCell>
-                    <IconButton className={classes.button} aria-label="Edit" component='a' href={`/edit-vendor/${data._id}`}>
+                    <IconButton
+                        className={classes.button}
+                        aria-label='Edit'
+                        component='a'
+                        href={`/edit-vendor/${data._id}`}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton className={classes.button} aria-label="Delete" onClick={(e) => this.deleteSport(e, data._id)}>
+                    <IconButton
+                        className={classes.button}
+                        aria-label='Delete'
+                        onClick={e => this.deleteSport(e, data._id)}>
                         <DeleteIcon />
                     </IconButton>
                 </TableCell>
             </TableRow>
-        )
-    };
+        );
+    }
     componentDidMount() {
-        this.props.onGetEvents(this.props.auth.user.id)
-        // store.dispatch(fetchAllEvents(eventList)) 
-    };
+        this.props.onGetEvents(this.props.auth.user.id);
+        // store.dispatch(fetchAllEvents(eventList))
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -85,10 +89,8 @@ class AllEventList extends Component {
                 <main className={classes.root}>
                     <div className={classes.toolbar} />
                     <Grid container spacing={24}>
-                        <Grid item xs={6}>
-                        </Grid>
-                        <Grid item xs={3} container justify="flex-end">
-                        </Grid>
+                        <Grid item xs={6} />
+                        <Grid item xs={3} container justify='flex-end' />
                     </Grid>
                     <Grid container spacing={24}>
                         <Paper className={classes.root}>
@@ -100,7 +102,9 @@ class AllEventList extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.props.event.map((event, i) => this.listView(event, i))}
+                                    {this.props.event.map((event, i) =>
+                                        this.listView(event, i)
+                                    )}
                                 </TableBody>
                             </Table>
                         </Paper>
@@ -123,9 +127,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onGetEvents: () => {
-            dispatch(fetchEvents([id], ['maker']))
+            dispatch(fetchEvents([id], ['maker']));
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(AllEventList)));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(withRouter(AllEventList)));

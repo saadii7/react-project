@@ -16,16 +16,17 @@ import Navbar from './components/Header/header';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Home from './components/Home/Home';
-import Profile from './components/user/Profile';
-import editProfile from './components/user/edit';
+import Profile from './components/Users/Profile';
+import editProfile from './components/Users/edit';
 import { setCurrentUser, logoutUser } from './actions/auth';
 import { Error404 } from './404';
 import Sidebar from './components/Drawer/drawer';
 // import CreateSport from './components/Sports/Create-Sport/Create-Sport';
-import TeamIndex from './components/Team/Index';
+import TeamIndex from './components/Teams/Index';
 import SportsIndex from './components/Sports/Index';
-import EventIndex from './components/Event/index';
-import UsersList from './components/user/list';
+// import EventIndex from './components/Old-Events/index';
+import UsersList from './components/Users/list';
+import EventIndex from './components/Events';
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -50,7 +51,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3
+        padding: theme.spacing(3)
     }
 });
 
@@ -121,9 +122,14 @@ class App extends Component {
                                 path={'/sports'}
                                 component={SportsIndex}
                             />
+
                             <PrivateRoute
                                 path={'/events'}
-                                component={EventIndex}
+                                component={() => (
+                                    <EventIndex
+                                        isAdmin={this.props.auth.user.isAdmin}
+                                    />
+                                )}
                             />
                             <PrivateRoute
                                 path={'/users'}

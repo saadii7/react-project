@@ -8,31 +8,30 @@ import { updateSport } from '../../actions/sports';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing()
     },
     input: {
-        display: 'none',
+        display: 'none'
     },
     container: {
         display: 'flex',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
+        marginLeft: theme.spacing(),
+        marginRight: theme.spacing()
+    }
 });
 
 class EditSport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sport: {    
-                sportName:'',
-                id:''
+            sport: {
+                sportName: '',
+                id: ''
             }
-        }
-
+        };
     }
 
     handleInputChange = e => {
@@ -40,7 +39,7 @@ class EditSport extends React.Component {
             sport: {
                 ...this.state.sport,
                 [e.target.name]: e.target.value,
-                id:this.props.sports._id
+                id: this.props.sports._id
             }
         });
     };
@@ -48,35 +47,39 @@ class EditSport extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.onUpdateSport(this.state.sport);
-        console.log("---------->",this.state.sport)
+        console.log('---------->', this.state.sport);
     };
     componentDidMount() {
         let props = this.props;
-        this.setState({ sport: props.sport })
+        this.setState({ sport: props.sport });
     }
-    componentWillReceiveProps = (props) => {
-        this.setState({ sport: props.sport })
-    }
+    componentWillReceiveProps = props => {
+        this.setState({ sport: props.sport });
+    };
     render() {
         const { classes } = this.props;
 
         return (
             <form className={classes.container} onSubmit={this.handleSubmit}>
-                <div className="form-group">
+                <div className='form-group'>
                     <TextField
-                        id="outlined-name"
-                        type="text"
+                        id='outlined-name'
+                        type='text'
                         name='sportName'
-                        label="Add Sports"
+                        label='Add Sports'
                         className={classes.textField}
                         onChange={this.handleInputChange}
                         value={this.state.sport.sportName}
-                        margin="normal"
-                        variant="outlined"
+                        margin='normal'
+                        variant='outlined'
                     />
                 </div>
-                <div className="form-group">
-                    <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                <div className='form-group'>
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        className={classes.button}>
                         Update
                     </Button>
                 </div>
@@ -85,7 +88,7 @@ class EditSport extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         auth: state.auth,
         errors: state.errors,
@@ -95,9 +98,12 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onUpdateSport: (sport) => {
+        onUpdateSport: sport => {
             dispatch(updateSport(sport));
         }
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(EditSport)));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(withRouter(EditSport)));

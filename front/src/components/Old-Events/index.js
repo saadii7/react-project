@@ -28,43 +28,41 @@ function getModalStyle() {
     };
 }
 
-
-
 const styles = theme => ({
     root: {
-        width: '100%',
-        // paddingTop: theme.spacing.unit * 2,
-        // paddingBottom: theme.spacing.unit * 2
+        width: '100%'
+        // paddingTop: theme.spacing(2),
+        // paddingBottom: theme.spacing(2)
     },
     modal: {
         // ...theme.mixins.gutters(),
         justifyContent: 'space-around',
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
     heading: {
         fontSize: theme.typography.pxToRem(23),
         flexBasis: '33.33%',
-        flexShrink: 0,
+        flexShrink: 0
     },
     secondaryHeading: {
         fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.secondary
     },
     fab: {
-        margin: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3
+        margin: theme.spacing(2),
+        right: theme.spacing(3)
     },
     absolute: {
         position: 'absolute',
-        bottom: theme.spacing.unit * 2,
-        right: theme.spacing.unit * 3
+        bottom: theme.spacing(2),
+        right: theme.spacing(3)
     },
     paper: {
         position: 'absolute',
-        width: theme.spacing.unit * 50,
+        width: theme.spacing(50),
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
+        padding: theme.spacing(4),
         outline: 'none'
     }
 });
@@ -87,7 +85,7 @@ class EditIndex extends Component {
     };
     handleChange = panel => (event, expanded) => {
         this.setState({
-            expanded: expanded ? panel : false,
+            expanded: expanded ? panel : false
         });
     };
 
@@ -96,11 +94,14 @@ class EditIndex extends Component {
         const { expanded } = this.state;
 
         return (
-
             <div className={classes.root}>
-                <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+                <ExpansionPanel
+                    expanded={expanded === 'panel2'}
+                    onChange={this.handleChange('panel2')}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>Registered Events</Typography>
+                        <Typography className={classes.heading}>
+                            Registered Events
+                        </Typography>
                         <Typography className={classes.secondaryHeading}>
                             Your Registered Events
                         </Typography>
@@ -110,17 +111,19 @@ class EditIndex extends Component {
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
 
-                <ExpansionPanel expanded={expanded === 'panel3'} onChange={this.handleChange('panel3')}>
+                <ExpansionPanel
+                    expanded={expanded === 'panel3'}
+                    onChange={this.handleChange('panel3')}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography className={classes.heading}>All Events</Typography>
+                        <Typography className={classes.heading}>
+                            All Events
+                        </Typography>
                         <Typography className={classes.secondaryHeading}>
                             All upcoming Events are Enlisted Here
                         </Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography>
-                            Upcoming Events
-                       </Typography>
+                        <Typography>Upcoming Events</Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
 
@@ -159,7 +162,6 @@ class EditIndex extends Component {
             </div>
         );
     }
-};
-
+}
 
 export default withStyles(styles)(EditIndex);
