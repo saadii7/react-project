@@ -12,18 +12,19 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Friends from './Friends';
 
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
+// function rand() {
+//     return Math.round(Math.random() * 20) - 10;
+// }
 
 function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
+    const top = 10;
+    const left = 30;
 
     return {
         top: `${top}%`,
+        margin:'auto',
         left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`
+        // transform: `translate(-${top}%, -${left}%)`
     };
 }
 
@@ -69,6 +70,24 @@ const styles = theme => ({
       extendedIcon: {
         marginRight: theme.spacing.unit*1,
       },
+    paper: {
+    maxHeight:500,
+    position: 'absolute',
+    width: 500,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(4),
+    outline: 'none',
+    overflow:'scroll',
+  },
+  modalStyle1:{
+    position:'absolute',
+    top:'10%',
+    left:'10%',
+    overflow:'scroll',
+    height:'100%',
+    display:'block'
+  }
 });
 class FriendIndex extends Component {
     state = {
@@ -116,12 +135,14 @@ class FriendIndex extends Component {
                     <Modal
                         aria-labelledby='simple-modal-title'
                         aria-describedby='simple-modal-description'
+                        style={{alignItems:'center',justifyContent:'center'}}
+                        // className={classes.modalStyle1}
                         open={this.state.open}
                         onClose={this.closeModal}
                         center='true'>
                         <div style={getModalStyle()} className={classes.paper}>
                             <Typography variant='h6' id='modal-title'>
-                                {this.state.add && <p>Add New Team</p>}
+                                {this.state.add && <p>Players</p>}
                                 {this.state.add && <Friends/>}
                             </Typography>
                         </div>

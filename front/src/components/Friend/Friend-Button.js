@@ -2,7 +2,18 @@ import React from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import {checkFriendship,makeFriendRequest,endFriendship} from '../../actions/friend';
+import Icon from '@material-ui/core/Icon';
+import { withStyles } from '@material-ui/core/styles';
+
+import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions/friend';
+
+const styles = theme => ({
+    button: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1)
+    },
+});
+
 class FriendButton extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +25,7 @@ class FriendButton extends React.Component {
 
     checkFrienship = (e) => {
         this.props.onCheckFrienship(e)
-        console.log('checkFriendship id-------->' + this.props.onClick)
+        console.log('checkFriendship id-------->' + this.props.id)
     }
 
     makeFriendRequest = (e) => {
@@ -32,13 +43,15 @@ class FriendButton extends React.Component {
     }
 
     render() {
+        const { classes } = this.props;
         let friendButton;
         let props = this.props;
         if (this.state.noRelationship) {
             friendButton = (
-                <button id="friendbutton" onClick={() => this.makeFriendRequest(props.onClick)}>
+                <Button id="friendbutton" onClick={() => this.makeFriendRequest(props.id)}>
                     Make friend request
-                </button>
+                    <Icon className={classes.rightIcon}>send</Icon>
+                </Button>
             );
         }
         if (!this.state.noRelationship) {
@@ -49,9 +62,10 @@ class FriendButton extends React.Component {
                             variant="contained"
                             color="primary"
                             id="friendbutton"
-                            onClick={() => this.acceptFriendRequest(props.onClick)}
+                            align='right'
+                            onClick={() => this.acceptFriendRequest(props.id)}
                         >
-                            Accept friend request
+                            Accept Request
                         </Button>
                     );
                 }
@@ -60,7 +74,7 @@ class FriendButton extends React.Component {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => this.endFriendship(props.onClick)} id="endfriendship">
+                            onClick={() => this.endFriendship(props.id)} id="endfriendship">
                             Cancel friend request
                         </Button>
                     );
@@ -71,14 +85,14 @@ class FriendButton extends React.Component {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => this.endFriendship(props.onClick)} id="endfriendship">
+                        onClick={() => this.endFriendship(props.id)} id="endfriendship">
                         End friendship
                     </Button>
                 );
             }
         }
 
-        return <div>{friendButton}</div>;
+        return <div className={classes.button}>{friendButton}</div>;
     }
 }
 
@@ -107,4 +121,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)((withRouter(FriendButton)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })((withRouter(FriendButton))))

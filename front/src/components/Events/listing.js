@@ -1,66 +1,138 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+// import store from '../../store';
+import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import { fetchEvents } from '../../actions/event';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
     root: {
-        width: '100%',
-        marginTop: theme.spacing(3),
-        overflowX: 'auto'
+        flexGrow: 1
     },
     table: {
-        minWidth: 650
+        minWidth: 550,
+    },
+    toolbar: theme.mixins.toolbar,
+    // paper: {
+    //     position: 'absolute',
+    //     width: theme.spacing(50),
+    //     backgroundColor: theme.palette.background.paper,
+    //     boxShadow: theme.shadows[5],
+    //     padding: theme.spacing(4),
+    // },
+    paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 400
+    },
+    image: {
+        width: 128,
+        height: 128
+    },
+    img: {
+        margin: 'auto',
+        display: 'block',
+        maxWidth: '100%',
+        maxHeight: '100%'
     }
-}));
+});
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
+class EventListing extends Component {
+    deleteSport(e, index) {
+        e.preventDefault();
+        this.props.onDelete(index);
+    }
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9)
-];
-
-function EventListing() {
-    const classes = useStyles();
-
-    return (
-        <Paper className={classes.root}>
-            <Table className={classes.table}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Dessert (100g serving)</TableCell>
-                        <TableCell align='right'>Calories</TableCell>
-                        <TableCell align='right'>Fat&nbsp;(g)</TableCell>
-                        <TableCell align='right'>Carbs&nbsp;(g)</TableCell>
-                        <TableCell align='right'>Protein&nbsp;(g)</TableCell>
-                    </TableRow>
+    listView(data, index) {
+        const { classes } = this.props;
+        return (
+            <Paper className={classes.tableRoot}>
+                <Table className={classes.table}>
+                    <TableHead>
+                        Events
                 </TableHead>
-                <TableBody>
-                    {rows.map(row => (
-                        <TableRow key={row.name}>
+                    <TableBody>
+                        <TableRow key={index}>
                             <TableCell component='th' scope='row'>
-                                {row.name}
+                                {data.eventName}
                             </TableCell>
-                            <TableCell align='right'>{row.calories}</TableCell>
-                            <TableCell align='right'>{row.fat}</TableCell>
-                            <TableCell align='right'>{row.carbs}</TableCell>
-                            <TableCell align='right'>{row.protein}</TableCell>
+                            <TableCell component='th' scope='row'>
+                                {data._id}
+                            </TableCell>
+                            <TableCell align='right'>
+                                <IconButton
+                                    className={classes.button}
+                                    aria-label='Edit'
+                                    component='a'
+                                    href={`/edit-vendor/${data._id}`}>
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    className={classes.button}
+                                    aria-label='Delete'
+                                    onClick={e => this.deleteSport(e, data._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </Paper>
-    );
+                    </TableBody>
+                </Table>
+            </Paper>
+
+        );
+    }
+    componentDidMount() {
+        this.props.onGetEvents(this.props.auth.user.id);
+        // store.dispatch(fetchAllEvents(eventList))
+    }
+    render() {
+        const { classes } = this.props;
+        return (
+            <div>
+                <main className={classes.root}>
+                    <div className={classes.toolbar} />
+
+                    <Paper className={classes.root}>
+
+                        {this.props.event.map((event, i) =>
+                            this.listView(event, i)
+                        )}
+                    </Paper>
+
+                </main>
+            </div>
+        );
+    }
 }
 
-export default EventListing;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        sports: state.sports,
+        event: state.event,
+        auth: state.auth
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onGetEvents: (id) => {
+            dispatch(fetchEvents([id], ['maker']));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(withRouter(EventListing)));

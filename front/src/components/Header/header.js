@@ -16,15 +16,14 @@ import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import { grey } from '@material-ui/core/colors';
 import MenuIcon from '@material-ui/icons/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import socket from '../../socket';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -185,6 +184,14 @@ class Navbar extends React.Component {
         }
     };
     componentDidMount() {
+        console.log(
+            'Listening to notifications_for_' + this.props.auth.user.id
+        );
+        socket.on('notifications_for_' + this.props.auth.user.id, data =>
+            // this.setState({ response: data })
+            console.log('----------------------------', data)
+        );
+
         this.setState({ open: this.props.open });
     }
 
