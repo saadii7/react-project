@@ -70,7 +70,7 @@ const UserSchema = new Schema(
                 ref: 'Team'
             }
         ],
-        friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Friendship' }]
+        friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'friendship' }]
     },
     {
         timestamps: true

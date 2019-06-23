@@ -28,8 +28,8 @@ app.use(
     })
 );
 
-var session = require('express-session');
-
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 require('./routes/index');
 
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
@@ -41,6 +41,14 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
     }
 );
 
+app.use(
+    session({
+        secret: 'gameon',
+        resave: true,
+        saveUninitialized: false,
+        store: new MongoStore({ mongooseConnection: mongoose.connection })
+    })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 require('./passport')(passport);
@@ -49,41 +57,34 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //use sessions for tracking logins
-app.use(
-    session({
-        secret: 'gameon',
-        resave: true,
-        saveUninitialized: false
-    })
-);
 
-// app.use(function(req, res, next) {
-//     console.log('>>>>>>>>>>>>>>>>>>', req.url);
-//     if (
-//         req.headers &&
-//         (req.url.indexOf('/auth/login') !== -1 ||
-//             req.url.indexOf('/auth/register') !== -1 ||
-//             // req.url.indexOf('/socket.io') !== -1 ||
-//             req.url.indexOf('/auth/logout') !== -1)
-//     ) {
-//         next();
-//     } else if (req.url.indexOf('.map') == -1) {
-//         var token =
-//             req.headers.authorization ||
-//             req.query.token ||
-//             req.headers['x-access-token'];
-//         if (req.session && req.session.passport && req.session.passport.user) {
-//             req.session.nowInMinutes = Math.floor(Date.now() / 1e3) + 6 * 3600;
-//             next();
-//         } else {
-//             return res
-//                 .status(380)
-//                 .send({ message: 'Non Authenticated User, logging you out.' });
-//         }
-//     } else {
-//         next();
-//     }
-// });
+app.use(function(req, res, next) {
+    console.log('>>>>>>>>>>>>>>>>>>', req.user);
+    if (
+        req.headers &&
+        (req.url.indexOf('/auth/login') !== -1 ||
+            req.url.indexOf('/auth/register') !== -1 ||
+            // req.url.indexOf('/socket.io') !== -1 ||
+            req.url.indexOf('/auth/logout') !== -1)
+    ) {
+        next();
+    } else if (req.url.indexOf('.map') == -1) {
+        var token =
+            req.headers.authorization ||
+            req.query.token ||
+            req.headers['x-access-token'];
+        if (req.session && req.session.passport && req.session.passport.user) {
+            req.session.nowInMinutes = Math.floor(Date.now() / 1e3) + 6 * 3600;
+            next();
+        } else {
+            return res
+                .status(380)
+                .send({ message: 'Non Authenticated User, logging you out.' });
+        }
+    } else {
+        next();
+    }
+});
 
 app.use('/auth', require('./routes/auth'));
 app.use('/users', require('./routes/users'));

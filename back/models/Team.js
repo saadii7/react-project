@@ -4,38 +4,44 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const TeamSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required:true,
-	},
-	captain: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+const TeamSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        captain: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        image: {
+            data: Buffer,
+            contentType: String,
+            name: String
+        },
+        description: {
+            type: String
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        },
+        user: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ],
+        deletedAt: {
+            type: Date,
+            default: null
+        }
     },
-	image: {
-		data: Buffer, contentType: String, name: String
-	},
-	description: {
-		type: String,
-	},
-	isDeleted:{
-		type: Boolean,
-		default:false,
-	},
-	user:[{ 
-		type:mongoose.Schema.Types.ObjectId,
-		ref:"User",
-	}],
-	deletedAt:{
-		type:Date,
-		default:null,
-	},
-},
-{
-	timestamps: true
-});
+    {
+        timestamps: true
+    }
+);
 
 const Team = mongoose.model('team', TeamSchema);
 module.exports = { Team };
