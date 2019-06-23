@@ -48,13 +48,18 @@ router.put('/update/:id', (req, res) => {
 
 /////////////////////// Delete Route
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id/delete', (req, res) => {
+    const io = req.app.get('io');
     let id = req.params.id;
     let body = { id, isDeleted: true, deletedAt: new Date().getTime() };
     Notification.findByIdAndUpdate(id, { $set: body }, { new: true })
         .then(note => {
             if (!note)
                 res.status(404).send({ message: 'Notification not found' });
+            io.emit('notifications_for_' + req.user._id, {
+                action: 'delete',
+                data: id
+            });
             res.status(200).send({ message: 'Successfuly Delete' });
         })
         .catch(e => {

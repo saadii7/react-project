@@ -3,14 +3,14 @@ const validator = require('validator');
 
 const Schema = new mongoose.Schema(
     {
-        ffrom: {
+        reciever: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Users',
+            ref: 'User',
             required: true
         },
-        to: {
+        sender: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Users',
+            ref: 'User',
             required: true
         },
         isDeleted: {
@@ -27,5 +27,5 @@ const Schema = new mongoose.Schema(
     }
 );
 
-var Friendship = mongoose.model('Friendship', Schema);
+var Friendship = mongoose.model('friendship', Schema);
 module.exports = { Friendship };
