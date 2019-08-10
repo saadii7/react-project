@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { getUser } from '../../actions/user';
 import UserForm from './form'
+import {updateUser} from '../../actions/user';
 
 class EditProfile extends Component {
 
@@ -16,7 +17,7 @@ class EditProfile extends Component {
                 id: '',
                 name: '',
                 userName: '',
-                image: '',
+                avatar: '',
                 sports: [],
                 email: '',
             },
@@ -35,6 +36,13 @@ class EditProfile extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+        const user = {
+            name: this.state.user.name,
+            userName: this.state.user.userName,
+            email: this.state.user.email,
+        };
+        // console.log(this.state.user);
+        this.props.onUpdateUser(this.state.user._id,user);
         console.log('chalo')
     }
 
@@ -71,7 +79,11 @@ const mapDispatchToProps = dispatch => {
     return {
         onGetUser: id => {
             dispatch(getUser(id));
+        },
+        onUpdateUser: (id,user) => {
+            dispatch(updateUser(id,user));
         }
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditProfile));

@@ -136,6 +136,8 @@ router.get('/:id/friends', (req, res) => {
 router.post('/:id/add-friend', (req, res) => {
     const io = req.app.get('io');
     let userId = req.params.id;
+    let notificationId = req.body.notificationId;
+
     let body = req.body;
     Notification.find({ from: body.friendId, to: userId })
         .then(note => {
@@ -166,6 +168,10 @@ router.post('/:id/add-friend', (req, res) => {
                         io.emit('friends_for_' + userId, {
                             action: 'new',
                             data: result[3]
+                        });
+                        io.emit('notifications_for_' + userId, {
+                            action: 'delete',
+                            data: notificationId
                         });
                         res.status(200).send({ message: 'Friend added.' });
                     })

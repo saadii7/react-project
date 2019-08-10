@@ -19,13 +19,14 @@ function rand() {
 }
 
 function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
+    const top = 10;
+    const left = 30;
 
     return {
         top: `${top}%`,
+        margin: 'auto',
         left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`
+        // transform: `translate(-${top}%, -${left}%)`
     };
 }
 
@@ -47,15 +48,16 @@ const styles = theme => ({
         right: theme.spacing(3)
     },
     absolute: {
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(3)
+        position: 'flex',
+        bottom: '-300px',
+        left:'550px'
     },
     paper: {
         position: 'absolute',
         width: theme.spacing(50),
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
+        overflow: 'scroll',
         padding: theme.spacing(4),
         outline: 'none'
     },

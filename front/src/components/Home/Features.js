@@ -31,12 +31,12 @@ const styles = theme => ({
 
 class Features extends Component {
     state = {
-        spacing: '24',
+       
     };
     render() {
         const { classes } = this.props;
         return (
-            <Grid container className={classes.root} justify='center' spacing={24}>
+            <Grid container className={classes.root} justify='center'>
                 <Grid item xs={3}>
                     <Card className={classes.card}>
                         <CardActionArea>

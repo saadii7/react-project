@@ -95,7 +95,6 @@ const mapDispatchToProps = dispatch => {
         }
     };
 };
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateSport));
 export default connect(
     mapStateToProps,
     mapDispatchToProps

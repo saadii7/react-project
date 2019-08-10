@@ -38,6 +38,7 @@ export const fetchAllTeams = () => {
         return axios
             .get('/teams/all')
             .then(response => {
+                {console.log('sports List---------->'+response.data)}
                 dispatch(fetchTeams(response.data));
             })
             .catch(error => {

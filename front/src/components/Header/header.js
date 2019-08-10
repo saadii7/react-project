@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/auth';
 import { withRouter, Link } from 'react-router-dom';
+import store from '../../store';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,7 +17,6 @@ import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { grey } from '@material-ui/core/colors';
 import MenuIcon from '@material-ui/icons/Menu';
 // import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -24,6 +24,12 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import socket from '../../socket';
+import Notifications from '../Header/notifications';
+import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
+import { fetchAllUsers } from '../../actions/user';
+import Profile from '../Users/Profile';
+import notifications from '../Header/notifications';
+
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -112,7 +118,7 @@ const styles = theme => ({
         height: 60
     },
     button: {
-        marginRight: theme.spacing.unit * 3
+        marginRight: theme.spacing(3)
     },
     root: {
         position: 'relative'
@@ -123,24 +129,19 @@ const styles = theme => ({
         right: 0,
         left: 0
     },
-    fake: {
-        backgroundColor: grey[200],
-        height: theme.spacing.unit * 1,
-        margin: theme.spacing.unit * 2,
-        // Selects every two elements among any group of siblings.
-        '&:nth-child(2n)': {
-            marginRight: theme.spacing.unit * 3
-        }
-    }
 });
 
 class Navbar extends React.Component {
     state = {
+        notifications: [],
         anchorEl: null,
+        NotificationMenuAnchorEl: null,
         mobileMoreAnchorEl: null,
         open: false,
-        search: ''
+        search: '',
+        filterUsersList: {}
     };
+
     handleClick = () => {
         this.setState(state => ({
             open: !state.open
@@ -160,6 +161,13 @@ class Navbar extends React.Component {
         this.setState({ anchorEl: null });
         this.handleMobileMenuClose();
     };
+    handleNotificationMenuOpen = event => {
+        this.setState({ NotificationMenuAnchorEl: event.currentTarget });
+    };
+    handleNotificationMenuClose = event => {
+        this.setState({ NotificationMenuAnchorEl: null });
+    };
+
     handleMobileMenuOpen = event => {
         this.setState({ mobileMoreAnchorEl: event.currentTarget });
     };
@@ -170,7 +178,7 @@ class Navbar extends React.Component {
 
     onLogout = e => {
         e.preventDefault();
-        this.props.logoutUser(this.props.history);
+        this.props.onLogoutUser(this.props.history);
     };
 
     onChange = e => {
@@ -183,30 +191,79 @@ class Navbar extends React.Component {
             this.props.handleDrawerOpen();
         }
     };
+    // handlerFunc = (dispatch) => (order) => {
+    //     store.dispatch(deleteNotificationSuccess(order));
+    //   }
     componentDidMount() {
-        console.log(
-            'Listening to notifications_for_' + this.props.auth.user.id
-        );
-        socket.on('notifications_for_' + this.props.auth.user.id, data =>
-            // this.setState({ response: data })
-            console.log('----------------------------', data)
-        );
+        let notifications = this.props.notifications;
+        console.log('notifications' + notifications);
+        console.log('Listening to notifications_for_' + this.props.auth.user.id);
+        store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
+        store.dispatch(fetchAllUsers());
+        // console.log('------------0-0-0-0---noti-----', this.props.notifications)
+        socket.on('notifications_for_' + this.props.auth.user.id, (data) => {
+            console.log('data-------notification------added', data)
+            switch (data.action) {
+                case 'new':
+                    for (let j = 0; j < this.props.users.length; j++) {
+                        if (this.props.users[j]._id === data.data.from) {
+                            data.data.user = this.props.users[j];
+                            // let notifications = this.props.notifications;
+                            // notifications.push(data.data);
+                            this.props.onCheckSocketNotifications(data.data);
+                            // this.setState({ notifications: notifications })
+                            console.log('------------0-0-0-0--------', data.data)
 
+                            //set store notification to this array "notifications"
+                            break;
+                        }
+                    }
+                    break;
+                case 'delete':
+                        this.props.onDeleteNotificationSuccess(data.data);
+                        window.location.reload();
+                    break;
+
+                default:
+                    break;
+            }
+        });
         this.setState({ open: this.props.open });
     }
 
     componentWillReceiveProps = props => {
-        this.setState({ open: props.open });
+        this.setState({
+            open: props.open,
+            [this.state.notifications]: props.notifications
+        });
+        this.userFilter(props)
+        console.log('--------351531531->', props)
     };
 
+    userFilter = (props) => {
+        // console.log('Header----State-----Notifications-----Data>', this.state.notifications)
+        // console.log('chalo User Filter-------->', props.users, 'AND', props.notifications)
+        let users = props.users
+        let notifications = props.notifications;
+        for (let i = 0; i < notifications.length; i++) {
+            for (let j = 0; j < users.length; j++) {
+                // console.log(users[j]._id, 'chalo fi-------->', notifications)
+                if (users[j]._id === notifications[i].from) {
+                    notifications[i].user = users[j];
+                    // console.log('chalo User--101010110------>', notifications[i].user)
+                    break;
+                }
+            }
+        }
+        this.setState({ notifications: notifications })
+    }
     render() {
         const { isAuthenticated } = this.props.auth;
-        const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { anchorEl, mobileMoreAnchorEl, NotificationMenuAnchorEl } = this.state;
         const { classes } = this.props;
-        const { open } = this.state;
-        const fake = <div className={classes.fake} />;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+        const isRenderNotificationMenuOpen = Boolean(NotificationMenuAnchorEl);
 
         const renderMenu = (
             <Menu
@@ -227,12 +284,28 @@ class Navbar extends React.Component {
                     onClick={this.handleMenuClose}>
                     Update Profile
                 </MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+                <MenuItem component={Link}
+                    to={'/users/' + this.props.auth.user.id + '/friends'}
+                    onClick={this.handleMenuClose}>
+                    Friends
+                </MenuItem>
                 <MenuItem
                     component={Link}
                     to='/logout'
                     onClick={this.onLogout.bind(this)}>
                     Logout
+                </MenuItem>
+            </Menu>
+        );
+        const renderNotificationMenu = (
+            <Menu
+                anchorEl={NotificationMenuAnchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isRenderNotificationMenuOpen}
+                onClose={this.handleNotificationMenuClose}>
+                <MenuItem onClick={this.handleMenuClose} >
+                    <Notifications notifications={this.state.notifications} user={this.props.auth.user} />
                 </MenuItem>
             </Menu>
         );
@@ -253,12 +326,16 @@ class Navbar extends React.Component {
                     <p>Messages</p>
                 </MenuItem>
                 <MenuItem onClick={this.handleMobileMenuClose}>
-                    <IconButton color='inherit'>
-                        <Badge badgeContent={11} color='secondary'>
+                    <IconButton
+                        aria-owns={isRenderNotificationMenuOpen ? 'material-appbar' : undefined}
+                        aria-haspopup='true'
+                        color='inherit'
+                        onClick={this.handleNotificationMenuOpen}
+                    >
+                        <Badge badgeContent={17} color='secondary'>
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    <p>NOtification</p>
                 </MenuItem>
                 <MenuItem onClick={this.handleProfileMenuOpen}>
                     <IconButton color='inherit'>
@@ -277,8 +354,13 @@ class Navbar extends React.Component {
                             <MailIcon />
                         </Badge>
                     </IconButton>
-                    <IconButton color='inherit'>
-                        <Badge badgeContent={17} color='secondary'>
+                    <IconButton
+                        aria-owns={isRenderNotificationMenuOpen ? 'material-appbar' : undefined}
+                        aria-haspopup='true'
+                        color='inherit'
+                        onClick={this.handleNotificationMenuOpen}
+                    >
+                        <Badge badgeContent={this.state.notifications.length} color='secondary'>
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
@@ -300,6 +382,7 @@ class Navbar extends React.Component {
                 </div>
                 {renderMenu}
                 {renderMobileMenu}
+                {renderNotificationMenu}
             </React.Fragment>
         );
         const guestLinks = (
@@ -367,6 +450,7 @@ class Navbar extends React.Component {
                             />
                         </div> */}
                         {isAuthenticated ? authLinks : guestLinks}
+
                     </Toolbar>
                 </AppBar>
             </div>
@@ -376,15 +460,30 @@ class Navbar extends React.Component {
 
 Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
-    logoutUser: PropTypes.func.isRequired,
+    // logoutUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    notifications: state.notifications,
+    users: state.users
 });
+const mapDispatchToProps = dispatch => {
+    return {
+        onCheckSocketNotifications: (notification) => {
+            dispatch(CheckSocketNotifications(notification));
+        },
+        onDeleteNotificationSuccess: (notification) => {
+            dispatch(deleteNotificationSuccess(notification));
+        },
+        onCheckNotifications: (id) => {
+            dispatch(checkNotifications([id], ['to']));
+        },
+        onLogoutUser: id => {
+            dispatch(logoutUser(id));
+        }
+    };
+};
 
-export default connect(
-    mapStateToProps,
-    { logoutUser }
-)(withStyles(styles)(withRouter(Navbar)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(Navbar)));

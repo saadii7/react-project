@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 // import store from '../../store';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,11 +10,20 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { fetchEvents } from '../../actions/event';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import allSport from '../../assets/allsport.jpg';
+
+
 
 const styles = theme => ({
     root: {
@@ -56,38 +66,70 @@ class EventListing extends Component {
     listView(data, index) {
         const { classes } = this.props;
         return (
-            <Paper className={classes.tableRoot}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        Events
-                </TableHead>
-                    <TableBody>
-                        <TableRow key={index}>
-                            <TableCell component='th' scope='row'>
-                                {data.eventName}
-                            </TableCell>
-                            <TableCell component='th' scope='row'>
-                                {data._id}
-                            </TableCell>
-                            <TableCell align='right'>
-                                <IconButton
-                                    className={classes.button}
-                                    aria-label='Edit'
-                                    component='a'
-                                    href={`/edit-vendor/${data._id}`}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                    className={classes.button}
-                                    aria-label='Delete'
-                                    onClick={e => this.deleteSport(e, data._id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </Paper>
+            <Grid container className={classes.root} justify='center'>
+                <Grid item xs={3}>
+                    <Card key={index} className={classes.card}>
+                        <CardActionArea>
+                            <CardMedia
+                                className={classes.media}
+                                image={allSport}
+                                title="Contemplative Reptile"
+                            />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {data.eventName}
+                                </Typography>
+                                <Typography component="p">
+                                    Explore latest exclusive updates on cricket all over the world.
+                                </Typography>
+                            </CardContent>
+                        </CardActionArea>
+                        <CardActions>
+                            {/* <IconButton
+                                className={classes.button}
+                                aria-label='Edit'
+                                component='a'
+                                href={`/edit-vendor/${data._id}`}>
+                                <EditIcon />
+                            </IconButton> */}
+                            <Link component="a" to={`/edit-vendor/${data._id}`}><EditIcon/></Link>
+                            <Link component="button" to={`/edit-vendor/${data._id}`}>Event Info</Link>                            
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
+            // <Paper className={classes.tableRoot}>
+            //     <Table className={classes.table}>
+            //         <TableHead>
+            //             Events
+            //     </TableHead>
+            //         <TableBody>
+            //             <TableRow key={index}>
+            //                 <TableCell component='th' scope='row'>
+            //                     {data.eventName}
+            //                 </TableCell>
+            //                 <TableCell component='th' scope='row'>
+            //                     {data._id}
+            //                 </TableCell>
+            //                 <TableCell align='right'>
+            //                     <IconButton
+            //                         className={classes.button}
+            //                         aria-label='Edit'
+            //                         component='a'
+            //                         href={`/edit-vendor/${data._id}`}>
+            //                         <EditIcon />
+            //                     </IconButton>
+            //                     <IconButton
+            //                         className={classes.button}
+            //                         aria-label='Delete'
+            //                         onClick={e => this.deleteSport(e, data._id)}>
+            //                         <DeleteIcon />
+            //                     </IconButton>
+            //                 </TableCell>
+            //             </TableRow>
+            //         </TableBody>
+            //     </Table>
+            // </Paper>
 
         );
     }

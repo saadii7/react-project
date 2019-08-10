@@ -91,5 +91,16 @@ router.get('/get/:id', (req, res) => {
             res.status(400).send(err);
         });
 });
+////////////all
+router.get('/all', (req, res) => {
+    let query = req.query || {};
+    query.isDeleted = false;
+    Notification.find(query)
+        .then(notification => {
+            if (!notification) res.status(404).send({ message: 'No notification found' });
+            res.status(200).send(notification);
+        })
+        .catch(err => res.status(400).send(err));
+});
 
 module.exports = router;

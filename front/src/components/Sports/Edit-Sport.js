@@ -51,9 +51,12 @@ class EditSport extends React.Component {
     };
     componentDidMount() {
         let props = this.props;
+        console.log('------1---->',props);
+
         this.setState({ sport: props.sport });
     }
     componentWillReceiveProps = props => {
+        console.log('-------2--->',props);
         this.setState({ sport: props.sport });
     };
     render() {

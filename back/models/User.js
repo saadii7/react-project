@@ -94,7 +94,7 @@ UserSchema.methods.toJSON = function() {
         'isDeleted',
         'privacy',
         'updatedAt',
-        'isAdmin'
+        'isAdmin',
     ]);
 };
 

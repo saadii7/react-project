@@ -63,7 +63,7 @@ export const registerUser = (user, history) => dispatch => {
             // dispatch(setCurrentUser(decoded));
         })
         .catch(err => {
-            dispatch({
+                dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
             });

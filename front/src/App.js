@@ -30,6 +30,9 @@ import SportsIndex from './components/Sports/Index';
 import UsersList from './components/Users/list';
 import EventIndex from './components/Events';
 import FiendIndex from './components/Friend/index';
+import FriendList from './components/Friend/friendList';
+// import ChatSidebar from './components/Drawer/chatDrawer';
+
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -70,6 +73,7 @@ class App extends Component {
     handleDrawerClose = () => {
         this.setState({ open: false });
     };
+
     render() {
         const PrivateRoute = ({ component: Component, ...rest }) => (
             <Route
@@ -78,8 +82,8 @@ class App extends Component {
                     this.props.auth.isAuthenticated === true ? (
                         <Component {...props} />
                     ) : (
-                        <Redirect to='/login' />
-                    )
+                            <Redirect to='/login' />
+                        )
                 }
             />
         );
@@ -94,6 +98,7 @@ class App extends Component {
                         handleDrawerClose={this.handleDrawerClose}
                     />
                     <Sidebar open={this.state.open} />
+                    {/* <ChatSidebar open={this.state.open} /> */}
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                         <Switch>
@@ -116,6 +121,10 @@ class App extends Component {
                                     '/user/' + this.props.auth.user.id + '/edit'
                                 }
                                 component={editProfile}
+                            />
+                            <PrivateRoute
+                                path={'/users/' + this.props.auth.user.id + '/friends'}
+                                component={FriendList}
                             />
                             <PrivateRoute
                                 path={'/teams'}

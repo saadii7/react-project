@@ -80,6 +80,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log('Next Props------->',nextProps)
         if (nextProps.auth.isAuthenticated) {
             this.props.history.push('/')
         }

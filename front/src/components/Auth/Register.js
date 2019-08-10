@@ -31,6 +31,7 @@ class Register extends Component {
             user: {
                 name: '',
                 userName: '',
+                avatar:'',
                 email: '',
                 password: '',
                 password_confirm: '',

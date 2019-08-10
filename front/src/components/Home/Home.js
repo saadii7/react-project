@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // import Carousel  from './Carousel';
 import Features from './Features';
 // import Headlines from './Headlines';
-
+import TabList from '../Tabs/Tabs';
 
 class Home extends Component {
     render() {
@@ -12,7 +12,8 @@ class Home extends Component {
         <div>
             {/* <Carousel /> */}
             <div className="container">
-                <Features />
+                <TabList/>
+                {/* <Features /> */}
                 {/* <Headlines /> */}
             </div>
         </div>

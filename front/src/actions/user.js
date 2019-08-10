@@ -1,4 +1,4 @@
-import {FETCH_USER_BY_ID,FETCH_ALL_USERS,DELETE_USER} from '../actions/types';
+import {FETCH_USER_BY_ID,FETCH_ALL_USERS,DELETE_USER,UPDATE_USER} from '../actions/types';
 import axios from 'axios';
 
 // export const getUser = (id) => dispatch => {
@@ -26,9 +26,9 @@ export const getUserByIdSuccess = (user) => {
     }
   };
   // Async Action
-  export const getUser = (Id) => {
+  export const getUser = (user) => {
     return (dispatch) => {
-      return axios.get('/users/get/'+Id)
+      return axios.get('/users/get/'+user)
         .then(response => {
           // Handle data with sync action
           dispatch(getUserByIdSuccess(response.data));
@@ -50,7 +50,8 @@ export const getUserByIdSuccess = (user) => {
   export const fetchAllUsers = () => {
     return (dispatch) => {
       return axios.get("/users/all")
-        .then(response => {
+      .then(response => {
+        console.log('-----all--users---->',response.data)
           dispatch(fetchUsers(response.data))
         })
         .catch(error => {
@@ -79,3 +80,22 @@ export const getUserByIdSuccess = (user) => {
     };
   };
   
+  export const updateUserSuccess = (user) => {
+    return {
+      type: UPDATE_USER,
+      payload:user
+    }
+  };
+  // Async Action
+  export const updateUser = (id,user) => {
+    return (dispatch) => {
+      return axios.put(`/users/update/${id}`,user)
+        .then(response => {
+          // Handle data with sync action
+          dispatch(updateUserSuccess(response.data));
+        })
+        .catch(error => {
+          throw(error);
+        });
+    };
+  };

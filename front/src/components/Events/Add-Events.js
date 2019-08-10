@@ -7,6 +7,11 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { createEvent } from '../../actions/event';
 import { fetchAllSports } from '../../actions/sports';
+// import Map from '../Map/Map';
+// import "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWeM8p4RJQOgswAG6F5sKQPy6nMFKWjFg&libraries=places&callback=initMap";
+// import {SearchBar} from 'material-ui-search-bar';
+// Import React Scrit Libraray to load Google object
+import Script from 'react-load-script';
 
 const styles = theme => ({
     button: {
@@ -45,8 +50,45 @@ class AddEvent extends React.Component {
             Contact: '',
             eventImage: '',
             Discription: '',
-            validationError: ''
+            validationError: '',
+            city: '',
+            query: ''
         };
+
+    }
+
+    handleScriptLoad = () => {
+        // Declare Options For Autocomplete
+        var options = {
+            types: ['(cities)'],
+        };
+
+        // Initialize Google Autocomplete
+        /*global google*/ // To disable any eslint 'google not defined' errors
+        this.autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            options,
+        );
+
+        // Fire Event when a suggested name is selected
+        this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
+    }
+    handlePlaceSelect = () => {
+
+        // Extract City From Address Object
+        let addressObject = this.autocomplete.getPlace();
+        let address = addressObject.address_components;
+
+        // Check if address is valid
+        if (address) {
+            // Set State
+            this.setState(
+                {
+                    city: address[0].long_name,
+                    query: addressObject.formatted_address,
+                }
+            );
+        }
     }
 
     handleInputChange = e => {
@@ -89,149 +131,172 @@ class AddEvent extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <form onSubmit={this.handleSubmit} className={classes.container}>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='eventName'
-                        label='Event Name'
-                        className={classes.textField}
-                        value={this.state.eventName}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='date'
-                        name='date'
-                        label='Event Date'
-                        className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        value={this.state.date}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='time'
-                        label='Event Duration'
-                        className={classes.textField}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        value={this.state.time}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='file'
-                        name='eventImage'
-                        label='Event Image'
-                        className={classes.textField}
-                        value={this.state.eventImage}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                    -
-                                </InputAdornment>
-                            )
-                        }}
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='Location'
-                        label='Location'
-                        className={classes.textField}
-                        value={this.state.Location}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='Discription'
-                        label='Discription'
-                        className={classes.textField}
-                        value={this.state.Discription}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <div>
+            <div>
+                <Script
+                    url="https://maps.googleapis.com/maps/api/js?key=AIzaSyALBVab8yKaKbYkDdOSHB7DxLVC5tKuGwg&libraries=places"
+                    onLoad={this.handleScriptLoad}
+                />
+
+                <form onSubmit={this.handleSubmit} className={classes.container}>
+                    <div className='form-group'>
                         <TextField
-                            id='outlined-select-currency-native'
-                            select
-                            label='Sports'
+                            id='outlined-name'
+                            type='text'
+                            name='eventName'
+                            label='Event Name'
                             className={classes.textField}
-                            value={this.state.selectedSport}
-                            onChange={e =>
-                                this.setState({
-                                    selectedSport: e.target.value,
-                                    validationError:
-                                        e.target.value === ''
-                                            ? 'You must select your favourite sport'
-                                            : ''
-                                })
-                            }
-                            SelectProps={{
-                                native: true,
-                                MenuProps: {
-                                    className: classes.menu
-                                }
+                            value={this.state.eventName}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='date'
+                            name='date'
+                            label='Event Date'
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true
                             }}
+                            value={this.state.date}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='text'
+                            name='time'
+                            label='Event Duration'
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true
+                            }}
+                            value={this.state.time}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='file'
+                            name='eventImage'
+                            label='Event Image'
+                            className={classes.textField}
+                            value={this.state.eventImage}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
                                         -
-                                    </InputAdornment>
+                                </InputAdornment>
                                 )
                             }}
-                            helperText='Please select your favourite sport'
-                            margin='normal'
-                            variant='outlined'>
-                            {this.props.sports.map(sport => (
-                                <option key={sport._id} value={sport._id}>
-                                    {sport.sportName}
-                                </option>
-                            ))}
-                        </TextField>
+                        />
                     </div>
-                </div>
-                <div className='form-group'>
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                        className={classes.button}>
-                        Submit
+                    <div className='form-group'>
+                        {/* <SearchBar id="autocomplete" placeholder="" hintText="Search City" value={this.state.query}
+                            style={{
+                                margin: '0 auto',
+                                maxWidth: 800,
+                            }}
+                        /> */}
+                        <TextField
+                            type="text"
+                            id="autocomplete"
+                            type='text'
+                            name='query'
+                            label='Location'
+                            className={classes.textField}
+                            value={this.state.query}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='text'
+                            name='Discription'
+                            label='Discription'
+                            className={classes.textField}
+                            value={this.state.Discription}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <div>
+                            <TextField
+                                id='outlined-select-currency-native'
+                                select
+                                label='Sports'
+                                className={classes.textField}
+                                value={this.state.selectedSport}
+                                onChange={e =>
+                                    this.setState({
+                                        selectedSport: e.target.value,
+                                        validationError:
+                                            e.target.value === ''
+                                                ? 'You must select your favourite sport'
+                                                : ''
+                                    })
+                                }
+                                SelectProps={{
+                                    native: true,
+                                    MenuProps: {
+                                        className: classes.menu
+                                    }
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            -
+                                    </InputAdornment>
+                                    )
+                                }}
+                                helperText='Please select your favourite sport'
+                                margin='normal'
+                                variant='outlined'>
+                                {this.props.sports.map(sport => (
+                                    <option key={sport._id} value={sport._id}>
+                                        {sport.sportName}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </div>
+                        <div className='form-group'>
+                            {/* <Map
+                                location={this.state.Location}
+                                google={this.props.google}
+                                center={{ lat: 31.5204, lng: 74.3587 }}
+                                height='300px'
+                                zoom={15}
+                            /> */}
+                        </div>
+                    </div>
+                    <div className='form-group'>
+                        <Button
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}>
+                            Submit
                     </Button>
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         );
     }
 }
@@ -254,7 +319,7 @@ const mapDispatchToProps = dispatch => {
         }
     };
 };
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(withRouter(AddEvent)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(AddEvent)));
+
+
+// AIzaSyDk3yd_KZu1VMBojiq8egFb2Jvxcx2O73c

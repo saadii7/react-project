@@ -40,11 +40,11 @@ class TeamList extends Component {
         this.state = {
             sports: []
         };
-        // this.editModal = props.editModal;
-        // this.closeModal = props.closeModal;
+        this.editModal = props.editModal;
+        this.closeModal = props.closeModal;
     }
-    // editModal = e => {};
-    // closeModal = e => {};
+    editModal = e => {};
+    closeModal = e => {};
 
     deleteTeam(e, index) {
         e.preventDefault();
@@ -55,9 +55,9 @@ class TeamList extends Component {
         // store.dispatch(fetchAllTeams());
         this.props.onFetchAllTeams();
     }
-    // refreshPage = () => {
-    //     window.location.reload();
-    // };
+    refreshPage = () => {
+        window.location.reload();
+    };
 
     listView(data, index) {
         const { classes } = this.props;
@@ -92,7 +92,7 @@ class TeamList extends Component {
                         aria-label='Delete'
                         onClick={e => {
                             this.deleteTeam(e, data._id);
-                            // this.refreshPage();
+                            this.refreshPage();
                         }}>
                         <DeleteIcon />
                     </IconButton>
@@ -124,7 +124,7 @@ class TeamList extends Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {this.props.teams.map((team, i) =>
+                                    {this.props.teams.teams.map((team, i) =>
                                         this.listView(team, i)
                                     )}
                                 </TableBody>
@@ -138,11 +138,11 @@ class TeamList extends Component {
 }
 
 const mapStateToProps = state => {
-    const { teams } = state.team;
     return {
         sports: state.sports,
         users: state.users,
-        teams
+        teams : state.teams
+
     };
 };
 

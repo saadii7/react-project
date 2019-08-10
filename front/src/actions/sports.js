@@ -2,12 +2,14 @@ import { ADD_SPORT, DELETE_SPORT, FETCH_ALL_SPORTS,UPDATE_SPORT } from '../actio
 import axios from 'axios';
 
 
-export const createSport = ({sportName}) => {
+export const createSport = ({name}) => {
   return (dispatch) => {
-    console.log("Sport Name-------------->",sportName)
-    return axios.post('/sports/create',{sportName})
+    console.log("Sport Name-------------->",name)
+    return axios.post('/sports/create',{name})
       .then(response => {
         dispatch(createSportSuccess(response.data))
+       console.log("Sport Name- Res------------->",response.data)
+
       })
       .catch(error => {
         throw(error);
@@ -16,6 +18,7 @@ export const createSport = ({sportName}) => {
 };
 
 export const createSportSuccess =  (data) => {
+  console.log("Sport Name- Res-------2------>",data)    
   return {
     type: ADD_SPORT,
     payload:data

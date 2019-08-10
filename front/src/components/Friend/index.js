@@ -1,32 +1,11 @@
 import React, { Component } from 'react';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
+// import SearchIcon from '@material-ui/icons/Search';
+// import InputBase from '@material-ui/core/InputBase';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Modal from '@material-ui/core/Modal';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import Friends from './Friends';
-
-// function rand() {
-//     return Math.round(Math.random() * 20) - 10;
-// }
-
-function getModalStyle() {
-    const top = 10;
-    const left = 30;
-
-    return {
-        top: `${top}%`,
-        margin:'auto',
-        left: `${left}%`,
-        // transform: `translate(-${top}%, -${left}%)`
-    };
-}
+import Friends from './findFriends';
 
 const styles = theme => ({
     search: {
@@ -53,41 +32,6 @@ const styles = theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing.unit * (1,1,1,5),
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: 300,
-        },
-    },
-    fab: {
-        margin: theme.spacing.unit*1,
-      },
-      extendedIcon: {
-        marginRight: theme.spacing.unit*1,
-      },
-    paper: {
-    maxHeight:500,
-    position: 'absolute',
-    width: 500,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(4),
-    outline: 'none',
-    overflow:'scroll',
-  },
-  modalStyle1:{
-    position:'absolute',
-    top:'10%',
-    left:'10%',
-    overflow:'scroll',
-    height:'100%',
-    display:'block'
-  }
 });
 class FriendIndex extends Component {
     state = {
@@ -107,8 +51,8 @@ class FriendIndex extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.search}>
-                <div className={classes.searchIcon}>
+            <div >
+                {/* <div className={classes.searchIcon}>
                     <SearchIcon />
                 </div>
                 <InputBase
@@ -118,35 +62,12 @@ class FriendIndex extends Component {
                         input: classes.inputInput,
                     }}
                     inputProps={{ 'aria-label': 'Search' }}
-                />
-               <div className={classes.root}>
-                    <Paper className={classes.modal}>
-                        <div>
-                            <Tooltip title='Add' aria-label='Add'>
-                                <Fab
-                                    color='primary'
-                                    onClick={this.openModal}
-                                    className={classes.absolute}>
-                                    <AddIcon />
-                                </Fab>
-                            </Tooltip>
-                        </div>
-                    </Paper>
-                    <Modal
-                        aria-labelledby='simple-modal-title'
-                        aria-describedby='simple-modal-description'
-                        style={{alignItems:'center',justifyContent:'center'}}
-                        // className={classes.modalStyle1}
-                        open={this.state.open}
-                        onClose={this.closeModal}
-                        center='true'>
-                        <div style={getModalStyle()} className={classes.paper}>
-                            <Typography variant='h6' id='modal-title'>
-                                {this.state.add && <p>Players</p>}
-                                {this.state.add && <Friends/>}
-                            </Typography>
-                        </div>
-                    </Modal>
+                /> */}
+                <div className={classes.root}>
+                    <Typography variant='h6' id='title'>
+                        {this.state.add && <p>Players</p>}
+                        {this.state.add && <Friends />}
+                    </Typography>
                 </div>
             </div>
         );

@@ -8,14 +8,16 @@ import userReducer from './userReducer';
 import teamReducer from './teamReducer';
 import eventReducer from './eventReducer';
 import usersReducer from './usersReducer';
-import friendReducer from './friendReducer';
+import notifications from './notifications';
+import friends from './friends';
 export default combineReducers({
     errors: errorReducer,
     auth: authReducer,
     sports: sportsReducer,
     user: userReducer,
-    team: teamReducer,
+    teams: teamReducer,
     event: eventReducer,
     users: usersReducer,
-    friend:friendReducer
+    notifications:notifications,
+    friends:friends
 });

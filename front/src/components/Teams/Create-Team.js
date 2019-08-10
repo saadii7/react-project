@@ -40,7 +40,7 @@ class CreateTeam extends React.Component {
             Discription: '',
             sportName: '',
             sports: [],
-            captain: 'ALiCH',
+            captain: '',
             selectedSport: '',
             validationError: ''
         };
