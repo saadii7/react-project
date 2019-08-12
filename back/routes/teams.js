@@ -113,4 +113,80 @@ router.delete('/delete/:id', (req, res) => {
         });
 });
 
+router.get('/:id/all-players', (req, res) => {
+    let teamId = req.params.id;
+    const userteam = new User_Team();
+    Team.findById(teamId).then(team => {
+        if (!team) {
+            res.status(404).send({ message: 'team not found' });
+        } else {
+            userteam.team.push(team._id);
+            let query = { team_id: teamId };
+            Team.find(query)
+                .then(players => {
+                    if (!players)
+                        res.status(404).send({
+                            message: 'No Players for this found'
+                        });
+                    res.status(200).send(players);
+                })
+                .catch(err => res.status(400).send(err));
+        }
+    });
+});
+
+router.post('/add-player', (req, res) => {
+    let teamid = req.body.teamId;
+    let userid = req.body.userId;
+    const userteam = new User_Team();
+    Team.findById(teamid).then(team => {
+        if (!team) {
+            res.status(404).send({ message: 'team not found' });
+        } else {
+            userteam.team.push(team._id);
+            User.findById(userid).then(user => {
+                if (!user) res.status(404).send({ message: 'user not found' });
+                userteam.user.push(user._id);
+                userteam
+                    .save()
+                    .then(abc => {
+                        if (abc)
+                            res.status(200).send({
+                                message: 'successfull added'
+                            });
+                        res.status(400).send(abc);
+                    })
+                    .catch(err => res.status(400).send(err));
+            });
+        }
+    });
+});
+
+router.post('/delete-player', (req, res) => {
+    let teamid = req.body.teamId;
+    let userid = req.body.userId;
+    const userteam = new User_Team();
+    Team.findById(teamid).then(team => {
+        if (!team) {
+            res.status(404).send({ message: 'team not found' });
+        } else {
+            userteam.team.push(team._id);
+            User.findById(userid).then(user => {
+                if (!user) res.status(404).send({ message: 'user not found' });
+                userteam.user.push(user._id);
+                userteam
+                    .remove()
+                    .then(abc => {
+                        if (abc)
+                            res.status(200).send({
+                                message: 'successfull deleted'
+                            });
+                        res.status(400).send(abc);
+                    })
+                    .catch(err => res.status(400).send(err));
+            });
+        }
+    });
+});
+
 module.exports = router;

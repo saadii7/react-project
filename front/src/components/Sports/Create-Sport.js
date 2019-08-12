@@ -26,7 +26,7 @@ const styles = theme => ({
 
 class CreateSport extends React.Component {
     state = {
-        sportName: ''
+        name: ''
     };
 
     handleInputChange = e => {
@@ -37,7 +37,7 @@ class CreateSport extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        if (this.state.sportName.trim()) {
+        if (this.state.name.trim()) {
             this.props.onAddSport(this.state);
             this.handleReset();
         }
@@ -45,7 +45,7 @@ class CreateSport extends React.Component {
 
     handleReset = () => {
         this.setState({
-            sportName: ''
+            name: ''
         });
     };
 
@@ -58,11 +58,11 @@ class CreateSport extends React.Component {
                     <TextField
                         id='outlined-name'
                         type='text'
-                        name='sportName'
+                        name='name'
                         label='Add Sports'
                         className={classes.textField}
                         onChange={this.handleInputChange}
-                        value={this.state.sportName}
+                        value={this.state.name}
                         margin='normal'
                         variant='outlined'
                     />
