@@ -11,7 +11,6 @@ import { fetchAllSports } from '../../actions/sports';
 // import "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWeM8p4RJQOgswAG6F5sKQPy6nMFKWjFg&libraries=places&callback=initMap";
 // import {SearchBar} from 'material-ui-search-bar';
 // Import React Scrit Libraray to load Google object
-import Script from 'react-load-script';
 
 const styles = theme => ({
     button: {
@@ -54,27 +53,24 @@ class AddEvent extends React.Component {
             city: '',
             query: ''
         };
-
     }
 
     handleScriptLoad = () => {
         // Declare Options For Autocomplete
         var options = {
-            types: ['(cities)'],
-        };
+            types: ['(cities)']
+        }; // To disable any eslint 'google not defined' errors
 
         // Initialize Google Autocomplete
-        /*global google*/ // To disable any eslint 'google not defined' errors
-        this.autocomplete = new google.maps.places.Autocomplete(
+        /*global google*/ this.autocomplete = new google.maps.places.Autocomplete(
             document.getElementById('autocomplete'),
-            options,
+            options
         );
 
         // Fire Event when a suggested name is selected
         this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
-    }
+    };
     handlePlaceSelect = () => {
-
         // Extract City From Address Object
         let addressObject = this.autocomplete.getPlace();
         let address = addressObject.address_components;
@@ -82,14 +78,12 @@ class AddEvent extends React.Component {
         // Check if address is valid
         if (address) {
             // Set State
-            this.setState(
-                {
-                    city: address[0].long_name,
-                    query: addressObject.formatted_address,
-                }
-            );
+            this.setState({
+                city: address[0].long_name,
+                query: addressObject.formatted_address
+            });
         }
-    }
+    };
 
     handleInputChange = e => {
         this.setState({
@@ -132,12 +126,9 @@ class AddEvent extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <Script
-                    url="https://maps.googleapis.com/maps/api/js?key=AIzaSyALBVab8yKaKbYkDdOSHB7DxLVC5tKuGwg&libraries=places"
-                    onLoad={this.handleScriptLoad}
-                />
-
-                <form onSubmit={this.handleSubmit} className={classes.container}>
+                <form
+                    onSubmit={this.handleSubmit}
+                    className={classes.container}>
                     <div className='form-group'>
                         <TextField
                             id='outlined-name'
@@ -198,7 +189,7 @@ class AddEvent extends React.Component {
                                 startAdornment: (
                                     <InputAdornment position='start'>
                                         -
-                                </InputAdornment>
+                                    </InputAdornment>
                                 )
                             }}
                         />
@@ -211,8 +202,8 @@ class AddEvent extends React.Component {
                             }}
                         /> */}
                         <TextField
-                            type="text"
-                            id="autocomplete"
+                            type='text'
+                            id='autocomplete'
                             type='text'
                             name='query'
                             label='Location'
@@ -263,7 +254,7 @@ class AddEvent extends React.Component {
                                     startAdornment: (
                                         <InputAdornment position='start'>
                                             -
-                                    </InputAdornment>
+                                        </InputAdornment>
                                     )
                                 }}
                                 helperText='Please select your favourite sport'
@@ -293,7 +284,7 @@ class AddEvent extends React.Component {
                             color='primary'
                             className={classes.button}>
                             Submit
-                    </Button>
+                        </Button>
                     </div>
                 </form>
             </div>
@@ -319,7 +310,9 @@ const mapDispatchToProps = dispatch => {
         }
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(AddEvent)));
-
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(withRouter(AddEvent)));
 
 // AIzaSyDk3yd_KZu1VMBojiq8egFb2Jvxcx2O73c
