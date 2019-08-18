@@ -172,10 +172,10 @@ class TeamList extends Component {
                 <TableCell component='th' scope='row'>
                     {data.name}
                 </TableCell>
-                {/* <TableCell component='th' scope='row'>
-                    {data.users}
+                <TableCell component='th' scope='row'>
+                    {/* {data.users} */}
                     {data._id}
-                </TableCell> */}
+                </TableCell>
                 <TableCell component='th' scope='row'>
                     <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
                         <AddIcon

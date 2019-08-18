@@ -67,10 +67,6 @@ class CreateTeam extends React.Component {
             captain: '',
             selectedSport: '',
             validationError: '',
-            checked: [],
-            setChecked: [],
-            selectedPlayer: [],
-            count: null,
             open: false,
             add: true,
         };
@@ -101,8 +97,6 @@ class CreateTeam extends React.Component {
             captain: this.props.auth.user.id
         };
         this.props.onAddTeam(team);
-        this.playerHandler()
-        // this.playerHandler()
         // let props = this.props;
         // if(e.target && e.target.image && e.target.image.files.length > 0){
         //     var file = e.target.image.files[0];
