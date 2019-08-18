@@ -32,7 +32,7 @@ import EventIndex from './components/Events';
 import FiendIndex from './components/Friend/index';
 import FriendList from './components/Friend/friendList';
 // import ChatSidebar from './components/Drawer/chatDrawer';
-
+import TeamProfile from './components/Teams/profile';
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -150,6 +150,10 @@ class App extends Component {
                             <PrivateRoute
                                 path={'/friends'}
                                 component={FiendIndex}
+                            />
+                            <PrivateRoute
+                                path={'/team/profile'}
+                                component={TeamProfile}
                             />
 
                             <Redirect from='*' to='/Error404' />

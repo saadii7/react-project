@@ -31,6 +31,7 @@ import socket from '../../socket';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
 import { fetchAllUsers } from '../../actions/user';
 import store from '../../store';
+import TeamProfile from './profile';
 
 
 
