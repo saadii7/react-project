@@ -15,6 +15,11 @@ const TeamSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
+        sport: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Sport',
+            required: true
+        },
         image: {
             data: Buffer,
             contentType: String,
@@ -27,7 +32,7 @@ const TeamSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
-        user: [
+        users: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User'

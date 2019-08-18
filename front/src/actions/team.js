@@ -2,7 +2,9 @@ import {
     ADD_TEAM,
     FETCH_TEAM,
     FETCH_ALL_TEAMS,
-    DELETE_TEAM
+    DELETE_TEAM,
+    ADD_TEAM_PLAYER,
+    FETCH_TEAM_PLAYER
 } from '../actions/types';
 import axios from 'axios';
 
@@ -12,14 +14,14 @@ export const createTeamSuccess = data => {
         payload: data
     };
 };
-export const createTeam = team => {
+export const createTeam = (team,callback) => {
     return dispatch => {
         console.log(team);
         return axios
             .post('/teams/create', team)
             .then(response => {
+                callback(response.data)
                 dispatch(createTeamSuccess(response.data));
-                console.log(response.data);
             })
             .catch(error => {
                 throw error;
@@ -27,18 +29,75 @@ export const createTeam = team => {
     };
 };
 
+
+
+
+export const fetchTeamPlayerSuccess = data => {
+    return {
+        type: FETCH_TEAM_PLAYER,
+        payload: data
+    };
+};
+export const fetchTeamPlayer = (id) => {
+    return dispatch => {
+        console.log('------action---players---->',id);
+        return axios
+            .get(`/teams/${id}/all-players`)
+            .then(response => {
+                // callback(response.data)
+                dispatch(fetchTeamPlayerSuccess(response.data));
+            })
+            .catch(error => {
+                throw error;
+            });
+    };
+};
+
+
+export const addTeamPlayerSuccess = data => {
+    return {
+        type: ADD_TEAM_PLAYER,
+        payload: data
+    };
+};
+export const addTeamPlayer = (palyers) => {
+    return dispatch => {
+        console.log('------action---players---->',palyers);
+        return axios
+            .post('/teams/add-player',palyers)
+            .then(response => {
+                // callback(response.data)
+                dispatch(addTeamPlayerSuccess(response.data));
+            })
+            .catch(error => {
+                throw error;
+            });
+    };
+};
+
+
 export const fetchTeams = teams => {
     return {
         type: FETCH_ALL_TEAMS,
         payload: teams
     };
 };
-export const fetchAllTeams = () => {
+export const fetchAllTeams = (ids, keys) => {
     return dispatch => {
+        let query = '';
+        if (keys.length > 0) {
+            //for loop
+            keys.forEach((key, index) => {
+              query += key + '=' + ids[index];
+              if (index !== keys.length - 1) query += '&';
+            });
+          }
+        {console.log('Querry--------->'+query)};
+
         return axios
-            .get('/teams/all')
+            .get('/teams/all?',query)
             .then(response => {
-                {console.log('sports List---------->'+response.data)}
+                {console.log('FETCH---------->'+response.data)}
                 dispatch(fetchTeams(response.data));
             })
             .catch(error => {

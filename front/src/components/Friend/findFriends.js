@@ -130,14 +130,15 @@ class Friends extends Component {
                     );
                 }
             }
-        } else {
-            friendButton = (
-                <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
-                    Add Friend
-                    <Icon className={classes.rightIcon}>send</Icon>
-                </Button>
-            );
-        }
+        } 
+        // else {
+        //     friendButton = (
+        //         <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
+        //             Add Friend
+        //             <Icon className={classes.rightIcon}>send</Icon>
+        //         </Button>
+        //     );
+        // }
         if (data._id !== this.props.auth.user.id) {
             return (
                 <div key={index}>

@@ -52,7 +52,7 @@ class SportsList extends Component {
         return (
             <TableRow key={index}>
                 <TableCell component='th' scope='row'>
-                    {data.name}
+                    {data.sportName}
                 </TableCell>
                 <TableCell>
                     <IconButton

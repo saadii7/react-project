@@ -1,12 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, responsiveFontSizes } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { createTeam } from '../../actions/team';
 import { fetchAllSports } from '../../actions/sports';
+import store from '../../store';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Checkbox from '@material-ui/core/Checkbox';
+import Avatar from '@material-ui/core/Avatar';
+import { fetchAllUsers } from '../../actions/user';
+
 
 const styles = theme => ({
     button: {
@@ -17,7 +28,9 @@ const styles = theme => ({
     },
     container: {
         display: 'flex',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        overflow: 'auto',
+
     },
     textField: {
         marginLeft: theme.spacing(),
@@ -28,7 +41,18 @@ const styles = theme => ({
     },
     menu: {
         width: 200
-    }
+    },
+    root: {
+        overflowY: 'auto',
+        // width: '100%',
+        // maxWidth: 300,
+        backgroundColor: theme.palette.background.paper,
+        left: theme.spacing(6),
+        // boxShadow: theme.shadows[1],
+        // outline: 'none'
+
+
+    },
 });
 
 class CreateTeam extends React.Component {
@@ -36,31 +60,49 @@ class CreateTeam extends React.Component {
         super(props);
         this.state = {
             teamImage: '',
-            teamName: '',
+            name: '',
             Discription: '',
-            sportName: '',
+            sport: '',
             sports: [],
             captain: '',
             selectedSport: '',
-            validationError: ''
+            validationError: '',
+            checked: [],
+            setChecked: [],
+            selectedPlayer: [],
+            count: null,
+            open: false,
+            add: true,
         };
     }
+
+    openModal = () => {
+        this.setState({ open: true });
+    };
+    editModal = sport => {
+        this.setState({ open: true, add: false, sport });
+    };
+    closeModal = () => {
+        this.setState({ open: false });
+    };
 
     handleInputChange = e => {
         this.setState({
             [e.target.name]: e.target.value
         });
     };
-
+    
     handleSubmit = e => {
         e.preventDefault();
         const team = {
-            teamName: this.state.teamName,
+            name: this.state.name,
             Discription: this.state.Discription,
-            sportName: this.state.selectedSport,
+            sport: this.state.selectedSport,
             captain: this.props.auth.user.id
         };
         this.props.onAddTeam(team);
+        this.playerHandler()
+        // this.playerHandler()
         // let props = this.props;
         // if(e.target && e.target.image && e.target.image.files.length > 0){
         //     var file = e.target.image.files[0];
@@ -76,109 +118,124 @@ class CreateTeam extends React.Component {
         //     this.props.onAddTeam(team);
         // }
     };
+    onSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state);
+    }
     componentDidMount() {
         this.props.onFetchAllSports();
+        store.dispatch(fetchAllUsers());
     }
     render() {
         const { classes } = this.props;
+
         return (
             <form onSubmit={this.handleSubmit} className={classes.container}>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='teamName'
-                        label='Team Name'
-                        className={classes.textField}
-                        value={this.state.teamName}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='file'
-                        name='teamImage'
-                        label='Image'
-                        className={classes.textField}
-                        value={this.state.teamImage}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                    -
-                                </InputAdornment>
-                            )
-                        }}
-                    />
-                </div>
-                <div className='form-group'>
-                    <TextField
-                        id='outlined-name'
-                        type='text'
-                        name='Discription'
-                        label='Discription'
-                        className={classes.textField}
-                        value={this.state.Discription}
-                        onChange={this.handleInputChange}
-                        margin='normal'
-                        variant='outlined'
-                    />
-                </div>
-                <div className='form-group'>
-                    <div>
+                <Grid item xs={6}>
+                    <div className='form-group'>
                         <TextField
-                            id='outlined-select-currency-native'
-                            select
-                            label='Sports'
+                            id='outlined-name'
+                            type='text'
+                            name='name'
+                            label='Team Name'
                             className={classes.textField}
-                            value={this.state.selectedSport}
-                            onChange={e =>
-                                this.setState({
-                                    selectedSport: e.target.value,
-                                    validationError:
-                                        e.target.value === ''
-                                            ? 'You must select your favourite sport'
-                                            : ''
-                                })
-                            }
-                            SelectProps={{
-                                native: true,
-                                MenuProps: {
-                                    className: classes.menu
-                                }
-                            }}
+                            value={this.state.name}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='file'
+                            name='teamImage'
+                            label='Image'
+                            className={classes.textField}
+                            value={this.state.teamImage}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start'>
                                         -
-                                    </InputAdornment>
+                                </InputAdornment>
                                 )
                             }}
-                            helperText='Please select your favourite sport'
-                            margin='normal'
-                            variant='outlined'>
-                            {this.props.sports.map(sport => (
-                                <option key={sport._id} value={sport.value}>
-                                    {sport.sportName}
-                                </option>
-                            ))}
-                        </TextField>
+                        />
                     </div>
-                </div>
-                <div className='form-group'>
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
-                        className={classes.button}>
-                        Submit
+                    <div className='form-group'>
+                        <TextField
+                            id='outlined-name'
+                            type='text'
+                            name='Discription'
+                            label='Discription'
+                            className={classes.textField}
+                            value={this.state.Discription}
+                            onChange={this.handleInputChange}
+                            margin='normal'
+                            variant='outlined'
+                        />
+                    </div>
+                    {/* //////// */}
+                    {/* <div className='form-group'>
+                        <Typography>Players Selected  {this.state.selectedPlayer.length}</Typography>
+                    </div> */}
+
+                    {/* //////// */}
+
+                    <div className='form-group'>
+                        <div>
+                            <TextField
+                                id='outlined-select-currency-native'
+                                select
+                                label='Sports'
+                                className={classes.textField}
+                                value={this.state.selectedSport}
+                                onChange={e =>
+                                    this.setState({
+                                        selectedSport: e.target.value,
+                                        validationError:
+                                            e.target.value === ''
+                                                ? 'You must select your favourite sport'
+                                                : ''
+                                    })
+                                }
+                                SelectProps={{
+                                    native: true,
+                                    MenuProps: {
+                                        className: classes.menu
+                                    }
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            -
+                                    </InputAdornment>
+                                    )
+                                }}
+                                helperText='Please select your favourite sport'
+                                margin='normal'
+                                variant='outlined'>
+                                {this.props.sports.map(sport => (
+                                    <option key={sport._id} value={sport._id}>
+                                        {sport.sportName}
+                                    </option>
+                                ))}
+                            </TextField>
+                        </div>
+                    </div>
+                    <div className='form-group'>
+                        <Button
+                            type='submit'
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}>
+                            Submit
                     </Button>
-                </div>
+                    </div>
+                </Grid>
             </form>
         );
     }
@@ -189,13 +246,19 @@ const mapStateToProps = state => {
         auth: state.auth,
         errors: state.errors,
         user: state.user,
-        sports: state.sports
+        sports: state.sports,
+        users: state.users
+
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         onAddTeam: team => {
-            dispatch(createTeam(team));
+            dispatch(createTeam(team, (response) => {
+                console.log('---------->>-----------', response);
+
+            }
+            ));
         },
         onFetchAllSports: () => {
             dispatch(fetchAllSports());

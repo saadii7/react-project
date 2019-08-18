@@ -1,4 +1,5 @@
 const { Team } = require('../models/Team');
+const { User_Team } = require('../models/User_Team');
 const User = require('../models/User');
 const multer = require('multer');
 const express = require('express');
@@ -6,38 +7,48 @@ const router = express.Router();
 const fs = require('fs');
 const _ = require('lodash');
 
-router.get('/all', (req, res) => {
-    let query = req.query || {};
+router.get('/all',(req,res)=>{
+    let query = req.query || {}
     query.isDeleted = false;
-    Team.find(query)
-        .then(sports => {
-            if (!sports) res.status(404).send({ message: 'No Sport found' });
-            res.status(200).send(sports);
-        })
-        .catch(err => res.status(400).send(err));
+    Team.find(query).then(teams=>{
+        if(!teams) res.status(404).send({message:'No Team found'})
+            res.status(200).send(teams);
+    }).catch(err=>res.status(400).send(err));
 });
+
+// router.get('/all', (req, res) => {
+//     let query = req.query || {};
+//     query.isDeleted = false;
+//     Team.find(query)
+//         .then(sports => {
+//             if (!sports) res.status(404).send({ message: 'No Sport found' });
+//             res.status(200).send(sports);
+//         })
+//         .catch(err => res.status(400).send(err));
+// });
 
 router.post('/create' /*, upload.single('teamImage')*/, (req, res) => {
     const newTeam = new Team();
     newTeam.name = req.body.name;
     newTeam.captain = req.body.captain;
     newTeam.description = req.body.description;
+    newTeam.sport = req.body.sport;
     newTeam.image.data = req.body.data;
     newTeam.image.contentType = req.body.contentType;
     newTeam.image.imageName = req.body.name;
     if (req.body.captain) {
         newTeam
-            .save()
-            .then(async team => {
-                await User.findById(req.body.captain).then(user => {
-                    if (user) {
-                        user.team.push(user._id);
-                        user.save();
-                        team.user.push(team._id);
-                        team.save();
-                    }
-                });
-                res.status(200).send(team);
+        .save()
+        .then(async team => {
+            await User.findById(req.body.captain).then(user => {
+                if (user) {
+                    user.teams.push(user._id);
+                    user.save();
+                    team.users.push(team._id);
+                    team.save();
+                }
+            });
+            res.status(200).send(team);
             })
             .catch(err => res.status(400).send(err));
     } else {
@@ -113,6 +124,8 @@ router.delete('/delete/:id', (req, res) => {
         });
 });
 
+/////////////
+
 router.get('/:id/all-players', (req, res) => {
     let teamId = req.params.id;
     const userteam = new User_Team();
@@ -136,6 +149,7 @@ router.get('/:id/all-players', (req, res) => {
 });
 
 router.post('/add-player', (req, res) => {
+    const io = req.app.get('io');
     let teamid = req.body.teamId;
     let userid = req.body.userId;
     const userteam = new User_Team();
@@ -146,6 +160,10 @@ router.post('/add-player', (req, res) => {
             userteam.team.push(team._id);
             User.findById(userid).then(user => {
                 if (!user) res.status(404).send({ message: 'user not found' });
+                io.emit('notifications_for_' + req.body.userid, {
+                    action: 'new',
+                    data: user
+                });
                 userteam.user.push(user._id);
                 userteam
                     .save()
