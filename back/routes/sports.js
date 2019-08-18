@@ -9,40 +9,43 @@ const _ = require('lodash');
 
 router.post(
     '/create',
-    /*upload.single('sportImage'),*/ function(req, res) {
-        Sport.findOne({ name: req.body.name })
-            .then(sport => {
-                if (!sport) {
-                    const newSport = new Sport();
-                    newSport.name = req.body.name;
-                    newSport.image.data = req.body.data;
-                    newSport.image.contentType = req.body.contentType;
-                    newSport.image.name = req.body.name;
-                    newSport
-                        .save()
-                        .then(sprt => {
-                            res.status(200).send(sprt);
-                        })
-                        .catch(err => res.status(400).send(err));
-                }
-                Sport.findByIdAndUpdate(
-                    sport.id,
-                    { $set: { isDeleted: false, deletedAt: null } },
-                    { new: true }
-                )
-                    .then(sprt => {
-                        if (!sprt) {
-                            res.status(404).send({
-                                message: 'Sport not found'
-                            });
-                        }
-                        res.status(200).send(sprt);
-                    })
-                    .catch(e => {
-                        res.status(400).send(e);
-                    });
-            })
-            .catch(err => res.status(400).send(err));
+    /*upload.single('sportImage'),*/ async function(req, res) {
+        let sport = await Sport.findOne({ name: req.body.name });
+
+        if (!sport) {
+            console.log('-----------------', req.body, sport);
+            let newSport = new Sport();
+            newSport.name = req.body.name;
+            // newSport.image.data = req.body.data;
+            // newSport.image.contentType = req.body.contentType;
+            // newSport.image.name = req.body.name;
+            newSport
+                .save()
+                .then(sprt => {
+                    res.status(200).send(sprt);
+                    return;
+                })
+                .catch(err => res.status(400).send(err));
+        } else {
+            Sport.findByIdAndUpdate(
+                sport.id,
+                { $set: { isDeleted: false, deletedAt: null } },
+                { new: true }
+            )
+                .then(sprt => {
+                    if (!sprt) {
+                        res.status(404).send({
+                            message: 'Sport not found'
+                        });
+                        return;
+                    }
+                    res.status(200).send(sprt);
+                    return;
+                })
+                .catch(e => {
+                    res.status(400).send(e);
+                });
+        }
     }
 );
 
