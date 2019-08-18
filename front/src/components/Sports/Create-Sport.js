@@ -38,10 +38,10 @@ class CreateSport extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         if (this.state.name.trim()) {
-            let sportName={
-                name:this.state.name
-            }
-            this.props.onAddSport(sportName);
+          
+                const name=this.state.name
+
+            this.props.onAddSport(name);
             this.handleReset();
         }
     };

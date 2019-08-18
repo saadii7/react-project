@@ -21,7 +21,7 @@ import { fetchAllUsers } from '../../actions/user';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing()
+        margin: theme.spacing(3 )
     },
     input: {
         display: 'none'
@@ -125,7 +125,8 @@ class CreateTeam extends React.Component {
 
         return (
             <form onSubmit={this.handleSubmit} className={classes.container}>
-                <Grid item xs={6}>
+                <Grid container wrap="nowrap" spacing={2} sm={6}>
+                <Grid item>
                     <div className='form-group'>
                         <TextField
                             id='outlined-name'
@@ -229,6 +230,7 @@ class CreateTeam extends React.Component {
                             Submit
                     </Button>
                     </div>
+                </Grid>
                 </Grid>
             </form>
         );

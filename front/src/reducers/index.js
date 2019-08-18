@@ -19,5 +19,5 @@ export default combineReducers({
     event: eventReducer,
     users: usersReducer,
     notifications:notifications,
-    friends:friends
+    friends:friends,
 });

@@ -59,12 +59,21 @@ const styles = theme => ({
     },
     toolbar: theme.mixins.toolbar,
     paper: {
-        position: 'absolute',
-        width: theme.spacing(50),
+        maxWidth: 500,
+        margin: `${theme.spacing(1)}px auto`,
+        padding: theme.spacing(2),
+        // position: 'absolute',
+        // width: theme.spacing(110),
         backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(4),
-        outline: 'none'
+        // boxShadow: theme.shadows[5],
+        overflowY: 'auto',
+        // padding: theme.spacing(4),
+        // outline: 'none'
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    Button: {
+        left: 200,
     },
     bigAvatar: {
         margin: 10,
@@ -82,7 +91,6 @@ class TeamList extends Component {
             open: false,
             add: true,
             isChecked: false,
-            setChecked: [],
             teamId: '',
             open: false,
             checkedValues: []
@@ -132,8 +140,8 @@ class TeamList extends Component {
                     }
                     break;
                 case 'delete':
-                        this.props.onDeleteNotificationSuccess(data.data);
-                        window.location.reload();
+                    this.props.onDeleteNotificationSuccess(data.data);
+                    window.location.reload();
                     break;
 
                 default:
@@ -142,7 +150,7 @@ class TeamList extends Component {
         });
         this.setState({ open: this.props.open });
     }
-    
+
     refreshPage = () => {
         window.location.reload();
     };
@@ -159,6 +167,7 @@ class TeamList extends Component {
         this.props.onFetchTeamPlayer(id)
     }
     listView(data, index) {
+        // console.log('--------listView------->')
         const { classes } = this.props;
         return (
             <TableRow key={index}>
@@ -215,7 +224,7 @@ class TeamList extends Component {
         );
     }
     handleCheck = (element, index) => {
-        console.log('---------isChecked-------->', element, '==========>', this.state.checkedValues)
+        // console.log('---------isChecked-------->', element, '==========>', this.state.checkedValues)
         const values = this.state.checkedValues.filter(e => e.id === element).length > 0
             ? this.state.checkedValues.splice(this.state.checkedValues.findIndex(e => e.id === element), 1)
             : this.state.checkedValues.push(element);
@@ -224,7 +233,7 @@ class TeamList extends Component {
                 [this.state.checkedValues[i]]: values
             });
         }
-        console.log('---------isChecked------>>>>>-->>>>', this.state.checkedValues)
+        // console.log('---------isChecked------>>>>>-->>>>', this.state.checkedValues)
     }
     onSubmit = (id) => {
         console.log("user----------ID-----Team---->", id);
@@ -236,50 +245,27 @@ class TeamList extends Component {
     }
     AddTeamPlayerHandler = (user, index) => {
         const { classes } = this.props;
-        let friendButton;
-        let Team_Member = this.props.teams.teams;
-        console.log("Friends--------->", index, '-------------', user);
-        // for (let i = 0; i < Team_Member.length; i++) {
-        // for (let k = 0; k < Team_Member.user.length; k++) {
-        // }
-
-        // if (Team_Member[i].users.length > 0) {
-        //     for (let j = 0; j < Team_Member[i].users.length;j++) {
-        //         if (user._id === Team_Member[i].users[i]) {
-        //             friendButton = (
-        //                 <Button id="friendbutton" size="small" color="primary" variant='contained' >
-        //                     Cancel
-        //                         {/* <Icon className={classes.rightIcon}>send</Icon> */}
-        //                 </Button>
-        //             );
-        //         } else {
-        //             friendButton = (
-        //                 <Button id="friendbutton" size="small" color="secondry" variant='contained' disabled={this.state.CheckButton} onClick={() => this.onSubmit(user._id)}>
-        //                     Add
-        //                     <Icon className={classes.rightIcon}>send</Icon>
-        //                 </Button>
-        //             );
-        //         }
-        //     }
-        // }
         return (
-            <div>
-                <List dense key={user._id} className={classes.root}>
-                    <ListItem key={user._id} button>
-                        <ListItemAvatar>
-                            <Avatar
-                                alt={user.name}
-                                src={user.avatar}
-                            />
-                        </ListItemAvatar>
-                        <ListItemText id={user._id} primary={user.name} />
-                        <ListItemSecondaryAction>
-                        </ListItemSecondaryAction>
-                        {/* {friendButton} */}
-                        <Button onClick={()=>this.onSubmit(user._id)} color='primary' variant="contained">Add</Button>
-                    </ListItem>
-                </List>
-            </div>
+            <Grid className={classes.container} wrap="nowrap" spacing={2} sm={6}>
+                    <Grid item>
+                        <List dense key={user._id}>
+                            <ListItem key={user._id}>
+                                <ListItemAvatar>
+                                    <Avatar
+                                        alt={user.name}
+                                        src={user.avatar}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText id={user._id} primary={user.name} />
+                                <ListItemSecondaryAction>
+                                </ListItemSecondaryAction>
+                                <Grid item>
+                                    <Button onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">Add</Button>
+                                </Grid>
+                            </ListItem>
+                        </List>
+                    </Grid>
+                </Grid>
         );
         // }
     }
@@ -313,25 +299,23 @@ class TeamList extends Component {
                                     )}
                                 </TableBody>
                             </Table>
-                            <Modal
-                                aria-labelledby='simple-modal-title'
-                                aria-describedby='simple-modal-description'
-                                open={this.state.open}
-                                onClose={this.closeModal}
-                                center='true'>
-                                <div style={getModalStyle()} className={classes.paper}>
-                                    <Typography variant='h6' id='modal-title'>
-                                        {/* <Button width="24" height="24" onClick={this.closeModal} variant="contained" color="secondary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z" /><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM9.41 15.95L12 13.36l2.59 2.59L16 14.54l-2.59-2.59L16 9.36l-1.41-1.41L12 10.54 9.41 7.95 8 9.36l2.59 2.59L8 14.54z" /></svg>
-                                        </Button> */}
-                                        {<p>Add Team Members</p>}
-                                        {this.props.users.map((users, index) => this.AddTeamPlayerHandler(users, index))}
-                                    </Typography>
-                                </div>
-                            </Modal>
                         </Paper>
                     </Grid>
                 </main>
+                <Modal
+                    aria-labelledby='simple-modal-title'
+                    aria-describedby='simple-modal-description'
+                    open={this.state.open}
+                    onClose={this.closeModal}
+                    center='true'>
+                    <div style={getModalStyle()} className={classes.paper}>
+                        <Typography variant='h6' id='modal-title'>
+                            {this.state.add && <p>Add New Team</p>}
+                            
+                            {this.state.add && this.props.users.map((users, index) => this.AddTeamPlayerHandler(users, index))}
+                        </Typography>
+                    </div>
+                </Modal>
             </div>
         );
     }
@@ -344,7 +328,7 @@ const mapStateToProps = state => {
         users: state.users,
         teams: state.teams,
         notifications: state.notifications,
-    
+
     };
 };
 

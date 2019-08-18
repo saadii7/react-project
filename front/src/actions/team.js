@@ -40,10 +40,10 @@ export const fetchTeamPlayerSuccess = data => {
 };
 export const fetchTeamPlayer = (id) => {
     return dispatch => {
-        console.log('------action---players---->',id);
         return axios
-            .get(`/teams/${id}/all-players`)
-            .then(response => {
+        .get(`/teams/${id}/all-players`)
+        .then(response => {
+            console.log('--------players---->',response.data);
                 // callback(response.data)
                 dispatch(fetchTeamPlayerSuccess(response.data));
             })

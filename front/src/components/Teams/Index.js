@@ -19,7 +19,7 @@ function rand() {
 }
 
 function getModalStyle() {
-    const top = 5;
+    const top = 10;
     const left = 15;
 
     return {
@@ -53,13 +53,16 @@ const styles = theme => ({
         left:'550px'
     },
     paper: {
-        position: 'absolute',
-        width: theme.spacing(110),
+        maxWidth: 500,
+    margin: `${theme.spacing(1)}px auto`,
+    padding: theme.spacing(2),
+        // position: 'absolute',
+        // width: theme.spacing(110),
         backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        overflow: 'scroll',
-        padding: theme.spacing(4),
-        outline: 'none'
+        // boxShadow: theme.shadows[5],
+        // // overflow: 'scroll',
+        // padding: theme.spacing(4),
+        // outline: 'none'
     },
     modal: {
         justifyContent: 'space-around',
@@ -158,11 +161,6 @@ class TeamIndex extends Component {
                             <Typography variant='h6' id='modal-title'>
                                 {this.state.add && <p>Add New Team</p>}
                                 {this.state.add && <CreateTeam />}
-
-                                {/* {!this.state.add && <p>Update Sport</p>}
-                                        {!this.state.add && (
-                                            <EditSport sport={this.state.sport} />
-                                        )} */}
                             </Typography>
                         </div>
                     </Modal>
