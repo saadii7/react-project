@@ -8,6 +8,11 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
+import {Card} from 'reactstrap';
+import { Paper } from '@material-ui/core';
+import ProfileImg from '../../assets/profile.png';
+
+
 import {
     Grid,
     CardContent,
@@ -19,10 +24,6 @@ import {fetchAllFriends} from '../../actions/friend';
 
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        padding: theme.spacing(2)
-    },
     paper: {
         height: 250,
         width: 280,
@@ -34,12 +35,15 @@ const styles = theme => ({
         height: 60
     },
     card: {
-        height: 250,
-        width: 280,
-        maxWidth: 385,
-        // padding: theme.spacing(2)
-    }, media: {
-        height: 140,
+        maxWidth: 345,
+    },
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
 });
 class FriendList extends Component {
@@ -65,8 +69,41 @@ class FriendList extends Component {
             return (
                 <div key={index}>
                     {console.log('$$$$' + data.userName)}
-                    <div>
-                        <Grid item key={index} >
+                    <Grid item xs={9} >
+                        <Paper className={classes.paper}> <Card className={classes.card}>
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    alt="Contemplative Reptile"
+                                    height="140"
+                                    image={ProfileImg}
+                                    title={data.userName}
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        {data.userName}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h9" component="h4">
+                                        Name:{data.name}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h9" component="h4">
+                                        Email:{data.email}
+                                    </Typography>
+                                    {/* <Typography variant="body2" color="textSecondary" component="p">
+                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                        across all continents except Antarctica
+                            </Typography> */}
+                                </CardContent>
+                            </CardActionArea>
+                            <CardActions>
+                            <Button size="small" color="primary">
+                                View Profile
+                                </Button>
+                            {/* <FriendButton id={data._id} users={this.props.users} /> */}
+                            </CardActions>
+                        </Card></Paper>
+                    </Grid>
+                    <br />                        {/* <Grid item key={index} >
                             <CardActionArea >
                                 <CardHeader
                                     title={data.userName}
@@ -89,10 +126,9 @@ class FriendList extends Component {
                                     {console.log("Key---id--->",data._id)}
                                 </Button>
                             </CardActions>
-                        </Grid>
+                        </Grid> */}
                     </div>
-                </div>
-            );
+           );
         }
     }
     render() {

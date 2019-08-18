@@ -8,7 +8,7 @@ import { getUser } from '../../actions/user';
 import EditProfile from '../Users/edit';
 import { Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 import Avatar from '@material-ui/core/Avatar';
-import { Divider, Paper } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
@@ -71,38 +71,39 @@ class TeamProfile extends Component {
             <div>
                 {/* <Grid item xs={3}> */}
                 {/* <Grid container spacing={3}> */}
-                        <Grid item spacing={3} xs={9} > 
-                <Paper className={classes.paper}> <Card className={classes.card}>
-                    <CardActionArea>
-                        <CardMedia
-                            component="img"
-                            alt="Contemplative Reptile"
-                            height="140"
-                            image={user.avatar}
-                            title={user.name}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                {user.name}
+                <Grid item spacing={3} xs={9} >
+                    <Paper className={classes.paper}> 
+                    <Card className={classes.card}>
+                        <CardActionArea>
+                            <CardMedia
+                                component="img"
+                                alt="Contemplative Reptile"
+                                height="140"
+                                image={user.avatar}
+                                title={user.name}
+                            />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {user.name}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary" component="p">
+                                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                    across all continents except Antarctica
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                across all continents except Antarctica
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                        <Button size="small" color="primary">
-                            Share
+                            </CardContent>
+                        </CardActionArea>
+                        <CardActions>
+                            <Button size="small" color="primary">
+                                Share
                         </Button>
-                        <Button size="small" color="primary">
-                            Learn More
+                            <Button size="small" color="primary">
+                                Learn More
                         </Button>
-                    </CardActions>
-                </Card></Paper>
-                 </Grid>
-                 <br/>
-                   {/* </Grid> */}
+                        </CardActions>
+                    </Card></Paper>
+                </Grid>
+                <br />
+                {/* </Grid> */}
                 {/* </Grid> */}
             </div>
         );
@@ -117,9 +118,9 @@ class TeamProfile extends Component {
             <div>
                 <Grid container spacing={3}>
                     {/* <Grid item xs={12}> */}
-                        {this.props.users.map((user, i) =>
-                            this.listView(user, i)
-                        )}
+                    {this.props.users.map((user, i) =>
+                        this.listView(user, i)
+                    )}
                     {/* </Grid> */}
                 </Grid>
             </div>
