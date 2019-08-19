@@ -65,7 +65,14 @@ class FriendList extends Component {
     }
     listView(data, index) {
         const { classes } = this.props;
+        let img;
         if (data._id !== this.props.auth.user.id) {
+                if(data.avatar && data.avatar.length>0){
+                    img = data.avatar
+                }else{
+                    img=ProfileImg
+                }
+    
             return (
                 <div key={index}>
                     {console.log('$$$$' + data.userName)}
@@ -76,7 +83,7 @@ class FriendList extends Component {
                                     component="img"
                                     alt="Contemplative Reptile"
                                     height="140"
-                                    image={ProfileImg}
+                                    image={img}
                                     title={data.userName}
                                 />
                                 <CardContent>

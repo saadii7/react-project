@@ -99,7 +99,7 @@ class Friends extends Component {
     }
 
     listView(data, index) {
-        // { console.log('twstingx', data._id, "----", index) };
+        // { console.log('twstingx', data, "----", index) };
         const { classes } = this.props;
         let props = this.props;
         let friendButton;
@@ -109,8 +109,8 @@ class Friends extends Component {
             for (let i = 0; i < friends.length; i++) {
                 if (data._id === friends[i]._id) {
                     friendButton = (
-                        <Button id="friendbutton" size="small" color="primary" disabled >
-                            Friends
+                        <Button id="friendbutton" size="small" color="secondary" >
+                            Unfriend
                                 {/* <Icon className={classes.rightIcon}>send</Icon> */}
                         </Button>
                     );
@@ -134,11 +134,11 @@ class Friends extends Component {
         // }
         let img;
         if (data._id !== this.props.auth.user.id) {
-            // if(data.avatar.length>0){
-            //     img = data.avatar
-            // }else{
-            //     img=ProfileImg
-            // }
+            if(data.avatar && data.avatar.length>0){
+                img = data.avatar
+            }else{
+                img=ProfileImg
+            }
             return (
                 <div key={index}>
                     <Grid item xs={9} >
@@ -148,7 +148,7 @@ class Friends extends Component {
                                     component="img"
                                     alt="Contemplative Reptile"
                                     height="140"
-                                    image={ProfileImg}
+                                    image={img}
                                     title={data.userName}
                                 />
                                 <CardContent>

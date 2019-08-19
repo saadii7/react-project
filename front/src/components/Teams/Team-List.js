@@ -25,8 +25,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { Typography, Button, Link } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckboxListSecondary from './Checkbox';
 import socket from '../../socket';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
 import { fetchAllUsers } from '../../actions/user';
@@ -195,11 +193,11 @@ class TeamList extends Component {
                     </Fab><Icon color="primary" />
                 </TableCell>
                 <TableCell component='th' scope='row'>
-                    <Link to='/team/profile'>
-                    <Fab size="small" color="primary" aria-label="add"  className={classes.margin}>
+                    {/* <Link to='/team/profile'> */}
+                    <Fab size="small" color="primary" tag={Link} href="/team/profile" to="/team/profile" aria-label="add"  className={classes.margin}>
                         <HomeIcon onClick={() => this.PlayerViewHandler(data._id)} className={classes.icon}></HomeIcon>
                     </Fab><Icon color="primary" />
-                    </Link>
+                    {/* </Link> */}
                 </TableCell>
                 <TableCell component='th' scope='row'>
                     {data.discription}

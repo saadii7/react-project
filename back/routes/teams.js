@@ -141,7 +141,9 @@ router.get('/:id/all-players', (req, res) => {
                         res.status(404).send({
                             message: 'No Players for this found'
                         });
-                    res.status(200).send(players);
+                    res.status(200).send(
+                        players
+                        );
                 })
                 .catch(err => res.status(400).send(err));
         }
@@ -170,6 +172,7 @@ router.post('/add-player', (req, res) => {
                     .then(abc => {
                         if (abc)
                             res.status(200).send({
+                                abc,
                                 message: 'successfull added'
                             });
                         res.status(400).send(abc);

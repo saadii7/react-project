@@ -4,11 +4,6 @@ import { Link } from 'react-router-dom';
 // import store from '../../store';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -98,39 +93,6 @@ class EventListing extends Component {
                     </Card>
                 </Grid>
             </Grid>
-            // <Paper className={classes.tableRoot}>
-            //     <Table className={classes.table}>
-            //         <TableHead>
-            //             Events
-            //     </TableHead>
-            //         <TableBody>
-            //             <TableRow key={index}>
-            //                 <TableCell component='th' scope='row'>
-            //                     {data.eventName}
-            //                 </TableCell>
-            //                 <TableCell component='th' scope='row'>
-            //                     {data._id}
-            //                 </TableCell>
-            //                 <TableCell align='right'>
-            //                     <IconButton
-            //                         className={classes.button}
-            //                         aria-label='Edit'
-            //                         component='a'
-            //                         href={`/edit-vendor/${data._id}`}>
-            //                         <EditIcon />
-            //                     </IconButton>
-            //                     <IconButton
-            //                         className={classes.button}
-            //                         aria-label='Delete'
-            //                         onClick={e => this.deleteSport(e, data._id)}>
-            //                         <DeleteIcon />
-            //                     </IconButton>
-            //                 </TableCell>
-            //             </TableRow>
-            //         </TableBody>
-            //     </Table>
-            // </Paper>
-
         );
     }
     componentDidMount() {
