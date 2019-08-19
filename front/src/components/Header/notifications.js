@@ -81,7 +81,7 @@ class Notifications extends React.Component {
       <React.Fragment>
         <CssBaseline />
         {/* {console.log('NOtification state data------>', this.state.notifications)} */}
-        <Paper square className={classes.paper}>
+        {/* <Paper square className={classes.paper}> */}
           <Typography className={classes.text} variant="h5" gutterBottom>
             Inbox
         </Typography>
@@ -104,7 +104,7 @@ class Notifications extends React.Component {
               }
             })}
           </List>
-        </Paper>
+        {/* </Paper> */}
       </React.Fragment>
     );
   }

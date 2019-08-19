@@ -29,6 +29,7 @@ import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess
 import { fetchAllUsers } from '../../actions/user';
 import Profile from '../Users/Profile';
 import notifications from '../Header/notifications';
+import Paper from '@material-ui/core/Paper';
 
 
 const drawerWidth = 240;
