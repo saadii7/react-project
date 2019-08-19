@@ -8,6 +8,9 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
+import { Paper } from '@material-ui/core';
+import { Card, CardImg, CardBody, CardTitle } from 'reactstrap';
+
 // import { shadows } from '@material-ui/system';
 import {
     Grid,
@@ -15,7 +18,7 @@ import {
     Typography,
     CardHeader
 } from '@material-ui/core/';
-
+import ProfileImg from '../../assets/profile.png';
 import { fetchAllUsers, deleteUser } from '../../actions/user';
 import { fetchAllFriends } from '../../actions/friend';
 import Icon from '@material-ui/core/Icon';
@@ -25,27 +28,17 @@ import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions
 // import FriendButton from './Friend-Button';
 
 const styles = theme => ({
+    card: {
+        maxWidth: 345,
+        margin: 20
+    },
     root: {
         flexGrow: 1,
-        padding: theme.spacing(2)
     },
     paper: {
-        height: 250,
-        width: 280,
-        // padding: theme.spacing(24)
-    },
-    bigAvatar: {
-        margin: 10,
-        width: 60,
-        height: 60
-    },
-    card: {
-        height: 250,
-        width: 280,
-        maxWidth: 385,
-        // padding: theme.spacing(2)
-    }, media: {
-        height: 140,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
 });
 class Friends extends Component {
@@ -116,21 +109,21 @@ class Friends extends Component {
             for (let i = 0; i < friends.length; i++) {
                 if (data._id === friends[i]._id) {
                     friendButton = (
-                        <Button id="friendbutton" size="small" color="primary" variant='contained' disabled >
+                        <Button id="friendbutton" size="small" color="primary" disabled >
                             Friends
                                 {/* <Icon className={classes.rightIcon}>send</Icon> */}
                         </Button>
                     );
                 } else {
                     friendButton = (
-                        <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
+                        <Button id="friendbutton" size="small" color="primary" disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
                             Add Friend
                             <Icon className={classes.rightIcon}>send</Icon>
                         </Button>
                     );
                 }
             }
-        } 
+        }
         // else {
         //     friendButton = (
         //         <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
@@ -139,37 +132,52 @@ class Friends extends Component {
         //         </Button>
         //     );
         // }
+        let img;
         if (data._id !== this.props.auth.user.id) {
+            // if(data.avatar.length>0){
+            //     img = data.avatar
+            // }else{
+            //     img=ProfileImg
+            // }
             return (
                 <div key={index}>
-                    {/* {console.log('$$$$' + data.userName)} */}
-                    <div>
-                        <Grid item key={index} >
-                            <CardActionArea >
-                                <CardHeader
-                                    title={data.userName}
-                                    subheader={data.email}
-                                />
+                    <Grid item xs={9} >
+                        <Paper className={classes.paper}> <Card className={classes.card}>
+                            <CardActionArea>
                                 <CardMedia
-                                    className={classes.media}
-                                    image={data.avatar}
-                                    title="Contemplative Reptile"
+                                    component="img"
+                                    alt="Contemplative Reptile"
+                                    height="140"
+                                    image={ProfileImg}
+                                    title={data.userName}
                                 />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        {data.name}
+                                        {data.userName}
                                     </Typography>
+                                    <Typography gutterBottom variant="h9" component="h4">
+                                        Name:{data.name}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h9" component="h4">
+                                        Email:{data.email}
+                                    </Typography>
+                                    {/* <Typography variant="body2" color="textSecondary" component="p">
+                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                        across all continents except Antarctica
+                            </Typography> */}
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
-                                <Button size="small" variant='contained' color="primary">
-                                    View Profile
+                            <Button size="small" color="primary">
+                                View Profile
                                 </Button>
-                                {/* <FriendButton id={data._id} users={this.props.users} /> */}
-                                {friendButton}
+                            {/* <FriendButton id={data._id} users={this.props.users} /> */}
+                            {friendButton}
                             </CardActions>
-                        </Grid>
-                    </div>
+                        </Card></Paper>
+                    </Grid>
+                    <br />
+                    {/* {console.log('$$$$' + data.userName)} */}
                 </div>
             );
         }
@@ -178,15 +186,8 @@ class Friends extends Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
-                <Grid
-                    container
-                    spacing={2}
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                >
+                <Grid container>
                     {this.props.users.map((user, i) => this.listView(user, i))}
-
                 </Grid>
             </div>
         );
