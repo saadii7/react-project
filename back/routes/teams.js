@@ -1,5 +1,4 @@
 const { Team } = require('../models/Team');
-const { User_Team } = require('../models/User_Team');
 const User = require('../models/User');
 const multer = require('multer');
 const express = require('express');
@@ -7,13 +6,15 @@ const router = express.Router();
 const fs = require('fs');
 const _ = require('lodash');
 
-router.get('/all',(req,res)=>{
-    let query = req.query || {}
+router.get('/all', (req, res) => {
+    let query = req.query || {};
     query.isDeleted = false;
-    Team.find(query).then(teams=>{
-        if(!teams) res.status(404).send({message:'No Team found'})
+    Team.find(query)
+        .then(teams => {
+            if (!teams) res.status(404).send({ message: 'No Team found' });
             res.status(200).send(teams);
-    }).catch(err=>res.status(400).send(err));
+        })
+        .catch(err => res.status(400).send(err));
 });
 
 // router.get('/all', (req, res) => {
@@ -38,17 +39,17 @@ router.post('/create' /*, upload.single('teamImage')*/, (req, res) => {
     newTeam.image.imageName = req.body.name;
     if (req.body.captain) {
         newTeam
-        .save()
-        .then(async team => {
-            await User.findById(req.body.captain).then(user => {
-                if (user) {
-                    user.teams.push(user._id);
-                    user.save();
-                    team.users.push(team._id);
-                    team.save();
-                }
-            });
-            res.status(200).send(team);
+            .save()
+            .then(async team => {
+                await User.findById(req.body.captain).then(user => {
+                    if (user) {
+                        user.teams.push(team);
+                        user.save();
+                        team.users.push(user);
+                        team.save();
+                    }
+                });
+                res.status(200).send(team);
             })
             .catch(err => res.status(400).send(err));
     } else {
@@ -128,22 +129,16 @@ router.delete('/delete/:id', (req, res) => {
 
 router.get('/:id/all-players', (req, res) => {
     let teamId = req.params.id;
-    const userteam = new User_Team();
-    Team.findById(teamId).then(team => {
+    Team.findById(teamId).then(async team => {
         if (!team) {
             res.status(404).send({ message: 'team not found' });
         } else {
-            userteam.team.push(team._id);
-            let query = { team_id: teamId };
-            Team.find(query)
-                .then(players => {
-                    if (!players)
-                        res.status(404).send({
-                            message: 'No Players for this found'
-                        });
-                    res.status(200).send(players);
-                })
-                .catch(err => res.status(400).send(err));
+            let players = await User.find({ _id: { $in: team.users } });
+            if (!players)
+                res.status(404).send({
+                    message: 'No Players for this found'
+                });
+            res.status(200).send(players);
         }
     });
 });
@@ -152,58 +147,64 @@ router.post('/add-player', (req, res) => {
     const io = req.app.get('io');
     let teamid = req.body.teamId;
     let userid = req.body.userId;
-    const userteam = new User_Team();
-    Team.findById(teamid).then(team => {
+    Promise.all([Team.findById(teamid), User.findById(userid)]).then(values => {
+        let team = values[0];
+        let user = values[1];
         if (!team) {
             res.status(404).send({ message: 'team not found' });
-        } else {
-            userteam.team.push(team._id);
-            User.findById(userid).then(user => {
-                if (!user) res.status(404).send({ message: 'user not found' });
-                io.emit('notifications_for_' + req.body.userid, {
-                    action: 'new',
-                    data: user
-                });
-                userteam.user.push(user._id);
-                userteam
-                    .save()
-                    .then(abc => {
-                        if (abc)
-                            res.status(200).send({
-                                message: 'successfull added'
-                            });
-                        res.status(400).send(abc);
-                    })
-                    .catch(err => res.status(400).send(err));
-            });
+            return;
         }
+        if (!user) {
+            res.status(404).send({ message: 'user not found' });
+            return;
+        }
+        user.teams.push(team._id);
+        team.users.push(user._id);
+        Promise.all([team.save(), user.save()]).then(resp => {
+            io.emit('notifications_for_' + req.body.userid, {
+                action: 'new',
+                data: team
+            });
+            res.status(200).send({
+                message: 'successfull added'
+            });
+        });
     });
 });
 
 router.post('/delete-player', (req, res) => {
+    const io = req.app.get('io');
     let teamid = req.body.teamId;
     let userid = req.body.userId;
-    const userteam = new User_Team();
-    Team.findById(teamid).then(team => {
+    Promise.all([Team.findById(teamid), User.findById(userid)]).then(values => {
+        let team = values[0];
+        let user = values[1];
         if (!team) {
             res.status(404).send({ message: 'team not found' });
-        } else {
-            userteam.team.push(team._id);
-            User.findById(userid).then(user => {
-                if (!user) res.status(404).send({ message: 'user not found' });
-                userteam.user.push(user._id);
-                userteam
-                    .remove()
-                    .then(abc => {
-                        if (abc)
-                            res.status(200).send({
-                                message: 'successfull deleted'
-                            });
-                        res.status(400).send(abc);
-                    })
-                    .catch(err => res.status(400).send(err));
-            });
+            return;
         }
+        if (!user) {
+            res.status(404).send({ message: 'user not found' });
+            return;
+        }
+        Promise.all([
+            Team.update(
+                { _id: team._id },
+                { $pull: { users: { $in: [user._id] } } }
+            ),
+            User.update(
+                { _id: user._id },
+                { $pull: { teams: { $in: [team._id] } } }
+            )
+        ]).then(resp => {
+            io.emit('notifications_for_' + req.body.userid, {
+                action: 'delete',
+                data: team
+            });
+            res.status(200).send({
+                message: 'successfull deleted'
+            });
+        });
     });
 });
 
