@@ -183,20 +183,27 @@ router.post('/:id/add-friend', (req, res) => {
         .catch(err => {
             res.status(400).send(err);
         });
-    // User.findById(id)
-    //     .populate('Friendship')
-    //     .then(user => {
-    //         if (!user) {
-    //             return res.status(404).send({ message: 'user not found' });
-    //         }
-    //         let isdel = user.isDeleted;
-    //         if (isdel)
-    //             return res.status(404).send({ message: 'User is "Deleted".' });
-    //         else {
-    //             return res.status(200).send(user);
-    //         }
-    //     })
-    //     .catch(err => res.status(400).send(err));
+});
+
+router.post('/:id/delete-friend', (req, res) => {
+    const io = req.app.get('io');
+    let userId = req.params.id;
+    let friendId = req.body.friendId;
+
+    Promise.all([
+        Friendship.deleteMany({
+            reciever: friendId,
+            sender: userId
+        }),
+        Friendship.deleteMany({
+            sender: friendId,
+            reciever: userId
+        })
+    ])
+        .then(result => {
+            res.status(200).send({ message: 'Friend deleted.' });
+        })
+        .catch(error => console.log(`Error in promises ${error}`));
 });
 
 module.exports = router;
