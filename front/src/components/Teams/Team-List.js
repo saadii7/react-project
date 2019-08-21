@@ -30,7 +30,7 @@ import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess
 import { fetchAllUsers } from '../../actions/user';
 import store from '../../store';
 import TeamProfile from './profile';
-
+import MaterialTable from 'material-table';
 
 
 function HomeIcon(props) {
@@ -92,10 +92,12 @@ class TeamList extends Component {
             isChecked: false,
             teamId: '',
             open: false,
-            checkedValues: []
+            checkedValues: [],
+            list:[],
+            setState:[]
         };
         this.editModal = props.editModal;
-        this.closeModal = props.closeModal;
+        // this.closeModal = props.closeModal;
     }
     editModal = e => { };
     // closeModal = e => { };
@@ -114,6 +116,7 @@ class TeamList extends Component {
     componentDidMount() {
         // store.dispatch(fetchAllTeams());
         store.dispatch(fetchAllTeams([this.props.auth.user.id], ['captain']));
+        this.setState({list:this.props.teams})
         let notifications = this.props.notifications;
         console.log('notifications' + notifications);
         console.log('Listening to notifications_for_' + this.props.auth.user.id);
@@ -169,58 +172,60 @@ class TeamList extends Component {
         // console.log('--------listView------->')
         const { classes } = this.props;
         return (
-            <TableRow key={index}>
-                <TableCell component='th' scope='row'>
-                    <Avatar
-                        alt='Remy Sharp'
-                        src={data.avatar}
-                        className={classes.bigAvatar}
-                    />{' '}
-                </TableCell>
-                <TableCell component='th' scope='row'>
-                    {data.name}
-                </TableCell>
-                <TableCell component='th' scope='row'>
-                    {/* {data.users}
+            <div>
+                <TableRow key={index}>
+                    <TableCell component='th' scope='row'>
+                        <Avatar
+                            alt='Remy Sharp'
+                            src={data.avatar}
+                            className={classes.bigAvatar}
+                        />{' '}
+                    </TableCell>
+                    <TableCell component='th' scope='row'>
+                        {data.name}
+                    </TableCell>
+                    <TableCell component='th' scope='row'>
+                        {/* {data.users}
                     {data._id} */}
-                </TableCell>
-                <TableCell component='th' scope='row'>
-                    <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
-                        <AddIcon
+                    </TableCell>
+                    <TableCell component='th' scope='row'>
+                        <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
+                            <AddIcon
+                                key={index}
+                                onClick={() => this.wrapperFunction(data._id)}
+                                aria-label='Edit' />
+                        </Fab><Icon color="primary" />
+                    </TableCell>
+                    <TableCell component='th' scope='row'>
+                        {/* <Link to='/team/profile'> */}
+                        <Fab size="small" color="primary" tag={Link} href="/team/profile" to="/team/profile" aria-label="add" className={classes.margin}>
+                            <HomeIcon onClick={() => this.PlayerViewHandler(data._id)} className={classes.icon}></HomeIcon>
+                        </Fab><Icon color="primary" />
+                        {/* </Link> */}
+                    </TableCell>
+                    <TableCell component='th' scope='row'>
+                        {data.discription}
+                    </TableCell>
+                    <TableCell>
+                        <IconButton
+                            className={classes.button}
                             key={index}
-                            onClick={() => this.wrapperFunction(data._id)}
-                            aria-label='Edit' />
-                    </Fab><Icon color="primary" />
-                </TableCell>
-                <TableCell component='th' scope='row'>
-                    {/* <Link to='/team/profile'> */}
-                    <Fab size="small" color="primary" tag={Link} href="/team/profile" to="/team/profile" aria-label="add"  className={classes.margin}>
-                        <HomeIcon onClick={() => this.PlayerViewHandler(data._id)} className={classes.icon}></HomeIcon>
-                    </Fab><Icon color="primary" />
-                    {/* </Link> */}
-                </TableCell>
-                <TableCell component='th' scope='row'>
-                    {data.discription}
-                </TableCell>
-                <TableCell>
-                    <IconButton
-                        className={classes.button}
-                        key={index}
-                        onClick={() => this.editModal(data)}
-                        aria-label='Edit'>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton
-                        className={classes.button}
-                        aria-label='Delete'
-                        onClick={e => {
-                            this.deleteTeam(e, data._id);
-                            this.refreshPage();
-                        }}>
-                        <DeleteIcon />
-                    </IconButton>
-                </TableCell>
-            </TableRow>
+                            onClick={() => this.editModal(data)}
+                            aria-label='Edit'>
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton
+                            className={classes.button}
+                            aria-label='Delete'
+                            onClick={e => {
+                                this.deleteTeam(e, data._id);
+                                this.refreshPage();
+                            }}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </TableCell>
+                </TableRow>
+            </div>
         );
     }
     handleCheck = (element, index) => {
@@ -247,25 +252,25 @@ class TeamList extends Component {
         const { classes } = this.props;
         return (
             <Grid className={classes.container} wrap="nowrap" spacing={2} sm={6}>
-                    <Grid item>
-                        <List dense key={user._id}>
-                            <ListItem key={user._id}>
-                                <ListItemAvatar>
-                                    <Avatar
-                                        alt={user.name}
-                                        src={user.avatar}
-                                    />
-                                </ListItemAvatar>
-                                <ListItemText id={user._id} primary={user.name} />
-                                <ListItemSecondaryAction>
-                                </ListItemSecondaryAction>
-                                <Grid item>
-                                    <Button onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">Add</Button>
-                                </Grid>
-                            </ListItem>
-                        </List>
-                    </Grid>
+                <Grid item>
+                    <List dense key={user._id}>
+                        <ListItem key={user._id}>
+                            <ListItemAvatar>
+                                <Avatar
+                                    alt={user.name}
+                                    src={user.avatar}
+                                />
+                            </ListItemAvatar>
+                            <ListItemText id={user._id} primary={user.name} />
+                            <ListItemSecondaryAction>
+                            </ListItemSecondaryAction>
+                            <Grid item>
+                                <Button onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">Add</Button>
+                            </Grid>
+                        </ListItem>
+                    </List>
                 </Grid>
+            </Grid>
         );
         // }
     }
@@ -274,33 +279,59 @@ class TeamList extends Component {
 
         return (
             <div>
+                <MaterialTable
+                    title="Editable Example"
+                    columns={this.props.teams.teams}
+                    data={this.props.teams.teams}
+                    editable={{
+                        onRowAdd: newData =>
+                            new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve();
+                                    const data = [...this.state.list.data];
+                                    data.push(newData);
+                                    this.state.setState({ ...this.state.list, data });
+                                }, 600);
+                            }),
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve();
+                                    const data = [...this.state.list.data];
+                                    data[data.indexOf(oldData)] = newData;
+                                    this.state.setState({ ...this.state.list, data });
+                                }, 600);
+                            }),
+                        onRowDelete: oldData =>
+                            new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve();
+                                    const data = [...this.state.list.data];
+                                    data.splice(data.indexOf(oldData), 1);
+                                    this.state.setState({ ...this.state.list, data });
+                                }, 600);
+                            }),
+                    }}
+                />
+                -----------------
                 <main className={classes.root}>
                     <div className={classes.toolbar} />
-                    <Grid container spacing={24}>
-                        <Grid item xs={6} />
-                        <Grid item xs={3} container justify='flex-end' />
-                    </Grid>
-                    <Grid container spacing={24}>
-                        <Paper className={classes.root}>
-                            <Table className={classes.table}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Image</TableCell>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Add Players</TableCell>
-                                        <TableCell>Profile</TableCell>
-                                        <TableCell>.      .</TableCell>
-                                        <TableCell>Action</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {this.props.teams.teams.map((team, i) =>
-                                        this.listView(team, i)
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </Paper>
-                    </Grid>
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Image</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Add Players</TableCell>
+                                <TableCell>Profile</TableCell>
+                                <TableCell>Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.props.teams.teams.map((team, i) =>
+                                this.listView(team, i)
+                            )}
+                        </TableBody>
+                    </Table>
                 </main>
                 <Modal
                     aria-labelledby='simple-modal-title'
@@ -311,7 +342,7 @@ class TeamList extends Component {
                     <div style={getModalStyle()} className={classes.paper}>
                         <Typography variant='h6' id='modal-title'>
                             {this.state.add && <p>Add New Team</p>}
-                            
+
                             {this.state.add && this.props.users.map((users, index) => this.AddTeamPlayerHandler(users, index))}
                         </Typography>
                     </div>

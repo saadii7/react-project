@@ -48,9 +48,8 @@ const styles = theme => ({
         right: theme.spacing(3)
     },
     absolute: {
-        position: 'flex',
-        bottom: '-300px',
-        left:'550px'
+        top: theme.spacing(3),
+        left: theme.spacing(3),
     },
     paper: {
         maxWidth: 500,
@@ -76,6 +75,7 @@ class TeamIndex extends Component {
     state = {
         open: false,
         add: true,
+        list: true,
         expanded: null,
         team: {}
     };
