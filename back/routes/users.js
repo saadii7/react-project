@@ -51,8 +51,6 @@ router.put('/update/:id', async (req, res) => {
         'name',
         'email',
         'avatar',
-        's_name',
-        'sport',
         'userName',
         'avatar',
         'isDeleted',
@@ -66,22 +64,8 @@ router.put('/update/:id', async (req, res) => {
     User.findByIdAndUpdate(id, { $set: body }, { new: true })
         .then(async user => {
             if (!user) {
-                res.status(404).send({ message: 'user not found' });
+                res.status(404).send({ message: 'User not found' });
             }
-            await Sport.findOne({ name: req.body.name })
-                .then(usr => {
-                    user.sport.push(usr._id);
-                    user.save().then(done =>
-                        console.log('----------------------', done)
-                    );
-                    usr.user.push(user._id);
-                    usr.save().then(done =>
-                        console.log('+++++++++++++++++', done)
-                    );
-                })
-                .catch(e =>
-                    res.status(400).send({ message: 'error at sportname' })
-                );
             res.status(200).send(user);
         })
         .catch(e => {

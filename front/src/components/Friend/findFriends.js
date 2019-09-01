@@ -23,6 +23,7 @@ import { fetchAllUsers, deleteUser } from '../../actions/user';
 import { fetchAllFriends } from '../../actions/friend';
 import Icon from '@material-ui/core/Icon';
 import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions/notifications';
+import {deleteFriend} from '../../actions/friend';
 
 
 // import FriendButton from './Friend-Button';
@@ -109,7 +110,7 @@ class Friends extends Component {
             for (let i = 0; i < friends.length; i++) {
                 if (data._id === friends[i]._id) {
                     friendButton = (
-                        <Button id="friendbutton" size="small" color="secondary" >
+                        <Button id="friendbutton" size="small" color="secondary" onClick={()=>this.props.onDeleteFriend(friends[i]._id)}>
                             Unfriend
                                 {/* <Icon className={classes.rightIcon}>send</Icon> */}
                         </Button>
@@ -124,18 +125,19 @@ class Friends extends Component {
                 }
             }
         }
-        // else {
-        //     friendButton = (
-        //         <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
-        //             Add Friend
-        //             <Icon className={classes.rightIcon}>send</Icon>
-        //         </Button>
-        //     );
-        // }
+        else {
+            friendButton = (
+                <Button id="friendbutton" size="small" color="primary" variant='contained' disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
+                    Add Friend
+                    <Icon className={classes.rightIcon}>send</Icon>
+                </Button>
+            );
+        }
         let img;
         if (data._id !== this.props.auth.user.id) {
             if(data.avatar && data.avatar.length>0){
-                img = data.avatar
+                // img = data.avatar
+                img=ProfileImg
             }else{
                 img=ProfileImg
             }
@@ -213,6 +215,9 @@ const mapDispatchToProps = dispatch => {
         },
         onMakeFriendRequest: id => {
             dispatch(makeFriendRequest(id));
+        }, 
+        onDeleteFriend: id => {
+            dispatch(deleteFriend(id));
         },
     };
 };

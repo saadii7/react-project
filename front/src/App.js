@@ -118,7 +118,7 @@ class App extends Component {
                             <PrivateRoute path='/profile' component={Profile} />
                             <PrivateRoute
                                 path={
-                                    '/user/' + this.props.auth.user.id + '/edit'
+                                    '/users/:id/edit'
                                 }
                                 component={editProfile}
                             />
@@ -127,6 +127,7 @@ class App extends Component {
                                 component={FriendList}
                             />
                             <PrivateRoute
+                                exact
                                 path={'/teams'}
                                 component={TeamIndex}
                             />
@@ -151,8 +152,9 @@ class App extends Component {
                                 path={'/friends'}
                                 component={FiendIndex}
                             />
-                            <PrivateRoute
-                                path={'/team/profile'}
+                            <Route
+                                exact
+                                path='/teams/:id/profile'
                                 component={TeamProfile}
                             />
 

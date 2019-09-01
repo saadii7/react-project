@@ -8,9 +8,10 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import {Card} from 'reactstrap';
+import { Card } from 'reactstrap';
 import { Paper } from '@material-ui/core';
 import ProfileImg from '../../assets/profile.png';
+import axios from 'axios';
 
 
 import {
@@ -20,7 +21,7 @@ import {
     CardHeader
 } from '@material-ui/core/';
 import Profile from '../Users/Profile';
-import {fetchAllFriends,deleteFriend} from '../../actions/friend';
+import { fetchAllFriends, deleteFriend } from '../../actions/friend';
 
 
 const styles = theme => ({
@@ -46,37 +47,45 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
 });
-class FriendList extends Component {
+class News extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            sportNews: []
         };
     }
     componentDidMount() {
-        this.props.onfetchAllFriends(this.props.auth.user.id);
-        }
+        axios.get('https://www.scorebat.com/video-api/v1/')
+            .then(response => {
+                // const news=response.data;
+                const sportNews = response.data;
+                this.setState({ sportNews });
+            })
+            .catch(error => {
+                throw error;
+            });
+    }
     refreshPage = () => {
         window.location.reload();
     };
-    viewProfile=(id)=>{
+    viewProfile = (id) => {
         console.log('--------Frnd Profile----->');
-        return(<Profile id={id}/>);
+        return (<Profile id={id} />);
     }
     listView(data, index) {
         const { classes } = this.props;
         let img;
         if (data._id !== this.props.auth.user.id) {
-                if(data.avatar && data.avatar.length>0){
-                    // img = data.avatar
-                    img=ProfileImg
-                }else{
-                    img=ProfileImg
-                }
-    
+            if (data.avatar && data.avatar.length > 0) {
+                // img = data.avatar
+                img = ProfileImg
+            } else {
+                img = ProfileImg
+            }
+
             return (
                 <div key={index}>
-                    {console.log('$$$$' + data.userName)}
+                    {/* {console.log('$$$$' + data.userName)} */}
                     <Grid item xs={9} >
                         <Paper className={classes.paper}> <Card className={classes.card}>
                             <CardActionArea>
@@ -84,19 +93,19 @@ class FriendList extends Component {
                                     component="img"
                                     alt="Contemplative Reptile"
                                     height="140"
-                                    image={img}
-                                    title={data.userName}
+                                    image={data.thumbnail}
+                                    title={data.title}
                                 />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        {data.userName}
+                                        {data.data.title}
                                     </Typography>
-                                    <Typography gutterBottom variant="h9" component="h4">
+                                    {/* <Typography gutterBottom variant="h9" component="h4">
                                         Name:{data.name}
                                     </Typography>
                                     <Typography gutterBottom variant="h9" component="h4">
                                         Email:{data.email}
-                                    </Typography>
+                                    </Typography> */}
                                     {/* <Typography variant="body2" color="textSecondary" component="p">
                                         Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                                         across all continents except Antarctica
@@ -104,39 +113,16 @@ class FriendList extends Component {
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
-                            <Button size="small" color="primary">
-                                View Profile
+                                <Button size="small" color="primary">
+                                    View Profile
                                 </Button>
-                            {/* <FriendButton id={data._id} users={this.props.users} /> */}
+                                {/* <FriendButton id={data._id} users={this.props.users} /> */}
                             </CardActions>
                         </Card></Paper>
                     </Grid>
-                    <br />                        {/* <Grid item key={index} >
-                            <CardActionArea >
-                                <CardHeader
-                                    title={data.userName}
-                                    subheader={data.email}
-                                />
-                                <CardMedia
-                                    className={classes.media}
-                                    image={data.avatar}
-                                    title="Contemplative Reptile"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        {data.name}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Button size="small" onClick={()=>this.viewProfile(data._id)} variant='contained' color="primary">
-                                    View Profile
-                                    {console.log("Key---id--->",data._id)}
-                                </Button>
-                            </CardActions>
-                        </Grid> */}
-                    </div>
-           );
+                    <br />
+                </div>
+            );
         }
     }
     render() {
@@ -151,7 +137,7 @@ class FriendList extends Component {
                     justify="flex-start"
                     alignItems="flex-start"
                 >
-                    {this.props.friends.map((user, i) => this.listView(user, i))}
+                    {this.state.sportNews.map((user, i) => this.listView(user, i))}
 
                 </Grid>
             </div>
@@ -162,7 +148,7 @@ class FriendList extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        friends:state.friends
+        friends: state.friends
     };
 };
 
@@ -171,9 +157,9 @@ const mapDispatchToProps = dispatch => {
         onfetchAllFriends: id => {
             dispatch(fetchAllFriends(id));
         },
-       
+
     };
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(FriendList)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(News)));
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import { Card} from 'reactstrap';
+import { Card } from 'reactstrap';
 import { Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -12,8 +12,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import { fetchAllUsers } from '../../actions/user';
 import store from '../../store';
+import { fetchTeamPlayer } from '../../actions/team';
+
 
 const styles = theme => ({
     card: {
@@ -33,16 +34,17 @@ class TeamProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            teamId: this.props.match.params.id
         }
     }
 
     componentDidMount() {
-        // this.setState({
-        //     user: this.props.auth.user
-        //     }),
-        console.log("Key---Props--state---->", this.state)
-        this.props.onfetchAllUsers();
+        // console.log("------Team---Profile------>",this.props.match.params.id)
+        this.props.onFetchTeamPlayer(this.state.teamId)
     };
+    componentWillReceiveProps(props) {
+        console.log('----------Profile-----props--->', props)
+    }
     listView = (user, i) => {
         const { classes } = this.props;
         console.log("-------$$$$$$$$$$$---->", user)
@@ -51,35 +53,35 @@ class TeamProfile extends Component {
                 {/* <Grid item xs={3}> */}
                 {/* <Grid container spacing={3}> */}
                 <Grid item spacing={3} xs={9} >
-                    <Paper className={classes.paper}> 
-                    <Card className={classes.card}>
-                        <CardActionArea>
-                            <CardMedia
-                                component="img"
-                                alt="Contemplative Reptile"
-                                height="140"
-                                image={user.avatar}
-                                title={user.name}
-                            />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    {user.name}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" component="p">
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                    across all continents except Antarctica
+                    <Paper className={classes.paper}>
+                        <Card className={classes.card}>
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    alt="Contemplative Reptile"
+                                    height="140"
+                                    // image={user.avatar}
+                                    title={user.name}
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        {user.name}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                        across all continents except Antarctica
                             </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                        <CardActions>
-                            <Button size="small" color="primary">
-                                Share
+                                </CardContent>
+                            </CardActionArea>
+                            <CardActions>
+                                <Button size="small" color="primary">
+                                    Share
                         </Button>
-                            <Button size="small" color="primary">
-                                Learn More
+                                <Button size="small" color="primary">
+                                    Learn More
                         </Button>
-                        </CardActions>
-                    </Card></Paper>
+                            </CardActions>
+                        </Card></Paper>
                 </Grid>
                 <br />
                 {/* </Grid> */}
@@ -97,7 +99,7 @@ class TeamProfile extends Component {
             <div>
                 <Grid container spacing={3}>
                     {/* <Grid item xs={12}> */}
-                    {this.props.users.map((user, i) =>
+                    {this.props.players.map((user, i) =>
                         this.listView(user, i)
                     )}
                     {/* </Grid> */}
@@ -112,13 +114,15 @@ const mapStateToProps = (state) => {
         auth: state.auth,
         users: state.users,
         teams: state.teams,
+        players: state.players
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onfetchAllUsers: () => {
-            dispatch(fetchAllUsers());
-        }
+        onFetchTeamPlayer: (id) => {
+            dispatch(fetchTeamPlayer(id));
+        },
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(TeamProfile)));

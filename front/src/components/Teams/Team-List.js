@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -24,13 +24,16 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { Typography, Button, Link } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
+
 import socket from '../../socket';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
 import { fetchAllUsers } from '../../actions/user';
 import store from '../../store';
 import TeamProfile from './profile';
 import MaterialTable from 'material-table';
+import Drawer from '@material-ui/core/Drawer';
+import { MenuItem } from '@material-ui/core';
 
 
 function HomeIcon(props) {
@@ -91,10 +94,11 @@ class TeamList extends Component {
             add: true,
             isChecked: false,
             teamId: '',
+            players: [],
             open: false,
             checkedValues: [],
-            list:[],
-            setState:[]
+            list: [],
+            setState: []
         };
         this.editModal = props.editModal;
         // this.closeModal = props.closeModal;
@@ -116,41 +120,12 @@ class TeamList extends Component {
     componentDidMount() {
         // store.dispatch(fetchAllTeams());
         store.dispatch(fetchAllTeams([this.props.auth.user.id], ['captain']));
-        this.setState({list:this.props.teams})
-        let notifications = this.props.notifications;
-        console.log('notifications' + notifications);
-        console.log('Listening to notifications_for_' + this.props.auth.user.id);
-        store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
-        store.dispatch(fetchAllUsers());
-        // console.log('------------0-0-0-0---noti-----', this.props.notifications)
-        socket.on('notifications_for_' + this.props.auth.user.id, (data) => {
-            console.log('data-------notification------added', data)
-            switch (data.action) {
-                case 'new':
-                    for (let j = 0; j < this.props.users.length; j++) {
-                        if (this.props.users[j]._id === data.data.from) {
-                            data.data.user = this.props.users[j];
-                            // let notifications = this.props.notifications;
-                            // notifications.push(data.data);
-                            this.props.onCheckSocketNotifications(data.data);
-                            // this.setState({ notifications: notifications })
-                            console.log('------------0-0-0-0--------', data.data)
+        this.setState({
+            list: this.props.teams,
+        })
+        console.log('-------List-------->', this.state.list)
+        console.log('-------Players-------->', this.state.players)
 
-                            //set store notification to this array "notifications"
-                            break;
-                        }
-                    }
-                    break;
-                case 'delete':
-                    this.props.onDeleteNotificationSuccess(data.data);
-                    window.location.reload();
-                    break;
-
-                default:
-                    break;
-            }
-        });
-        this.setState({ open: this.props.open });
     }
 
     refreshPage = () => {
@@ -158,15 +133,22 @@ class TeamList extends Component {
     };
     wrapperFunction = (id) => {
         //do something
+        console.log('-------Wrapper Function-------->')
+        this.props.onFetchTeamPlayer(id)
         this.openModal();
         //do something
         this.setState({
-            teamId: id
+            teamId: id,
         });
+        // console.log('-------TeamId---00000----->', this.state.teamId)
+        // console.log('-------Player---00000----->', this.state.players)
+
     }
     PlayerViewHandler = (id) => {
         console.log('-------TeamId-------->', id)
-        this.props.onFetchTeamPlayer(id)
+        this.setState({
+            teamId: id,
+        });
     }
     listView(data, index) {
         // console.log('--------listView------->')
@@ -193,15 +175,19 @@ class TeamList extends Component {
                             <AddIcon
                                 key={index}
                                 onClick={() => this.wrapperFunction(data._id)}
-                                aria-label='Edit' />
-                        </Fab><Icon color="primary" />
+                                aria-label='Add' />
+                        </Fab>
+                        <Icon color="primary" />
                     </TableCell>
                     <TableCell component='th' scope='row'>
-                        {/* <Link to='/team/profile'> */}
-                        <Fab size="small" color="primary" tag={Link} href="/team/profile" to="/team/profile" aria-label="add" className={classes.margin}>
-                            <HomeIcon onClick={() => this.PlayerViewHandler(data._id)} className={classes.icon}></HomeIcon>
-                        </Fab><Icon color="primary" />
-                        {/* </Link> */}
+                        {/* <HomeIcon key={index}  className={classes.icon}> */}
+                        <Link to={`/teams/${data._id}/profile`}>
+                            <Fab size="small" color="primary" className={classes.margin}>
+                                <HomeIcon title={"Add"}>
+                                    <Icon color="primary" />
+                                </HomeIcon>
+                            </Fab>
+                        </Link>
                     </TableCell>
                     <TableCell component='th' scope='row'>
                         {data.discription}
@@ -228,18 +214,6 @@ class TeamList extends Component {
             </div>
         );
     }
-    handleCheck = (element, index) => {
-        // console.log('---------isChecked-------->', element, '==========>', this.state.checkedValues)
-        const values = this.state.checkedValues.filter(e => e.id === element).length > 0
-            ? this.state.checkedValues.splice(this.state.checkedValues.findIndex(e => e.id === element), 1)
-            : this.state.checkedValues.push(element);
-        for (let i = 0; i < this.state.checkedValues.length; i++) {
-            this.setState({
-                [this.state.checkedValues[i]]: values
-            });
-        }
-        // console.log('---------isChecked------>>>>>-->>>>', this.state.checkedValues)
-    }
     onSubmit = (id) => {
         console.log("user----------ID-----Team---->", id);
         const teamPlayers = {
@@ -248,8 +222,38 @@ class TeamList extends Component {
         }
         this.props.onAddTeamPlayers(teamPlayers)
     }
+    
     AddTeamPlayerHandler = (user, index) => {
+        console.log('meo----@@@')
         const { classes } = this.props;
+        let playerButton;
+        let players = 10;
+        // Player Button for team selection 
+        if (players.length > 0) {
+            for (let i = 0; i < players.length; i++) {
+                if (user._id === players[i]._id) {
+                    playerButton = (
+                        <Button id="friendbutton" size="small" onClick={() => this.onSubmit(user._id)} className={classes.Button} color='secondary' variant="contained">
+                            Unfriend
+                        </Button>
+                    );
+                } else {
+                    playerButton = (
+                        <Button id="friendbutton" size="small" onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">
+                            Add
+                        </Button>
+                    );
+                }
+            }
+        }
+        else {
+            playerButton = (
+                <Button id="friendbutton" size="small" onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">
+                    Add
+                </Button>
+            );
+        }
+        /////
         return (
             <Grid className={classes.container} wrap="nowrap" spacing={2} sm={6}>
                 <Grid item>
@@ -265,7 +269,8 @@ class TeamList extends Component {
                             <ListItemSecondaryAction>
                             </ListItemSecondaryAction>
                             <Grid item>
-                                <Button onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">Add</Button>
+                                {playerButton}
+                                {/* <Button onClick={() => this.onSubmit(user._id)} className={classes.Button} color='primary' variant="contained">Add</Button> */}
                             </Grid>
                         </ListItem>
                     </List>
@@ -279,41 +284,6 @@ class TeamList extends Component {
 
         return (
             <div>
-                <MaterialTable
-                    title="Editable Example"
-                    columns={this.props.teams.teams}
-                    data={this.props.teams.teams}
-                    editable={{
-                        onRowAdd: newData =>
-                            new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve();
-                                    const data = [...this.state.list.data];
-                                    data.push(newData);
-                                    this.state.setState({ ...this.state.list, data });
-                                }, 600);
-                            }),
-                        onRowUpdate: (newData, oldData) =>
-                            new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve();
-                                    const data = [...this.state.list.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    this.state.setState({ ...this.state.list, data });
-                                }, 600);
-                            }),
-                        onRowDelete: oldData =>
-                            new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve();
-                                    const data = [...this.state.list.data];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    this.state.setState({ ...this.state.list, data });
-                                }, 600);
-                            }),
-                    }}
-                />
-                -----------------
                 <main className={classes.root}>
                     <div className={classes.toolbar} />
                     <Table className={classes.table}>
@@ -342,8 +312,9 @@ class TeamList extends Component {
                     <div style={getModalStyle()} className={classes.paper}>
                         <Typography variant='h6' id='modal-title'>
                             {this.state.add && <p>Add New Team</p>}
-
-                            {this.state.add && this.props.users.map((users, index) => this.AddTeamPlayerHandler(users, index))}
+                            {this.state.add && this.props.users.map((users, index) =>
+                                this.AddTeamPlayerHandler(users, index)
+                            )}
                         </Typography>
                     </div>
                 </Modal>
@@ -359,6 +330,7 @@ const mapStateToProps = state => {
         users: state.users,
         teams: state.teams,
         notifications: state.notifications,
+        palyers: state.players
 
     };
 };

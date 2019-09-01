@@ -8,7 +8,6 @@ const _ = require('lodash');
 router.post('/create' /* , upload.single('eventImage')  */, function(req, res) {
     const io = req.app.get('io');
     const newNotification = new Notification();
-    // newNotification.status = req.body.status;
     newNotification.to = req.body.to;
     newNotification.from = req.body.from;
     newNotification.type = req.body.type;

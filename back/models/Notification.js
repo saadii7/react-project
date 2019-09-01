@@ -19,7 +19,11 @@ const Schema = new mongoose.Schema(
         },
         type: {
             type: String,
+            enum : ['friendship', 'admission'],
             required: true
+        },
+        data:{
+            type: JSON
         },
         seen: {
             type: Boolean,

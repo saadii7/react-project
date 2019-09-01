@@ -20,13 +20,24 @@ const EventSchema = new mongoose.Schema(
             ref: 'User',
             required: true
         },
+        host: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Team',
+            required: true
+        },
+        opponent: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Team',
+            required: true
+        },
         name: {
             type: String,
             required: true
         },
         status: {
-            type: Boolean,
-            default: false
+            type: String,
+            enum: ['active','cancel','complete'],
+            default: 'active' 
         },
         duration: {
             type: Number
@@ -43,7 +54,7 @@ const EventSchema = new mongoose.Schema(
         },
         result: {
             type: String,
-            enum: [true, false, 'draw']
+            enum: ['maker', 'opponent', 'draw'],
         }
     },
     {

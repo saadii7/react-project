@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import Global from '../News/Shared/Global';
+import Global from '../News/Shared/Global';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -42,7 +42,6 @@ class Headlines extends Component {
         axios.get(urlPath)
             .then(res => {
                 const sportNews = res.data.articles;
-
                 this.setState({ sportNews });
             })
     }

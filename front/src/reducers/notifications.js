@@ -1,4 +1,4 @@
-import { MAKE_FRIEND_REQUEST, CHECK_NOTIFICATIONS, ADD_NOTIFICATION, DELETE_NOTIFICATION } from '../actions/types';
+import { MAKE_FRIEND_REQUEST, CHECK_NOTIFICATIONS, ADD_NOTIFICATION, DELETE_NOTIFICATION,DELETE_FRIEND} from '../actions/types';
 
 export default function reducer(state = [], action) {
     switch (action.type) {
@@ -8,6 +8,8 @@ export default function reducer(state = [], action) {
             return action.payload;
         case ADD_NOTIFICATION:
             return [action.payload];
+        case DELETE_FRIEND:
+      return state.filter(friend => friend._id !== action.id);
         // case DELETE_NOTIFICATION:
         //     console.log("DELETE_NOTIFICATION------1")
         //     return state.filter(notifications => notifications._id !== action.id)

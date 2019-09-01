@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 const validator = require('validator');
 const _ = require('lodash');
 
-const UserSchema = new Schema(
-    {
+const UserSchema = new Schema({
         name: {
             type: String,
             required: true

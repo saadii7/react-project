@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 // import Temperature from '../Temperature';
 // import Carousel  from './Carousel';
-import Features from './Features';
+// import Features from './Features';
 // import Headlines from './Headlines';
 import TabList from '../Tabs/Tabs';
 

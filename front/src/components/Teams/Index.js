@@ -48,7 +48,7 @@ const styles = theme => ({
         right: theme.spacing(3)
     },
     absolute: {
-        top: theme.spacing(3),
+        top: theme.spacing  (3),
         left: theme.spacing(3),
     },
     paper: {

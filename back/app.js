@@ -59,7 +59,6 @@ app.use(bodyParser.json());
 //use sessions for tracking logins
 
 app.use(function(req, res, next) {
-    console.log('>>>>>>>>>>>>>>>>>>', req.user);
     if (
         req.headers &&
         (req.url.indexOf('/auth/login') !== -1 ||

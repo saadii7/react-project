@@ -10,6 +10,9 @@ const sportSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
+        minPlayerCount: {
+            type: Number
+        },
         links: {
             type: String
         },

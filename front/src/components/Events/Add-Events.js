@@ -7,6 +7,9 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { createEvent } from '../../actions/event';
 import { fetchAllSports } from '../../actions/sports';
+import { fetchAllTeams, fetchTeamPlayer } from '../../actions/team';
+
+
 // import Map from '../Map/Map';
 // import "https://maps.googleapis.com/maps/api/js?key=AIzaSyDWeM8p4RJQOgswAG6F5sKQPy6nMFKWjFg&libraries=places&callback=initMap";
 // import {SearchBar} from 'material-ui-search-bar';
@@ -121,6 +124,7 @@ class AddEvent extends React.Component {
     };
     componentDidMount() {
         this.props.onFetchAllSports();
+        this.props.onFetchAllTeams([this.props.auth.user.id],['captain'])
     }
     render() {
         const { classes } = this.props;
@@ -267,7 +271,48 @@ class AddEvent extends React.Component {
                                 ))}
                             </TextField>
                         </div>
+                        
+                        
+                        
+                        
                         <div className='form-group'>
+                        <TextField
+                                id='outlined-select-currency-native'
+                                select
+                                label='Teams'
+                                className={classes.textField}
+                                value={this.state.selectedSport}
+                                onChange={e =>
+                                    this.setState({
+                                        selectedSport: e.target.value,
+                                        validationError:
+                                            e.target.value === ''
+                                                ? 'You must select your favourite Team'
+                                                : ''
+                                    })
+                                }
+                                SelectProps={{
+                                    native: true,
+                                    MenuProps: {
+                                        className: classes.menu
+                                    }
+                                }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            -
+                                        </InputAdornment>
+                                    )
+                                }}
+                                helperText='Please select your favourite Team'
+                                margin='normal'
+                                variant='outlined'>
+                                {this.props.teams.teams.map(team => (
+                                    <option key={team._id} value={team._id}>
+                                        {team.name}
+                                    </option>
+                                ))}
+                            </TextField>
                             {/* <Map
                                 location={this.state.Location}
                                 google={this.props.google}
@@ -297,7 +342,8 @@ const mapStateToProps = state => {
         auth: state.auth,
         errors: state.errors,
         user: state.user,
-        sports: state.sports
+        sports: state.sports,
+        teams: state.teams,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -307,7 +353,10 @@ const mapDispatchToProps = dispatch => {
         },
         onFetchAllSports: () => {
             dispatch(fetchAllSports());
-        }
+        },
+        onFetchAllTeams: (id) => {
+            dispatch(fetchAllTeams((id), ['captain']));
+        },
     };
 };
 export default connect(
