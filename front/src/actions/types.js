@@ -1,4 +1,7 @@
 // types.js
+//Forgot Password
+export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const RESET_PASSWORD = 'RESET_PASSWORD';
 
 //ERRORS
 export const GET_ERRORS = 'GET_ERRORS';
@@ -22,10 +25,19 @@ export const UPDATE_SPORT = 'UPDATE_SPORT';
 
 //EVENT
 export const ADD_EVENT = 'ADD_EVENT';
-export const FETCH_EVENT = 'GET_EVENT';
+// export const FETCH_EVENT = 'GET_EVENT';
 export const FETCH_ALL_EVENTS = 'FETCH_ALL_EVENTS';
 export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const DELETE_EVENT = 'DELETE_EVENT';
+export const FETCH_EVENT_BY_ID = 'FETCH_EVENT_BY_ID';
+export const ADD_PLAYERS_AT_EVENT = 'ADD_PLAYERS_AT_EVENT';
+export const FETCH_FULL_EVENT = 'FETCH_FULL_EVENT';
+
+////
+export const CHECK_TEAM_PLAYERS = 'CHECK_TEAM_PLAYERS';
+export const MANAGE_TEAM_PLAYERS = 'MANAGE_TEAM_PLAYERS';
+
+
 
 //PROFILE
 export const SET_UPDATE_PROFILE = 'SET_UPDATE_PROFILE';
@@ -66,4 +78,9 @@ export const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
 
 
 
- 
+ //Grounds
+export const ADD_GROUND = 'ADD_GROUND';
+export const FETCH_GROUND = 'FETCH_GROUND';
+export const FETCH_ALL_GROUNDS = 'FETCH_ALL_GROUNDS';
+export const EDIT_GROUND = 'EDIT_GROUND';
+export const DELETE_GROUND = 'DELETE_GROUND';

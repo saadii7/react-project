@@ -52,17 +52,6 @@ class FriendIndex extends Component {
         const { classes } = this.props;
         return (
             <div >
-                {/* <div className={classes.searchIcon}>
-                    <SearchIcon />
-                </div>
-                <InputBase
-                    placeholder="Search…"
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                    inputProps={{ 'aria-label': 'Search' }}
-                /> */}
                 <div className={classes.root}>
                     <Typography variant='h6' id='title'>
                         {this.state.add && <p>Players</p>}

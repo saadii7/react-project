@@ -14,7 +14,7 @@ export const createTeamSuccess = data => {
         payload: data
     };
 };
-export const createTeam = (team,callback) => {
+export const createTeam = (team, callback) => {
     return dispatch => {
         console.log(team);
         return axios
@@ -39,11 +39,11 @@ export const fetchTeamPlayerSuccess = data => {
     };
 };
 export const fetchTeamPlayer = (id) => {
+    console.log('--------players---->', id);
     return dispatch => {
         return axios
-        .get(`/teams/${id}/all-players`)
-        .then(response => {
-            console.log('--------players---->',response.data);
+            .get(`/teams/${id}/all-players`)
+            .then(response => {
                 // callback(response.data)
                 dispatch(fetchTeamPlayerSuccess(response.data));
             })
@@ -62,43 +62,12 @@ export const addTeamPlayerSuccess = data => {
 };
 export const addTeamPlayer = (palyers) => {
     return dispatch => {
-        console.log('------action---players---->',palyers);
+        console.log('------action---players---->', palyers);
         return axios
-            .post('/teams/add-player',palyers)
+            .post('/teams/add-player', palyers)
             .then(response => {
                 // callback(response.data)
                 dispatch(addTeamPlayerSuccess(response.data));
-            })
-            .catch(error => {
-                throw error;
-            });
-    };
-};
-
-
-export const fetchTeams = teams => {
-    return {
-        type: FETCH_ALL_TEAMS,
-        payload: teams
-    };
-};
-export const fetchAllTeams = (ids, keys) => {
-    return dispatch => {
-        let query = '';
-        if (keys.length > 0) {
-            //for loop
-            keys.forEach((key, index) => {
-              query += key + '=' + ids[index];
-              if (index !== keys.length - 1) query += '&';
-            });
-          }
-        {console.log('Querry--------->'+query)};
-
-        return axios
-            .get('/teams/all?',query)
-            .then(response => {
-                {console.log('FETCH---------->'+response.data)}
-                dispatch(fetchTeams(response.data));
             })
             .catch(error => {
                 throw error;
@@ -113,20 +82,23 @@ export const fetchAllTeams = (ids, keys) => {
 //         payload: teams
 //     };
 // };
-
 // export const fetchAllTeams = (ids, keys) => {
 //     return dispatch => {
+//         // {console.log('Querry--------->'+ids,keys)};
 //         let query = '';
 //         if (keys.length > 0) {
-//             //for loop
+//             // for loop
 //             keys.forEach((key, index) => {
 //                 query += key + '=' + ids[index];
 //                 if (index !== keys.length - 1) query += '&';
 //             });
 //         }
+//         { console.log('Querry--------->' + query) };
+
 //         return axios
-//             .get('/teams/all?' + query)
+//             .get(`/teams/all?${query}`)
 //             .then(response => {
+//                 { console.log('FETCH---------->' + response.data) }
 //                 dispatch(fetchTeams(response.data));
 //             })
 //             .catch(error => {
@@ -134,6 +106,35 @@ export const fetchAllTeams = (ids, keys) => {
 //             });
 //     };
 // };
+
+
+export const fetchMyTeamsSuccess = teams => {
+    return {
+        payload: teams,
+        type: FETCH_ALL_TEAMS,
+    };
+};
+
+export const fetchMyTeams = (ids, keys) => {
+    return dispatch => {
+        let query = '';
+        if (keys.length > 0) {
+            //for loop
+            keys.forEach((key, index) => {
+                query += key + '=' + ids[index];
+                if (index !== keys.length - 1) query += '&';
+            });
+        }
+        return axios
+            .get('/teams/all?' + query)
+            .then(response => {
+                dispatch(fetchMyTeamsSuccess(response.data));
+            })
+            .catch(error => {
+                throw error;
+            });
+    };
+};
 
 
 
@@ -147,7 +148,7 @@ export const getTeamByIdSuccess = team => {
 export const getTeam = id => {
     return dispatch => {
         return axios
-            .get('/teams/get/' + id)
+            .get(`/teams/get/${id}`)
             .then(response => {
                 // Handle data with sync action
                 dispatch(getTeamByIdSuccess(response.data));

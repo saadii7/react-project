@@ -91,6 +91,7 @@ app.use('/sports', require('./routes/sports'));
 app.use('/teams', require('./routes/teams'));
 app.use('/notifications', require('./routes/notifications'));
 app.use('/events', require('./routes/events'));
+app.use('/grounds', require('./routes/grounds'));
 
 app.get('/', function(req, res) {
     res.send('hello');

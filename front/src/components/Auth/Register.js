@@ -8,20 +8,66 @@ import { withStyles } from '@material-ui/core/styles';
 import { registerUser } from '../../actions/auth';
 import UserForm from '../Users/form';
 import Paper from '@material-ui/core/Paper';
+// import Background from '../../assets/Background.jpg';
+
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit * 2,
-        marginLeft: theme.spacing.unit
+        marginLeft: theme.spacing.unit * 25,
+        color: "#FB8122"
+    },
+    input: {
+        display: 'none',
+
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    dense: {
+        marginTop: 16,
+    },
+    menu: {
+        width: 200,
     },
     paper: {
+        marginTop: 80,
         position: 'absolute',
         width: theme.spacing.unit * 50,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
+        backgroundColor: '#181C1F',
+        opacity:(0.75),
+        // backgroundColor: 'transparent',
+        boxShadow: theme.shadows[10],
         padding: theme.spacing.unit * 4,
         outline: 'none',
-        marginLeft: theme.spacing.unit * 45
-    }
+        marginLeft: theme.spacing.unit * 50,
+        marginRight: theme.spacing.unit,
+        // backgroundImage: `url(${messi})`,
+        // backgroundSize: 'cover',
+
+    },
+    body: {
+        // backgroundImage: `url(${Background})`,
+        // marginTop: 20,
+        width: "100%",
+        height: 445,
+        flex: 1,
+        margin: 0
+
+        // height:502
+    },
+    color: {
+        color: "#FB8122"
+    },
+    input_color: {
+        // color:"#FB8122"
+        borderColor: "#FB8122"
+    },
+   
 });
 
 class Register extends Component {
@@ -62,7 +108,23 @@ class Register extends Component {
             password_confirm: this.state.user.password_confirm
         };
         console.log(this.state.user);
-        this.props.registerUser(user, this.props.history);
+        let props = this.props;
+        if (e.target && e.target.image && e.target.image.files.length > 0) {
+            var file = e.target.image.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                console.log('RESULT', reader.result)
+                user.avatar = reader.result;
+                // props.updateUser(team);
+                props.registerUser(user,props.history);
+            }
+            reader.readAsDataURL(file);
+
+        } else {
+            // this.props.registerUser(user);
+            this.props.registerUser(user, this.props.history);
+        }
+        
     };
 
     componentWillReceiveProps(nextProps) {
@@ -87,10 +149,12 @@ class Register extends Component {
 
         return (
             <div
-                className='container'
-                style={{ marginTop: '50px', width: '700px' }}>
+                className={'container'}
+                className={classes.body}
+                // style={{ marginTop: '50px', width: '700px' }}
+                >
                 <Paper className={classes.paper}>
-                    <h2 style={{ marginBottom: '40px' }}>Registration</h2>
+                    <h2 className={classes.color} style={{ marginBottom: '40px' }}>Registration</h2>
                     <UserForm
                         registration={true}
                         user={this.state.user}

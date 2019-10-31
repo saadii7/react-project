@@ -20,10 +20,8 @@ const TeamSchema = new mongoose.Schema(
             ref: 'Sport',
             required: true
         },
-        image: {
-            data: Buffer,
-            contentType: String,
-            name: String
+        avatar: {
+            type: String
         },
         description: {
             type: String
@@ -43,7 +41,8 @@ const TeamSchema = new mongoose.Schema(
             default: null
         }
     },
-    {
+    {   
+        strict: false,
         timestamps: true
     }
 );

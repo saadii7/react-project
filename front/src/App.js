@@ -33,6 +33,14 @@ import FiendIndex from './components/Friend/index';
 import FriendList from './components/Friend/friendList';
 // import ChatSidebar from './components/Drawer/chatDrawer';
 import TeamProfile from './components/Teams/profile';
+import EventList from './components/Events/listing';
+import Facebook from './components/News/news';
+import VideoPlayer from './components/News/video_player';
+import MapContainer from './components/Events/FullEvent';
+import User_Profile from './components/Users/User_Profile';
+import GroundIndex from './components/Grounds/Index';
+import GroundList from './components/Grounds/Gorunds_List';
+
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -52,12 +60,14 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        padding: '0 8px',
+        // padding: '0 8px',
         ...theme.mixins.toolbar
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3)
+        paddingTop: theme.spacing(1),
+        paddingLeft: theme.spacing(0)
+
     }
 });
 
@@ -106,6 +116,11 @@ class App extends Component {
                             <Route exact path='/login' component={Login} />
                             <Route
                                 exact
+                                path='/video'
+                                component={VideoPlayer}
+                            />
+                            <Route
+                                exact
                                 path='/register'
                                 component={Register}
                             />
@@ -114,8 +129,20 @@ class App extends Component {
                                 path='/Error404'
                                 component={Error404}
                             />
+                            <Route
+                                exact
+                                path='/news'
+                                component={Facebook}
+                            />
 
-                            <PrivateRoute path='/profile' component={Profile} />
+                            <PrivateRoute path='/:id/profile' component={Profile} />
+                            <PrivateRoute
+                                exact
+                                path={
+                                    '/user/:id/profile'
+                                }
+                                component={User_Profile}
+                            />
                             <PrivateRoute
                                 path={
                                     '/users/:id/edit'
@@ -123,13 +150,34 @@ class App extends Component {
                                 component={editProfile}
                             />
                             <PrivateRoute
-                                path={'/users/' + this.props.auth.user.id + '/friends'}
+                                path={
+                                    '/event/:id/index'
+                                }
+                                component={MapContainer}
+                            />
+                            <PrivateRoute
+                                path={'/users/:id/friends'}
                                 component={FriendList}
                             />
                             <PrivateRoute
                                 exact
                                 path={'/teams'}
                                 component={TeamIndex}
+                            />
+                            <PrivateRoute
+                                exact
+                                path={'/grounds'}
+                                // component={GroundIndex}
+                                component={() => (
+                                    <GroundIndex
+                                        isAdmin={this.props.auth.user.isAdmin}
+                                    />
+                                )}
+                            />
+                            <PrivateRoute
+                                exact
+                                path={'/groundList'}
+                                component={GroundList}
                             />
                             <PrivateRoute
                                 path={'/sports'}
@@ -144,6 +192,12 @@ class App extends Component {
                                     />
                                 )}
                             />
+                            {/* <Route
+                                path={'/events'}
+                                component={() => (
+                                    <EventList/>
+                                )}
+                            /> */}
                             <PrivateRoute
                                 path={'/users'}
                                 component={UsersList}

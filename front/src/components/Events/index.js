@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
-// import SearchIcon from '@material-ui/icons/Search';
-// import InputBase from '@material-ui/core/InputBase';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 import EventListing from './listing';
 import AddEvent from './Add-Events';
-// import Map from '../Map/Map'
+import Grid from '@material-ui/core/Grid';
+import { Button } from '@material-ui/core';
+import Icon from '@material-ui/core/Icon';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import Card from '@material-ui/core/Card';
+import { connect } from 'react-redux';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import UserProfile from './user_bio';
+import Trending from '../Home/Features';
+import Container from '@material-ui/core/Container';
+
+// import Map from '../Map/Map';
 function getModalStyle() {
     const top = 10;
-    const left = 30;
+    const left = 15;
 
     return {
         top: `${top}%`,
@@ -25,70 +31,50 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 1),
+ 
+    root: {
+        flexGrow: 1,
+        paddingTop: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+
+    },
+    sticky: {
+        background: 'black',
+        position: '-webkit-sticky',
+        position: 'sticky',
+        // top: 20,
+        bottom: 20,
+        // marginTop:'40px',
+        // paddingTop: '40px',
+        paddingBottom: '40px',
+        // zIndex: 5,
+    },
+    fab: {
+        margin: 0,
+        top: 'auto',
+        float: "right",
+        position: 'left',
+        backgroundColor: '#181C1F',
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.60),
-        },
-        marginRight: theme.spacing.unit * 2,
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing.unit * 3,
-            width: 'auto',
+            backgroundColor: ("#FB8122"),
         },
     },
-    searchIcon: {
-        width: theme.spacing.unit * 7,
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
+    modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing.unit * (1, 1, 1, 5),
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: 300,
-        },
-    },
-    fab: {
-        margin: theme.spacing.unit * 1,
-    },
-    extendedIcon: {
-        marginRight: theme.spacing.unit * 1,
-    },
     paper: {
+        overflow: 'auto',
         maxHeight: 500,
-        position: 'absolute',
-        width: 700,
         backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
         boxShadow: theme.shadows[5],
-        padding: theme.spacing(4),
-        outline: 'none',
-        overflow: 'scroll',
+        padding: theme.spacing(2, 4, 3),
     },
-    modalStyle1: {
-        position: 'absolute',
-        top: '10%',
-        left: '10%',
-        overflow: 'scroll',
-        height: '100%',
-        display: 'block'
-    },
-    absolute: {
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(3)
-    },
+
+
+
 });
 class EventIndex extends Component {
     state = {
@@ -109,48 +95,52 @@ class EventIndex extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.root}>
-                <div>
-                    <Tooltip title='Add' aria-label='Add'>
-                        <Fab
-                            color='primary'
-                            onClick={this.openModal}
-                            className={classes.absolute}>
-                            <AddIcon />
-                        </Fab>
-                    </Tooltip>
-                </div>
-                <EventListing events={this.state.events} />
-                {/* <Map
-                            location={this.state.Location}
-                            google={this.props.google}
-                            center={{ lat: 31.5204, lng: 74.3587 }}
-                            height='300px'
-                            zoom={15}
-                        /> */}
+            <div>
+                {console.log('EventIndex------',this.props.auth.user.id)}
+                <Grid container direction='row' className={classes.root} spacing={6}>
+                    <Grid item>
+                    {/* <ListSubheader > */}
+                         <UserProfile id={this.props.auth.user.id} user={this.props.auth.user}/>
+                    {/* </ListSubheader> */}
+                    </Grid>
+                    <Grid item direction="column" md={6}>
+                        <EventListing id={this.props.auth.user.id}/>
+                    </Grid>
+                    <Grid item direction="column" md={3}>
+                        <Trending />
+                    </Grid>
+                </Grid>
+
+
                 <Modal
-                    aria-labelledby='simple-modal-title'
-                    aria-describedby='simple-modal-description'
-                    style={{ alignItems: 'center', justifyContent: 'center' }}
-                    // className={classes.modalStyle1}
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
                     open={this.state.open}
                     onClose={this.closeModal}
-                    center='true'>
-                    <div style={getModalStyle()} className={classes.paper}>
-                        <Typography variant='h6' id='modal-title'>
-                            {this.state.add && <p> Create Event</p>}
-                            {this.state.add && <AddEvent />}
-
-                            {!this.state.add && <p>Update Sport</p>}
-                            {/* {!this.state.add && (
-                                <EditSport sport={this.state.sport} />
-                            )} */}
-
-                        </Typography>
-                    </div>
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={this.state.open}>
+                        <div className={classes.paper}>
+                            <Typography variant='h6' id='modal-title'>
+                                {this.state.add && <p> Create Event</p>}
+                                {this.state.add && <AddEvent />}
+                            </Typography>
+                        </div>
+                    </Fade>
                 </Modal>
+
             </div>
         );
     }
 }
-export default (withStyles(styles, { withTheme: true })(withRouter(EventIndex)));
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(withRouter(EventIndex)));
+
+// export default (withStyles(styles, { withTheme: true })(withRouter(EventIndex)));

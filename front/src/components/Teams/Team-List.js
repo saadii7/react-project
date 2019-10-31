@@ -13,7 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import { fetchAllTeams, deleteTeam, addTeamPlayer, fetchTeamPlayer } from '../../actions/team';
+import { fetchMyTeams, deleteTeam, addTeamPlayer, fetchTeamPlayer } from '../../actions/team';
 import Icon from '@material-ui/core/Icon';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -34,6 +34,7 @@ import TeamProfile from './profile';
 import MaterialTable from 'material-table';
 import Drawer from '@material-ui/core/Drawer';
 import { MenuItem } from '@material-ui/core';
+import MaterialTableDemo from './Team_Table';
 
 
 function HomeIcon(props) {
@@ -57,31 +58,26 @@ function getModalStyle() {
 
 const styles = theme => ({
     root: {
-        flexGrow: 1
+        width: '100%',
+        marginTop: theme.spacing(3),
     },
-    toolbar: theme.mixins.toolbar,
-    paper: {
-        maxWidth: 500,
-        margin: `${theme.spacing(1)}px auto`,
-        padding: theme.spacing(2),
-        // position: 'absolute',
-        // width: theme.spacing(110),
+    table: {
+        minWidth: 650,
+    },
+    tableWrapper: {
+        maxHeight: 440,
+        overflow: 'auto',
+      },
+      paper:{
+        maxHeight: 500,
+        position: 'absolute',
+        width: 500,
         backgroundColor: theme.palette.background.paper,
-        // boxShadow: theme.shadows[5],
-        overflowY: 'auto',
-        // padding: theme.spacing(4),
-        // outline: 'none'
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    Button: {
-        left: 200,
-    },
-    bigAvatar: {
-        margin: 10,
-        width: 60,
-        height: 60
-    }
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(4),
+        // outline: 'none',
+        overflow: 'auto',
+      }
 });
 class TeamList extends Component {
     constructor(props) {
@@ -118,8 +114,8 @@ class TeamList extends Component {
         console.log('-----delete Team---->', index)
     }
     componentDidMount() {
-        // store.dispatch(fetchAllTeams());
-        store.dispatch(fetchAllTeams([this.props.auth.user.id], ['captain']));
+        store.dispatch(fetchMyTeams([this.props.auth.user.id], ['captain']));
+        // store.dispatch(fetchAllTeams(null,['captain']));
         this.setState({
             list: this.props.teams,
         })
@@ -145,86 +141,24 @@ class TeamList extends Component {
 
     }
     PlayerViewHandler = (id) => {
-        console.log('-------TeamId-------->', id)
+        // console.log('-------TeamId-------->', id)
         this.setState({
             teamId: id,
         });
     }
-    listView(data, index) {
-        // console.log('--------listView------->')
-        const { classes } = this.props;
-        return (
-            <div>
-                <TableRow key={index}>
-                    <TableCell component='th' scope='row'>
-                        <Avatar
-                            alt='Remy Sharp'
-                            src={data.avatar}
-                            className={classes.bigAvatar}
-                        />{' '}
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                        {data.name}
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                        {/* {data.users}
-                    {data._id} */}
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                        <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
-                            <AddIcon
-                                key={index}
-                                onClick={() => this.wrapperFunction(data._id)}
-                                aria-label='Add' />
-                        </Fab>
-                        <Icon color="primary" />
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                        {/* <HomeIcon key={index}  className={classes.icon}> */}
-                        <Link to={`/teams/${data._id}/profile`}>
-                            <Fab size="small" color="primary" className={classes.margin}>
-                                <HomeIcon title={"Add"}>
-                                    <Icon color="primary" />
-                                </HomeIcon>
-                            </Fab>
-                        </Link>
-                    </TableCell>
-                    <TableCell component='th' scope='row'>
-                        {data.discription}
-                    </TableCell>
-                    <TableCell>
-                        <IconButton
-                            className={classes.button}
-                            key={index}
-                            onClick={() => this.editModal(data)}
-                            aria-label='Edit'>
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton
-                            className={classes.button}
-                            aria-label='Delete'
-                            onClick={e => {
-                                this.deleteTeam(e, data._id);
-                                this.refreshPage();
-                            }}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-            </div>
-        );
-    }
     onSubmit = (id) => {
-        console.log("user----------ID-----Team---->", id);
         const teamPlayers = {
             teamId: this.state.teamId,
             userId: id
         }
         this.props.onAddTeamPlayers(teamPlayers)
     }
-    
+    profileHandler=(id)=>{
+        // console.log("profileHandler----------ID-----Team---->", id);
+        return(<TeamProfile id={id}/>);
+    }
     AddTeamPlayerHandler = (user, index) => {
-        console.log('meo----@@@')
+        // console.log('meo----@@@')
         const { classes } = this.props;
         let playerButton;
         let players = 10;
@@ -284,25 +218,81 @@ class TeamList extends Component {
 
         return (
             <div>
-                <main className={classes.root}>
-                    <div className={classes.toolbar} />
-                    <Table className={classes.table}>
+                <Paper className={classes.root}>
+                <div className={classes.tableWrapper}>
+                    <Table className={classes.table} stickyHeader>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Image</TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Add Players</TableCell>
-                                <TableCell>Profile</TableCell>
-                                <TableCell>Action</TableCell>
+                                <TableCell>Teams</TableCell>
+                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Captain</TableCell>
+                                <TableCell align="right">Sport</TableCell>
+                                <TableCell align="right">No of Players</TableCell>
+                                <TableCell align="right">Edit Team</TableCell>
+                                <TableCell align="right">Delete Team</TableCell>
+                                <TableCell align="right">Add Players</TableCell>
+                                <TableCell align="right">Profile</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.teams.teams.map((team, i) =>
-                                this.listView(team, i)
+                            {this.props.teams.teams.map((data, index) =>
+                                <TableRow className={classes.root} key={data.name}>
+                                    <TableCell component="th" scope="row">
+                                        <Avatar
+                                            alt='Remy Sharp'
+                                            src={data.avatar}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="right">{data.name}</TableCell>
+                                    <TableCell align="right">{data.name}</TableCell>
+                                    <TableCell align="right">Football</TableCell>
+                                    <TableCell align="right">{data.users.length}</TableCell>
+                                    <TableCell align="right">
+                                        <IconButton
+                                            className={classes.button}
+                                            key={index}
+                                            onClick={() => this.editModal(data)}
+                                            aria-label='Edit'>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <IconButton
+                                            className={classes.button}
+                                            aria-label='Delete'
+                                            onClick={e => {
+                                                this.deleteTeam(e, data._id);
+                                                this.refreshPage();
+                                            }}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
+                                            <AddIcon
+                                                key={index}
+                                                onClick={() => this.wrapperFunction(data._id)}
+                                                aria-label='Add' />
+                                        </Fab>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <Link to={`/teams/${data._id}/profile`}>
+                                            <Fab size="small" color="primary" className={classes.margin}>
+                                                <HomeIcon title={"Add"}>
+                                                    <Icon color="primary" />
+                                                </HomeIcon>
+                                            </Fab>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell align="right"></TableCell>
+
+                                </TableRow>
+
                             )}
                         </TableBody>
                     </Table>
-                </main>
+                        </div>
+                </Paper>
                 <Modal
                     aria-labelledby='simple-modal-title'
                     aria-describedby='simple-modal-description'
@@ -340,8 +330,8 @@ const mapDispatchToProps = dispatch => {
         onDelete: id => {
             dispatch(deleteTeam(id));
         },
-        onFetchAllTeams: (id) => {
-            dispatch(fetchAllTeams((id), ['captain']));
+        onFetchMyTeams: (id) => {
+            dispatch(fetchMyTeams((id), ['captain']));
         },
         onAddTeamPlayers: (player) => {
             dispatch(addTeamPlayer(player));

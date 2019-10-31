@@ -39,6 +39,11 @@ const styles = theme => ({
     },
     root: {
         flexGrow: 1,
+        paddingTop: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        width: '100%'
+
     },
     paper: {
         padding: theme.spacing(1),
@@ -111,30 +116,7 @@ class FriendList extends Component {
                             </CardActions>
                         </Card></Paper>
                     </Grid>
-                    <br />                        {/* <Grid item key={index} >
-                            <CardActionArea >
-                                <CardHeader
-                                    title={data.userName}
-                                    subheader={data.email}
-                                />
-                                <CardMedia
-                                    className={classes.media}
-                                    image={data.avatar}
-                                    title="Contemplative Reptile"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        {data.name}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Button size="small" onClick={()=>this.viewProfile(data._id)} variant='contained' color="primary">
-                                    View Profile
-                                    {console.log("Key---id--->",data._id)}
-                                </Button>
-                            </CardActions>
-                        </Grid> */}
+                    <br />                        
                     </div>
            );
         }

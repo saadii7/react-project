@@ -5,7 +5,7 @@ export default function sportReducer(state = [], action) {
     case ADD_SPORT:
       return [...state, action.payload];
     case DELETE_SPORT:
-      return state.filter(sport => sport._id !== action.id);
+      return state.filter(sports => sports._id !== action.id);
     case FETCH_ALL_SPORTS:
       return action.sports;
     case UPDATE_SPORT:

@@ -4,79 +4,83 @@ const validator = require('validator');
 const _ = require('lodash');
 
 const UserSchema = new Schema({
-        name: {
-            type: String,
-            required: true
-        },
-        userName: {
-            type: String,
-            required: true,
-            unique: true
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            validate: {
-                validator: validator.isEmail,
-                message: 'email is not valid'
-            }
-        },
-        password: {
-            type: String,
-            required: true,
-            minlength: 6
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false
-        },
-        avatar: {
-            type: String
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        },
-        available: {
-            type: Boolean,
-            default: false
-        },
-        isDeleted: {
-            type: Boolean,
-            default: false
-        },
-        deletedAt: {
-            type: Date
-        },
-        privacy: {
-            type: Boolean,
-            default: false
-        },
-        updatedAt: {
-            type: Date,
-            default: null
-        },
-        sports: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Sport'
-            }
-        ],
-        teams: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Team'
-            }
-        ],
-        friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'friendship' }]
+    name: {
+        type: String,
+        required: true
     },
+    userName: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: validator.isEmail,
+            message: 'email is not valid'
+        }
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 6
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    avatar: {
+        type: String
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    available: {
+        type: Boolean,
+        default: false
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date
+    },
+    privacy: {
+        type: Boolean,
+        default: false
+    },
+    updatedAt: {
+        type: Date,
+        default: null
+    },
+    sports: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Sport'
+        }
+    ],
+    teams: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Team'
+        }
+    ],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'friendship' }],
+
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
+},
     {
         timestamps: true
-    }
+    },
+
 );
 
-UserSchema.methods.toJSON = function() {
+UserSchema.methods.toJSON = function () {
     var user = this;
     var userObject = user.toObject();
     return _.pick(userObject, [

@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-// import InputBase from '@material-ui/core/InputBase';
+import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -18,7 +18,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
-// import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -30,11 +30,12 @@ import { fetchAllUsers } from '../../actions/user';
 import Profile from '../Users/Profile';
 import notifications from '../Header/notifications';
 import Paper from '@material-ui/core/Paper';
-
+import Logo from '../../assets/logo1.png';
 
 const drawerWidth = 240;
 const styles = theme => ({
     appBar: {
+        backgroundColor:'#FB8122',
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
@@ -54,7 +55,7 @@ const styles = theme => ({
     },
     menuButton: {
         marginLeft: 12,
-        marginRight: 36
+        // marginRight: 36
     },
     title: {
         display: 'none',
@@ -119,7 +120,8 @@ const styles = theme => ({
         height: 60
     },
     button: {
-        marginRight: theme.spacing(3)
+        marginRight: theme.spacing(3),
+        // color:"#181C1F"
     },
     root: {
         position: 'relative'
@@ -244,18 +246,18 @@ class Navbar extends React.Component {
     userFilter = (props) => {
         // console.log('Header----State-----Notifications-----Data>', this.state.notifications)
         // console.log('chalo User Filter-------->', props.users, 'AND', props.notifications)
-        let users = props.users
-        let notifications = props.notifications;
-        for (let i = 0; i < notifications.length; i++) {
-            for (let j = 0; j < users.length; j++) {
-                // console.log(users[j]._id, 'chalo fi-------->', notifications)
-                if (users[j]._id === notifications[i].from) {
-                    notifications[i].user = users[j];
-                    // console.log('chalo User--101010110------>', notifications[i].user)
-                    break;
+            let users = props.users
+            let notifications = props.notifications;
+            for (let i = 0; i < notifications.length; i++) {
+                for (let j = 0; j < users.length; j++) {
+                    // console.log(users[j]._id, 'chalo fi-------->', notifications)
+                    if (users[j]._id === notifications[i].from) {
+                        notifications[i].user = users[j];
+                        // console.log('chalo User--101010110------>', notifications[i].user)
+                        break;
+                    }
                 }
             }
-        }
         this.setState({ notifications: notifications })
     }
     render() {
@@ -394,19 +396,19 @@ class Navbar extends React.Component {
                         className={classes.button}
                         component={Link}
                         to='/register'
-                        variant='contained'
-                        color='primary'>
-                        {' '}
-                        Signup{' '}
+                        // variant='contained'
+                        color='inherit'
+                        >
+                        Signup
                     </Button>
                     <Button
                         className={classes.button}
                         component={Link}
                         to='/login'
-                        variant='contained'
-                        color='primary'>
-                        {' '}
-                        Login{' '}
+                        // variant='contained'
+                        color='inherit'
+                        >
+                        Login
                     </Button>
                 </div>
             </React.Fragment>
@@ -414,10 +416,12 @@ class Navbar extends React.Component {
         return (
             <div>
                 <AppBar
+                    // color='#FF5900'
                     position='fixed'
                     className={classNames(classes.appBar, {
                         [classes.appBarShift]: this.state.open
                     })}>
+                    
                     <Toolbar disableGutters={!this.state.open}>
                         <IconButton
                             color='inherit'
@@ -428,7 +432,10 @@ class Navbar extends React.Component {
                             })}>
                             <MenuIcon />
                         </IconButton>
-                        <Typography
+                        <Link to='/'>
+                            <img height='70' width='200' src={Logo}/>
+                        </Link>
+                        {/* <Typography
                             component={Link}
                             to='/'
                             className={classes.title}
@@ -436,8 +443,8 @@ class Navbar extends React.Component {
                             color='inherit'
                             noWrap>
                             Game On
-                        </Typography>
-                        {/* <div className={classes.search}>
+                        </Typography> */}
+                        <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
                             </div>
@@ -449,7 +456,7 @@ class Navbar extends React.Component {
                                     input: classes.inputInput,
                                 }}
                             />
-                        </div> */}
+                        </div>
                         {isAuthenticated ? authLinks : guestLinks}
 
                     </Toolbar>

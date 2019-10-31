@@ -11,11 +11,11 @@ const initialState = {
 };
 export default function postReducer(state = initialState, action) {
     switch (action.type) {
-        // case ADD_TEAM:
-        //     return {
-        //         ...state,
-        //         teams: [...state.teams, action.payload]
-        //     };
+        case ADD_TEAM:
+            return {
+                ...state,
+                teams: [...state.teams, action.payload]
+            };
         case FETCH_TEAM:
             return {
                 ...state,

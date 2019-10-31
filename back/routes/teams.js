@@ -1,4 +1,6 @@
 const { Team } = require('../models/Team');
+const { Event } = require('../models/Event');
+const PlayerRecord = require('../models/PlayerRecord');
 const User = require('../models/User');
 const multer = require('multer');
 const express = require('express');
@@ -34,9 +36,7 @@ router.post('/create' /*, upload.single('teamImage')*/, (req, res) => {
     newTeam.captain = req.body.captain;
     newTeam.description = req.body.description;
     newTeam.sport = req.body.sport;
-    newTeam.image.data = req.body.data;
-    newTeam.image.contentType = req.body.contentType;
-    newTeam.image.imageName = req.body.name;
+    newTeam.avatar= req.body.avatar;
     if (req.body.captain) {
         newTeam
             .save()
@@ -96,7 +96,7 @@ router.put('/update/:id', (req, res) => {
 router.get('/get/:id', (req, res) => {
     let id = req.params.id;
     Team.findById(id)
-        .then(team => {
+        .then(async team => {
             if (!team) {
                 return res.status(404).send({ message: 'Team not found' });
             }
@@ -142,6 +142,75 @@ router.get('/:id/all-players', (req, res) => {
         }
     });
 });
+////////////////////////////////////
+
+///////////////////non faultyPlayers
+router.post('/:id/non-faulty-players', (req, res) => {
+    let id = req.params.id;
+    let eventId = req.body.eventId;
+    Promise.all([
+        Event.findById(eventId),
+        Team.findById(id)
+    ])
+        .then(async result => {
+            let event = result[0];
+            let team = result[1];
+            if (!event) {
+                return res.status(404).send({ message: 'Event not found' });
+            }
+            let isdel = event.isDeleted;
+            if (isdel) {
+                return res.status(404).send({ message: 'Event is "Deleted".' })
+            } else {
+                console.log('--------------team-----', team)
+                console.log('--------------event-----', event)
+
+                let faultyPlayerIds = []
+                // let eventIds = PlayerRecord.find(where: {playerId : team.users}).map(&:eventId)
+                // let faultyEventIds = Event.find(where {id: eventIds, date < event.date && date > event.date + event.duration}).map(&:id)   
+                // faultyPlayerIds = PlayerRecord.find(where: {eventId : faultyEventIds}).map(&:playerId) 
+                let events = await PlayerRecord.find({ playerId: { $in: team.users } }, { eventId: 1 })
+                let eventIds = events.map((x) => { return x.eventId });
+                console.log('>>>>>>>>>>>>>>>>>>>.', eventIds)
+                let endDate = new Date(event.date.getTime() + (event.duration) * 60000);
+                console.log('>>>>>>>>>>---------->>>>>>>>>.', endDate)
+
+                let faultyEvents = await Event.find({
+                    _id: { $in: eventIds },
+                    date: { $gte: endDate },
+                    date: { $lte: event.date }
+                }, { _id: 1 })
+                let faultyEventIds = faultyEvents.map((x) => { return x._id });
+                console.log('>>>>>>>>>>------.', faultyEventIds)
+
+                let faultyPlayers = await PlayerRecord.find({ eventId: { $in: faultyEventIds } }, { playerId: 1 })
+                faultyPlayerIds = faultyPlayers.map((x) => { return x.playerId });
+                let players = await User.find({ _id: { $in: team.users, $nin: faultyPlayerIds } });
+                console.log('>.................--.----.', players)
+                return res.status(200).send(players);
+            }
+        })
+});
+
+////////////////////////////////
+router.post('/:id/all-players', (req, res) => {
+    let id = req.params.id;
+    let eventId = req.body.eventId;
+    Team.findById(teamId).then(async team => {
+        if (!team) {
+            res.status(404).send({ message: 'team not found' });
+        } else {
+            let players = await User.find({ _id: { $in: team.users } });
+            if (!players)
+                res.status(404).send({
+                    message: 'No Players for this found'
+                });
+            res.status(200).send(players);
+        }
+    });
+});
+
+
 
 router.post('/add-player', (req, res) => {
     const io = req.app.get('io');

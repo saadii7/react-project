@@ -10,11 +10,33 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import classnames from 'classnames';
 
-
+const CssTextField = withStyles({
+    root: {
+      '& label.Mui-focused': {
+        color: '#FB8122'
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'white',
+      },
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: '#FB8122',
+          borderBlockWidth:20
+        },
+        '&:hover fieldset': {
+          borderColor: 'white',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'white',
+        },
+      },
+    },
+  })(TextField);
 const styles = theme => ({
     button: {
         margin: theme.spacing.unit * 2,
         marginLeft: theme.spacing.unit,
+        color:"#FB8122"
 
     },
     input: {
@@ -58,7 +80,7 @@ class UserForm extends Component {
         return (
             <form onSubmit={this.onSubmit}>
                 <div className="form-group">
-                    <TextField
+                    <CssTextField
                         id="outlined-name"
                         type="text"
                         name="name"
@@ -77,7 +99,7 @@ class UserForm extends Component {
                     {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
                 </div>
                 <div className="form-group">
-                    <TextField
+                    <CssTextField
                         id="outlined-name"
                         type="text"
                         name="userName"
@@ -96,13 +118,13 @@ class UserForm extends Component {
                     {errors.userName && (<div className="invalid-feedback">{errors.userName}</div>)}
                 </div>
                 <div className='form-group'>
-                    <TextField
+                    <CssTextField
                         id="outlined-name"
                         type="file"
                         name="image"
                         label="image"
                         onChange={this.inputChange}
-                        // value={this.state.user.avatar}
+                        value={this.state.user.avatar}
                         margin="normal"
                         variant="outlined"
                         InputProps={{
@@ -111,7 +133,7 @@ class UserForm extends Component {
                     />
                 </div>
                 <div className="form-group">
-                    <TextField
+                    <CssTextField
                         id="outlined-name"
                         type="email"
                         name="email"
@@ -132,7 +154,7 @@ class UserForm extends Component {
                 {
                     this.state.registration &&
                     <div className="form-group">
-                        <TextField
+                        <CssTextField
                             id="outlined-name"
                             type="password"
                             name="password"
@@ -154,7 +176,7 @@ class UserForm extends Component {
                 {
                     this.state.registration &&
                     <div className="form-group">
-                        <TextField
+                        <CssTextField
                             id="outlined-name"
                             type="password"
                             name='password_confirm'
@@ -175,9 +197,12 @@ class UserForm extends Component {
                 }
 
                 <div className="form-group">
-                    <Button className={classes.button} color='primary' type="submit" variant="contained">
+                    <Button className={classes.button} type="submit" variant="outlined">
                         Save
-                        </Button>
+                    </Button>
+                    <Button className={classes.button} variant="outlined">
+                        Reset Password
+                    </Button>
                 </div>
             </form>
         )

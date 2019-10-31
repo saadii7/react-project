@@ -39,9 +39,11 @@ class CreateSport extends React.Component {
         e.preventDefault();
         if (this.state.name.trim()) {
           
-                const name=this.state.name
+                const sport={
+                    name:this.state.name
+                } 
 
-            this.props.onAddSport(name);
+            this.props.onAddSport(sport);
             this.handleReset();
         }
     };
@@ -93,7 +95,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onAddSport: sport => {
+        onAddSport: (sport) => {
             dispatch(createSport(sport));
         }
     };

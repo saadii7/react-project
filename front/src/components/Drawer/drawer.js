@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // import { Home, AccountCircle, ZoomOutTwoTone } from '@material-ui/icons';
-import { MenuList, MenuItem } from '@material-ui/core';
+import { MenuList, MenuItem, IconButton } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -16,36 +16,43 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Icon from '@material-ui/core/Icon';
 import red from '@material-ui/core/colors/red';
+import {Typography} from '@material-ui/core/';
 import TeamIndex from '../Teams/Index';
 import SportsIndex from '../Sports/Index';
 import EventIndex from '../Old-Events/index';
 import UsersList from '../Users/list';
 // import Friends from '../Friend/Friends.js';
 import FriendIndex from '../Friend/index';
+import Facebook from '../News/news';
+import GroundIndex from '../Grounds/Index';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
-        display: '100%'
-        // justifyContent: 'space-around',
-        // alignItems: 'flex-end',
+        display: '100%',
+        color:"disable"
     },
     icon: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(2),
+        color: '#FB8122'
     },
     iconHover: {
-        margin: theme.spacing(2),
         '&:hover': {
-            color: red[800]
-        }
+            color: "#ffffff",
+        },
+        color: "#FB8122",
     },
     drawer: {
+        
+        // paddingTop:56,
+        // backgroundColor:'#FB8122',
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap'
     },
     drawerOpen: {
+        backgroundColor:'#181C1F',
         width: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
@@ -53,6 +60,7 @@ const styles = theme => ({
         })
     },
     drawerClose: {
+        backgroundColor:'#181C1F',
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
@@ -60,24 +68,36 @@ const styles = theme => ({
         overflowX: 'hidden',
         width: theme.spacing(7) + 1,
         [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1
+            width: theme.spacing(8) + 1
         }
     },
     toolbar: {
+        // toolbar: theme.mixins.toolbar,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        padding: '0 8px',
+        paddingTop:75,
         ...theme.mixins.toolbar
-    }
+    },
+    root: {
+        color: "#FB8122",
+        '&$selected': {
+          color: '#ffffff',
+        },
+        '&:hover': {
+            color: "#ffffff",
+        },
+      },
+      selected: {},
 });
 
 const guestRoutes = [
     {
-        link: '/teams/add',
-        title: 'Add team',
+        link: '/news',
+        title: 'Match Highlights',
         icon: 'toys',
-        component: TeamIndex
+        component: Facebook,
+        
     },
     {
         link: '/teams/profile',
@@ -111,27 +131,50 @@ const adminRoutes = [
         title: 'Users',
         icon: 'videogame_asset',
         component: UsersList
-    }
+    },
+    {
+        link: '/news',
+        title: 'Match Highlights',
+        icon: 'toys',
+        component: Facebook,
+        
+    },
+    {
+        link: '/grounds',
+        title: 'Play Grounds',
+        icon: 'toys',
+        component: GroundIndex,
+        
+        
+    },
 ];
 const userRoutes = [
     {
         link: '/teams',
         title: 'Teams',
         icon: 'toll',
-        component: TeamIndex
+        component: TeamIndex,
+        backgroundColor:"primary"
     },
     {
         link: '/events',
         title: 'Events',
         icon: 'videogame_asset',
-        component: EventIndex
+        component: EventIndex,
     },
     {
         link: '/friends',
         title: 'Find Friends',
         icon: 'videogame_asset',
         component: FriendIndex
-    }
+    },
+    {
+        link: '/news',
+        title: 'Match Highlights',
+        icon: 'toys',
+        component: Facebook,
+        
+    },
 ];
 class Sidebar extends React.Component {
     constructor(props) {
@@ -155,6 +198,7 @@ class Sidebar extends React.Component {
     };
     render() {
         const { classes } = this.props;
+        const actionClasses = this.props.classes;
         const { isAuthenticated, user } = this.props.auth;
         let { isAdmin } = user;
         let authLinks = null;
@@ -166,7 +210,7 @@ class Sidebar extends React.Component {
                     style={{ textDecoration: 'none' }}
                     key={index}>
                     <MenuItem button key={route}>
-                        <ListItemIcon title={route.title}>
+                        <ListItemIcon title={route.title} classes={actionClasses}>
                             <Icon>{route.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={route.title} />
@@ -181,7 +225,7 @@ class Sidebar extends React.Component {
                     style={{ textDecoration: 'none' }}
                     key={index}>
                     <MenuItem button key={index}>
-                        <ListItemIcon title={route.title}>
+                        <ListItemIcon title={route.title} classes={actionClasses}>
                             <Icon>{route.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={route.title} />
@@ -196,7 +240,7 @@ class Sidebar extends React.Component {
                 style={{ textDecoration: 'none' }}
                 key={index}>
                 <MenuItem button key={route}>
-                    <ListItemIcon>
+                    <ListItemIcon classes={actionClasses}>
                         <Icon>{route.icon}</Icon>
                     </ListItemIcon>
                     <ListItemText primary={route.text} />
@@ -219,21 +263,22 @@ class Sidebar extends React.Component {
                 open={this.state.open}>
                 <div className={classes.toolbar}>
                     {/* type something here */}
+                    {/* <Typography>Bash</Typography> */}
                 </div>
-                <Divider />
+                <Divider/>
 
                 <MenuList>{isAuthenticated ? authLinks : guestLinks}</MenuList>
-                <Divider />
-                <List>
+                <Divider/>
+                {/* <List>
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
                         <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            <ListItemIcon classes={actionClasses}>
+                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
                     ))}
-                </List>
+                </List> */}
             </Drawer>
         );
     }

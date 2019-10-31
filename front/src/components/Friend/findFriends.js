@@ -12,22 +12,13 @@ import { Paper } from '@material-ui/core';
 import { Card, CardImg, CardBody, CardTitle } from 'reactstrap';
 
 // import { shadows } from '@material-ui/system';
-import {
-    Grid,
-    CardContent,
-    Typography,
-    CardHeader
-} from '@material-ui/core/';
-import ProfileImg from '../../assets/profile.png';
+import {Grid,CardContent,Typography} from '@material-ui/core/';
 import { fetchAllUsers, deleteUser } from '../../actions/user';
 import { fetchAllFriends } from '../../actions/friend';
+import ProfileImg from '../../assets/profile.png';
 import Icon from '@material-ui/core/Icon';
 import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions/notifications';
 import {deleteFriend} from '../../actions/friend';
-
-
-// import FriendButton from './Friend-Button';
-
 const styles = theme => ({
     card: {
         maxWidth: 345,
@@ -35,11 +26,14 @@ const styles = theme => ({
     },
     root: {
         flexGrow: 1,
+        paddingTop: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+
     },
     paper: {
         padding: theme.spacing(1),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color:"#181C1F",
     },
 });
 class Friends extends Component {
@@ -119,7 +113,7 @@ class Friends extends Component {
                     friendButton = (
                         <Button id="friendbutton" size="small" color="primary" disabled={this.state.CheckButton} onClick={() => this.makeFriendRequest(data._id)}>
                             Add Friend
-                            <Icon className={classes.rightIcon}>send</Icon>
+                            {/* <Icon className={classes.rightIcon}>send</Icon> */}
                         </Button>
                     );
                 }
@@ -170,7 +164,7 @@ class Friends extends Component {
                                 </CardContent>
                             </CardActionArea>
                             <CardActions>
-                            <Button size="small" color="primary">
+                            <Button size="small" href={`/user/${data._id}/profile`} color="primary">
                                 View Profile
                                 </Button>
                             {/* <FriendButton id={data._id} users={this.props.users} /> */}

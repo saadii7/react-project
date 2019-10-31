@@ -10,10 +10,19 @@ const EventSchema = new mongoose.Schema(
         location: {
             type: String
         },
+        lat:{
+            type:String
+        },
+        lng:{
+            type:String
+        },
         sport: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Sport',
             required: true
+        },
+        avatar: {
+            type: String
         },
         maker: {
             type: mongoose.Schema.Types.ObjectId,
@@ -23,12 +32,11 @@ const EventSchema = new mongoose.Schema(
         host: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Team',
-            required: true
+            // required: true
         },
         opponent: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Team',
-            required: true
         },
         name: {
             type: String,
@@ -40,7 +48,7 @@ const EventSchema = new mongoose.Schema(
             default: 'active' 
         },
         duration: {
-            type: Number
+            type: Number,
         },
         description: {
             type: String
@@ -58,6 +66,7 @@ const EventSchema = new mongoose.Schema(
         }
     },
     {
+        strict: false,
         timestamps: true
     }
 );

@@ -10,7 +10,9 @@ import eventReducer from './eventReducer';
 import usersReducer from './usersReducer';
 import notifications from './notifications';
 import friends from './friends';
+import event from './event';
 import players from './Players';
+import ground from './ground';
 export default combineReducers({
     errors: errorReducer,
     auth: authReducer,
@@ -18,8 +20,10 @@ export default combineReducers({
     user: userReducer,
     teams: teamReducer,
     event: eventReducer,
+    singleEvent:event,
     users: usersReducer,
     notifications:notifications,
     friends:friends,
     players:players,
+    ground:ground,
 });

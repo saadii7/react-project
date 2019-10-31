@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 // import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,9 +16,15 @@ import Avatar from '@material-ui/core/Avatar';
 import { Button } from '@material-ui/core';
 import { acceptFriendRequest } from '../../actions/friend';
 import socket from '../../socket';
-import {deleteNotification} from '../../actions/notifications';
+import { deleteNotification } from '../../actions/notifications';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
   text: {
     padding: theme.spacing(2, 2, 0),
   },
@@ -57,55 +63,65 @@ class Notifications extends React.Component {
   friendRequestHandler = (id, friendId, notificationId) => {
     // console.log('idkjandjan-------->', id,friendId)
     this.props.onAcceptFriendRequest(id, friendId, notificationId);
-    window.location = window.location
+    // window.location = window.location
   }
   deleteNotification = (id) => {
     // console.log('idkjandjan-------->', id,friendId)
     this.props.ondeleteNotification(id);
     // window.location = window.location
   }
-  // componentWillReceiveProps = (props) => {
-  //   // { console.log('NOtification data props------>', props) }
-  //   // this.setState({ notifications: props.notifications, user: props.user })
-  // }
+
   componentWillReceiveProps = props => {
+    { console.log('NOtification data props------>', props) }
     this.setState({
-        [this.state.notifications]: props.notifications
+      [this.state.notifications]: props.notifications
     });
-    this.userFilter(props)
-    // console.log('--------351531531->', props)
-};
+  };
   render() {
     const { classes } = this.props;
     return (
-      <React.Fragment>
-        <CssBaseline />
-        {/* {console.log('NOtification state data------>', this.state.notifications)} */}
-        {/* <Paper square className={classes.paper}> */}
-          <Typography className={classes.text} variant="h5" gutterBottom>
-            Inbox
-        </Typography>
-          <List className={classes.list}>
-            {this.props.notifications.map((notification) => {
+      <div>
+
+        <List className={classes.root}>
+          {
+            this.props.notifications.map((notification) => {
               if (this.props.auth.user.id !== notification.from) {
-                return(
-                <React.Fragment key={notification._id}>
-                  <ListItem alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar alt="Profile Picture" src={notification.user.avatar} />
-                    </ListItemAvatar>
-                    <ListItemText className={classes.inline} primary={notification.user.name} secondary={this.props.auth.user.name} />
-                    <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
-                    <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
-                  </ListItem>
-                  <Divider variant="inset" component="li" />
-                </React.Fragment>
-                )
+                return (
+                  <Paper>
+
+                    <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                        <Avatar alt="Profile Picture" src={notification.user.avatar} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={notification.user.name}
+                        // secondary={this.props.auth.user.name}
+                        secondary={
+                          <React.Fragment>
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              className={classes.inline}
+                              color="textPrimary"
+                            >
+                              {/* {" — I'll be in your neighborhood doing errands this…"} */}
+                              {this.props.auth.user.name}
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      />
+                      <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
+                      <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
+
+                    </ListItem>
+                  </Paper>
+                  // <Divider variant="inset" component="li" />
+                );
               }
-            })}
-          </List>
-        {/* </Paper> */}
-      </React.Fragment>
+            })
+          }
+        </List>
+      </div>
     );
   }
 }

@@ -59,7 +59,7 @@ class CreateTeam extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            teamImage: '',
+            avatar: '',
             name: '',
             Discription: '',
             sport: '',
@@ -94,23 +94,26 @@ class CreateTeam extends React.Component {
             name: this.state.name,
             Discription: this.state.Discription,
             sport: this.state.selectedSport,
-            captain: this.props.auth.user.id
+            captain: this.props.auth.user.id,
+            // image:this.state.teamImage
         };
-        this.props.onAddTeam(team);
-        // let props = this.props;
-        // if(e.target && e.target.image && e.target.image.files.length > 0){
-        //     var file = e.target.image.files[0];
-        //     var reader = new FileReader();
-        //     reader.onloadend = function() {
-        //         console.log('RESULT', reader.result)
-        //         this.state.teamImage = reader.result;
-        //         props.onAddTeam(team);;
-        //     }
-        //     reader.readAsDataURL(file);
-        //     console.log(team);
-        // }else{
-        //     this.props.onAddTeam(team);
-        // }
+        // this.props.onAddTeam(team);
+        let props = this.props;
+        if (e.target && e.target.image && e.target.image.files.length > 0) {
+            var file = e.target.image.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                console.log('RESULT', reader.result)
+                team.avatar = reader.result;
+                // props.updateUser(team);
+                props.onAddTeam(team);
+            }
+            reader.readAsDataURL(file);
+
+        } else {
+            // this.props.registerUser(user);
+                props.onAddTeam(team);
+        }
     };
     onSubmit = (e) => {
         e.preventDefault();
@@ -215,7 +218,7 @@ class CreateTeam extends React.Component {
                                 variant='outlined'>
                                 {this.props.sports.map(sport => (
                                     <option key={sport._id} value={sport._id}>
-                                        {sport.sportName}
+                                        {sport.name}
                                     </option>
                                 ))}
                             </TextField>

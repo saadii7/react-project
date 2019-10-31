@@ -1,7 +1,7 @@
 // authentication.js
 
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER,FORGOT_PASSWORD} from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
 
@@ -63,9 +63,38 @@ export const registerUser = (user, history) => dispatch => {
             // dispatch(setCurrentUser(decoded));
         })
         .catch(err => {
+            {console.log('auth log ----------->',err.response)}
                 dispatch({
                 type: GET_ERRORS,
-                payload: err.response.data
+                payload: err.response.data,
             });
         });
     }
+
+
+
+    export const forgotPassword = (email) => {
+        return dispatch => {
+            console.log('-------email------->', email)
+            return axios
+                .post('/auth/forgot',email)
+                .then(response => {
+                    dispatch(forgotPasswordSuccess(response.data));
+                    console.log(response.data);
+                })
+                .catch(err => {
+                    throw err,
+                    dispatch({
+                        type: GET_ERRORS,
+                        payload: err.response.data,
+                    });
+                });
+        };
+    };
+    
+    export const forgotPasswordSuccess = data => {
+        return {
+            type: FORGOT_PASSWORD,
+            payload: data
+        };
+    };

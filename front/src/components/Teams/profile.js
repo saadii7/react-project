@@ -22,6 +22,11 @@ const styles = theme => ({
     },
     root: {
         flexGrow: 1,
+        paddingTop: theme.spacing(3),
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+        width: '100%'
+
     },
     paper: {
         padding: theme.spacing(1),
@@ -34,24 +39,20 @@ class TeamProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teamId: this.props.match.params.id
+            teamId: this.props.match.params.id,
+            players:null
         }
     }
 
     componentDidMount() {
-        // console.log("------Team---Profile------>",this.props.match.params.id)
-        this.props.onFetchTeamPlayer(this.state.teamId)
-    };
-    componentWillReceiveProps(props) {
-        console.log('----------Profile-----props--->', props)
-    }
+        this.props.onFetchTeamPlayer(this.props.match.params.id)
+        console.log("------Team---Profile------>", this.props.match.params.id)
+    }   
     listView = (user, i) => {
         const { classes } = this.props;
         console.log("-------$$$$$$$$$$$---->", user)
         return (
             <div>
-                {/* <Grid item xs={3}> */}
-                {/* <Grid container spacing={3}> */}
                 <Grid item spacing={3} xs={9} >
                     <Paper className={classes.paper}>
                         <Card className={classes.card}>
@@ -84,27 +85,23 @@ class TeamProfile extends Component {
                         </Card></Paper>
                 </Grid>
                 <br />
-                {/* </Grid> */}
-                {/* </Grid> */}
             </div>
         );
     }
+    // setTimeout(function() {
+
+    // }, 1000);
+    
     render() {
         const { classes } = this.props;
-        // const teamList = this.props.user.team
-        // .map((tea) =>
-        // <li key={tea.team}>{tea.team}</li> 
-        // );
         return (
-            <div>
+            <div className={classes.root}>            
                 <Grid container spacing={3}>
-                    {/* <Grid item xs={12}> */}
-                    {this.props.players.map((user, i) =>
+                    {this.props.players.team_players.map((user, i) =>
                         this.listView(user, i)
                     )}
-                    {/* </Grid> */}
                 </Grid>
-            </div>
+            </div>    
         );
     }
 }

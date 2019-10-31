@@ -16,6 +16,7 @@ export const checkFriendship = (id) => {
       });
   };
 };
+
 export const makeFriendRequest = (id) => {
   return (dispatch) => {
     // console.log("check Frndship Id-------------->", id)
