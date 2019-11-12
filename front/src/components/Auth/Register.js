@@ -35,11 +35,12 @@ const styles = theme => ({
         width: 200,
     },
     paper: {
-        marginTop: 80,
+        marginTop: 40,
+        marginBottom: 40,
         position: 'absolute',
         width: theme.spacing.unit * 50,
         backgroundColor: '#181C1F',
-        opacity:(0.75),
+        opacity: (0.75),
         // backgroundColor: 'transparent',
         boxShadow: theme.shadows[10],
         padding: theme.spacing.unit * 4,
@@ -51,14 +52,14 @@ const styles = theme => ({
 
     },
     body: {
-        // backgroundImage: `url(${Background})`,
-        // marginTop: 20,
+        // display: "flex",
+        // flexDirection: "row",
+        // // justifyContent: space - between,
+        // alignItems: "stretch",
         width: "100%",
         height: 445,
         flex: 1,
         margin: 0
-
-        // height:502
     },
     color: {
         color: "#FB8122"
@@ -67,7 +68,7 @@ const styles = theme => ({
         // color:"#FB8122"
         borderColor: "#FB8122"
     },
-   
+
 });
 
 class Register extends Component {
@@ -77,7 +78,7 @@ class Register extends Component {
             user: {
                 name: '',
                 userName: '',
-                avatar:'',
+                avatar: '',
                 email: '',
                 password: '',
                 password_confirm: '',
@@ -116,7 +117,7 @@ class Register extends Component {
                 console.log('RESULT', reader.result)
                 user.avatar = reader.result;
                 // props.updateUser(team);
-                props.registerUser(user,props.history);
+                props.registerUser(user, props.history);
             }
             reader.readAsDataURL(file);
 
@@ -124,7 +125,7 @@ class Register extends Component {
             // this.props.registerUser(user);
             this.props.registerUser(user, this.props.history);
         }
-        
+
     };
 
     componentWillReceiveProps(nextProps) {
@@ -148,13 +149,11 @@ class Register extends Component {
         const { classes } = this.props;
 
         return (
-            <div
-                className={'container'}
+            <div container
                 className={classes.body}
-                // style={{ marginTop: '50px', width: '700px' }}
-                >
+            >
                 <Paper className={classes.paper}>
-                    <h2 className={classes.color} style={{ marginBottom: '40px' }}>Registration</h2>
+                    <h2 className={classes.color} align="center" style={{ marginBottom: '20px' }}>Registration</h2>
                     <UserForm
                         registration={true}
                         user={this.state.user}

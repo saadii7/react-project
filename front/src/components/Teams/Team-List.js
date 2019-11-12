@@ -25,6 +25,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { Typography, Button } from '@material-ui/core';
+import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions/notifications';
 
 import socket from '../../socket';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
@@ -67,8 +68,8 @@ const styles = theme => ({
     tableWrapper: {
         maxHeight: 440,
         overflow: 'auto',
-      },
-      paper:{
+    },
+    paper: {
         maxHeight: 500,
         position: 'absolute',
         width: 500,
@@ -77,7 +78,7 @@ const styles = theme => ({
         padding: theme.spacing(4),
         // outline: 'none',
         overflow: 'auto',
-      }
+    }
 });
 class TeamList extends Component {
     constructor(props) {
@@ -147,28 +148,44 @@ class TeamList extends Component {
         });
     }
     onSubmit = (id) => {
+        const data = {
+            to: id,
+            from: this.props.auth.user.id,
+            status: 'pending',
+            type: 'selection',
+            content: `${this.props.auth.user.name} added you in his team`
+        }
+        // console.log('makeFrinendRequestId-------->' + id)
+        this.props.onMakeFriendRequest(data);
+        // this.state.CheckButton = true
+
         const teamPlayers = {
             teamId: this.state.teamId,
             userId: id
         }
         this.props.onAddTeamPlayers(teamPlayers)
     }
-    profileHandler=(id)=>{
+    profileHandler = (id) => {
         // console.log("profileHandler----------ID-----Team---->", id);
-        return(<TeamProfile id={id}/>);
+        return (<TeamProfile id={id} />);
+    }
+    componentWillUpdate(props) {
+        console.log("profileHandler----------componentWillUpdate---->", props);
     }
     AddTeamPlayerHandler = (user, index) => {
         // console.log('meo----@@@')
         const { classes } = this.props;
         let playerButton;
-        let players = 10;
+        let players =10;
         // Player Button for team selection 
+        // let players = "5cea43277f615f1f5cc35675";        let players = "5cea43277f615f1f5cc35675";
+
         if (players.length > 0) {
             for (let i = 0; i < players.length; i++) {
-                if (user._id === players[i]._id) {
+                if (user._id === players) {
                     playerButton = (
                         <Button id="friendbutton" size="small" onClick={() => this.onSubmit(user._id)} className={classes.Button} color='secondary' variant="contained">
-                            Unfriend
+                            Remove
                         </Button>
                     );
                 } else {
@@ -219,79 +236,79 @@ class TeamList extends Component {
         return (
             <div>
                 <Paper className={classes.root}>
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Teams</TableCell>
-                                <TableCell align="right">Name</TableCell>
-                                <TableCell align="right">Captain</TableCell>
-                                <TableCell align="right">Sport</TableCell>
-                                <TableCell align="right">No of Players</TableCell>
-                                <TableCell align="right">Edit Team</TableCell>
-                                <TableCell align="right">Delete Team</TableCell>
-                                <TableCell align="right">Add Players</TableCell>
-                                <TableCell align="right">Profile</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {this.props.teams.teams.map((data, index) =>
-                                <TableRow className={classes.root} key={data.name}>
-                                    <TableCell component="th" scope="row">
-                                        <Avatar
-                                            alt='Remy Sharp'
-                                            src={data.avatar}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="right">{data.name}</TableCell>
-                                    <TableCell align="right">{data.name}</TableCell>
-                                    <TableCell align="right">Football</TableCell>
-                                    <TableCell align="right">{data.users.length}</TableCell>
-                                    <TableCell align="right">
-                                        <IconButton
-                                            className={classes.button}
-                                            key={index}
-                                            onClick={() => this.editModal(data)}
-                                            aria-label='Edit'>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton
-                                            className={classes.button}
-                                            aria-label='Delete'
-                                            onClick={e => {
-                                                this.deleteTeam(e, data._id);
-                                                this.refreshPage();
-                                            }}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
-                                            <AddIcon
-                                                key={index}
-                                                onClick={() => this.wrapperFunction(data._id)}
-                                                aria-label='Add' />
-                                        </Fab>
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Link to={`/teams/${data._id}/profile`}>
-                                            <Fab size="small" color="primary" className={classes.margin}>
-                                                <HomeIcon title={"Add"}>
-                                                    <Icon color="primary" />
-                                                </HomeIcon>
-                                            </Fab>
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell align="right"></TableCell>
-
+                    <div className={classes.tableWrapper}>
+                        <Table className={classes.table} stickyHeader>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Teams</TableCell>
+                                    <TableCell align="right">Name</TableCell>
+                                    <TableCell align="right">Captain</TableCell>
+                                    <TableCell align="right">Sport</TableCell>
+                                    <TableCell align="right">No of Players</TableCell>
+                                    <TableCell align="right">Edit Team</TableCell>
+                                    <TableCell align="right">Delete Team</TableCell>
+                                    <TableCell align="right">Add Players</TableCell>
+                                    <TableCell align="right">Profile</TableCell>
                                 </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {this.props.teams.teams.map((data, index) =>
+                                    <TableRow className={classes.root} key={data.name}>
+                                        <TableCell component="th" scope="row">
+                                            <Avatar
+                                                alt='Remy Sharp'
+                                                src={data.avatar}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="right">{data.name}</TableCell>
+                                        <TableCell align="right">{data.name}</TableCell>
+                                        <TableCell align="right">Football</TableCell>
+                                        <TableCell align="right">{data.users.length}</TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                className={classes.button}
+                                                key={index}
+                                                onClick={() => this.editModal(data)}
+                                                aria-label='Edit'>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                className={classes.button}
+                                                aria-label='Delete'
+                                                onClick={e => {
+                                                    this.deleteTeam(e, data._id);
+                                                    this.refreshPage();
+                                                }}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Fab size="small" color="primary" aria-label="add" className={classes.margin}>
+                                                <AddIcon
+                                                    key={index}
+                                                    onClick={() => this.wrapperFunction(data._id)}
+                                                    aria-label='Add' />
+                                            </Fab>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Link to={`/teams/${data._id}/profile`}>
+                                                <Fab size="small" color="primary" className={classes.margin}>
+                                                    <HomeIcon title={"Add"}>
+                                                        <Icon color="primary" />
+                                                    </HomeIcon>
+                                                </Fab>
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell align="right"></TableCell>
 
-                            )}
-                        </TableBody>
-                    </Table>
-                        </div>
+                                    </TableRow>
+
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </Paper>
                 <Modal
                     aria-labelledby='simple-modal-title'
@@ -348,6 +365,9 @@ const mapDispatchToProps = dispatch => {
         onCheckNotifications: (id) => {
             dispatch(checkNotifications([id], ['to']));
         },
+        onMakeFriendRequest: id => {
+            dispatch(makeFriendRequest(id));
+        }, 
 
     };
 };

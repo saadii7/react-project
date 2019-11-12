@@ -10,10 +10,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { fetchAllGrounds } from '../../actions/grounds';
 import AddGround from './Add_Grounds';
 import GroundList from './Gorunds_List';
-import TeamList from '../Teams/Team-List';
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
+import { Paper } from '@material-ui/core';
+import ground from '../../assets/ground2.jpg';
 
 function getModalStyle() {
     const top = 10;
@@ -30,10 +28,12 @@ function getModalStyle() {
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        // paddingTop: theme.spacing(3),
-        // paddingLeft: theme.spacing(3),
-        // paddingRight: theme.spacing(3),
-        // width: '100%'
+    },
+    background:{
+        maxWidth:"100%",
+        opacity:0.7,
+        backgroundImage: `url(${ground})`
+        
     },
     heading: {
         fontSize: theme.typography.pxToRem(23),
@@ -66,13 +66,7 @@ const styles = theme => ({
         maxWidth: 500,
         margin: `${theme.spacing(1)}px auto`,
         padding: theme.spacing(2),
-        // position: 'absolute',
-        // width: theme.spacing(110),
         backgroundColor: theme.palette.background.paper,
-        // boxShadow: theme.shadows[5],
-        // // overflow: 'scroll',
-        // padding: theme.spacing(4),
-        // outline: 'none'
     },
     modal: {
         justifyContent: 'space-around',
@@ -116,38 +110,47 @@ class GroundIndex extends Component {
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
-
-        return (
-            <div className={classes.root}>
-            <GroundList/>
-            {/* <TeamList/> */}
-                <div>
-                    <div>
-                        <Tooltip title='Add' aria-label='Add'>
-                            <Fab
-                                color='primary'
-                                onClick={this.openModal}
-                                className={classes.fab}>
-                                <AddIcon className={classes.color} />
-                            </Fab>
-                        </Tooltip>
-                    </div>
-                    <Modal
-                        aria-labelledby='simple-modal-title'
-                        aria-describedby='simple-modal-description'
-                        open={this.state.open}
-                        onClose={this.closeModal}
-                        center='true'>
-                        <div style={getModalStyle()} className={classes.paper}>
-                            <Typography variant='h6' id='modal-title'>
-                                {this.state.add && <p>Add New Ground</p>}
-                                {this.state.add && <AddGround />}
-                            </Typography>
+        if (this.props.auth.user.isAdmin === true) {
+            return (
+                <div className={classes.root}>
+                    {/* <div className={classes.background}> */}
+                        <GroundList />
+                        <div>
+                            <div>
+                                <Tooltip title='Add' aria-label='Add'>
+                                    <Fab
+                                        color='primary'
+                                        onClick={this.openModal}
+                                        className={classes.fab}>
+                                        <AddIcon className={classes.color} />
+                                    </Fab>
+                                </Tooltip>
+                            </div>
+                            <Modal
+                                aria-labelledby='simple-modal-title'
+                                aria-describedby='simple-modal-description'
+                                open={this.state.open}
+                                onClose={this.closeModal}
+                                center='true'>
+                                <div style={getModalStyle()} className={classes.paper}>
+                                    <Typography variant='h6' align="center" id='modal-title'>
+                                        {this.state.add && <p>Add New Ground</p>}
+                                        {this.state.add && <AddGround />}
+                                    </Typography>
+                                </div>
+                            </Modal>
                         </div>
-                    </Modal>
+                    </div>
+                // </div>
+            )
+        } else {
+            return (
+                <div className={classes.root}>
+                    <GroundList />
                 </div>
-            </div>
-        );
+            )
+        }
+
     }
 }
 const mapStateToProps = state => {

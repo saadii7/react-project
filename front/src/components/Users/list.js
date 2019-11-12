@@ -56,7 +56,7 @@ class UsersList extends Component {
         console.log('Modal Props-------->'+this.props.editModal)
         store.dispatch(fetchAllUsers());
     }
-    componentWillReceiveProps(props){
+    UNSAFE_componentWillReceiveProps(props){
         console.log('Modal Props-----2--->'+props.editModal)
     }
     refreshPage = () => {

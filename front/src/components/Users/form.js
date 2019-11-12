@@ -12,31 +12,34 @@ import classnames from 'classnames';
 
 const CssTextField = withStyles({
     root: {
-      '& label.Mui-focused': {
-        color: '#FB8122'
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: '#FB8122',
-          borderBlockWidth:20
+        '& label': {
+            color: '#FB8122'
         },
-        '&:hover fieldset': {
-          borderColor: 'white',
+        '& label.Mui-focused': {
+            color: '#FB8122'
         },
-        '&.Mui-focused fieldset': {
-          borderColor: 'white',
+        '& .MuiInput-underline:after': {
+            borderBottomColor: 'white',
         },
-      },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#FB8122',
+                borderBlockWidth: 20
+            },
+            '&:hover fieldset': {
+                borderColor: 'white',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'white',
+            },
+        },
     },
-  })(TextField);
+})(TextField);
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit * 2,
-        marginLeft: theme.spacing.unit,
-        color:"#FB8122"
+        marginTop: theme.spacing.unit * 2,
+        // color: "#000",
+        backgroundColor: "#FB8122"
 
     },
     input: {
@@ -71,7 +74,7 @@ class UserForm extends Component {
         console.log(this.props);
         // this.props.onGetUser(this.props.auth.user.id);
     }
-    componentWillReceiveProps = (props) => {
+    UNSAFE_componentWillReceiveProps = (props) => {
         this.setState({ user: props.user, registration: props.registration })
     }
     render() {
@@ -85,6 +88,7 @@ class UserForm extends Component {
                         type="text"
                         name="name"
                         label="Name"
+                        fullWidth
                         className={classnames('form-control form-control-lg', {
                             'is-invalid': errors.name,
                         })}
@@ -94,6 +98,7 @@ class UserForm extends Component {
                         variant="outlined"
                         InputProps={{
                             startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            style: { fontFamily: 'nunito', borderColor: "white", color: "white"}
                         }}
                     />
                     {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
@@ -104,6 +109,7 @@ class UserForm extends Component {
                         type="text"
                         name="userName"
                         label="Username"
+                        fullWidth
                         className={classnames('form-control form-control-lg', {
                             'is-invalid': errors.userName,
                         })}
@@ -113,6 +119,7 @@ class UserForm extends Component {
                         variant="outlined"
                         InputProps={{
                             startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            style: { fontFamily: 'nunito', borderColor: "white", color: "white" }
                         }}
                     />
                     {errors.userName && (<div className="invalid-feedback">{errors.userName}</div>)}
@@ -123,12 +130,14 @@ class UserForm extends Component {
                         type="file"
                         name="image"
                         label="image"
+                        fullWidth
                         onChange={this.inputChange}
                         value={this.state.user.avatar}
                         margin="normal"
                         variant="outlined"
                         InputProps={{
                             startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            style: { fontFamily: 'nunito', borderColor: "white", color: "white" }
                         }}
                     />
                 </div>
@@ -138,6 +147,7 @@ class UserForm extends Component {
                         type="email"
                         name="email"
                         label="Email"
+                        fullWidth
                         className={classnames('form-control form-control-lg', {
                             'is-invalid': errors.email,
                         })}
@@ -147,6 +157,7 @@ class UserForm extends Component {
                         variant="outlined"
                         InputProps={{
                             startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                            style: { fontFamily: 'nunito', borderColor: "white", color: "white" }
                         }}
                     />
                     {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
@@ -159,6 +170,7 @@ class UserForm extends Component {
                             type="password"
                             name="password"
                             label="Password"
+                            fullWidth
                             className={classnames('form-control form-control-lg', {
                                 'is-invalid': errors.password,
                             })}
@@ -168,6 +180,7 @@ class UserForm extends Component {
                             variant="outlined"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                style: { fontFamily: 'nunito', borderColor: "white", color: "white" }
                             }}
                         />
                         {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
@@ -181,6 +194,7 @@ class UserForm extends Component {
                             type="password"
                             name='password_confirm'
                             label="Confirm Password"
+                            fullWidth
                             className={classnames('form-control form-control-lg', {
                                 'is-invalid': errors.password_confirm,
                             })}
@@ -190,6 +204,7 @@ class UserForm extends Component {
                             variant="outlined"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start" >-</InputAdornment>,
+                                style: { fontFamily: 'nunito', borderColor: "white", color: "white" }
                             }}
                         />
                         {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
@@ -197,12 +212,12 @@ class UserForm extends Component {
                 }
 
                 <div className="form-group">
-                    <Button className={classes.button} type="submit" variant="outlined">
+                    <Button fullWidth className={classes.button} type="submit" variant="outlined">
                         Save
                     </Button>
-                    <Button className={classes.button} variant="outlined">
+                    {/* <Button className={classes.button} variant="outlined">
                         Reset Password
-                    </Button>
+                    </Button> */}
                 </div>
             </form>
         )

@@ -6,17 +6,12 @@ import { connect } from 'react-redux';
 
 // import { Home, AccountCircle, ZoomOutTwoTone } from '@material-ui/icons';
 import { MenuList, MenuItem, IconButton } from '@material-ui/core';
+import GroupIcon from '@material-ui/icons/Group';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Icon from '@material-ui/core/Icon';
-import red from '@material-ui/core/colors/red';
-import {Typography} from '@material-ui/core/';
 import TeamIndex from '../Teams/Index';
 import SportsIndex from '../Sports/Index';
 import EventIndex from '../Old-Events/index';
@@ -26,12 +21,22 @@ import FriendIndex from '../Friend/index';
 import Facebook from '../News/news';
 import GroundIndex from '../Grounds/Index';
 
-const drawerWidth = 240;
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStroopwafel } from '@fortawesome/free-solid-svg-icons';
 
+
+export const TeamIcon = () => (
+    <div>
+        Team Icon: <i className="fal fa-users-crown"></i>
+    </div>
+)
+
+const drawerWidth = 240;
 const styles = theme => ({
     root: {
         display: '100%',
-        color:"disable"
+        color: "disable"
     },
     icon: {
         margin: theme.spacing(2),
@@ -44,7 +49,7 @@ const styles = theme => ({
         color: "#FB8122",
     },
     drawer: {
-        
+
         // paddingTop:56,
         // backgroundColor:'#FB8122',
         width: drawerWidth,
@@ -52,7 +57,7 @@ const styles = theme => ({
         whiteSpace: 'nowrap'
     },
     drawerOpen: {
-        backgroundColor:'#181C1F',
+        backgroundColor: '#181C1F',
         width: drawerWidth,
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
@@ -60,7 +65,7 @@ const styles = theme => ({
         })
     },
     drawerClose: {
-        backgroundColor:'#181C1F',
+        backgroundColor: '#181C1F',
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen
@@ -76,33 +81,33 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingTop:75,
+        paddingTop: 75,
         ...theme.mixins.toolbar
     },
     root: {
         color: "#FB8122",
         '&$selected': {
-          color: '#ffffff',
+            color: '#ffffff',
         },
         '&:hover': {
             color: "#ffffff",
         },
-      },
-      selected: {},
+    },
+    selected: {},
 });
 
 const guestRoutes = [
     {
         link: '/news',
         title: 'Match Highlights',
-        icon: 'toys',
+        icon: "fab fa-youtube",
         component: Facebook,
-        
+
     },
     {
         link: '/teams/profile',
         title: 'Profile',
-        icon: 'toys',
+        icon: "fas fa-newspaper",
         component: TeamIndex
     }
 ];
@@ -111,70 +116,92 @@ const adminRoutes = [
     {
         link: '/teams',
         title: 'Teams',
-        icon: 'toll',
+        icon: "fas fa-users",
         component: TeamIndex
     },
     {
         link: '/sports',
         title: 'Sports',
-        icon: 'videogame_asset',
+        icon: "fas fa-volleyball-ball",
         component: SportsIndex
     },
     {
-        link: '/event',
+        link: '/friends',
+        title: 'Find Friends',
+        icon: "fas fa-user-friends",
+        component: FriendIndex
+    },
+    {
+        link: '/events',
         title: 'Events',
-        icon: 'videogame_asset',
-        component: EventIndex
+        icon: "far fa-calendar-alt",
+        component: EventIndex,
     },
     {
         link: '/users',
         title: 'Users',
-        icon: 'videogame_asset',
+        icon: "fas fa-users",
         component: UsersList
     },
     {
         link: '/news',
         title: 'Match Highlights',
-        icon: 'toys',
+        icon: "fab fa-youtube",
         component: Facebook,
-        
+
     },
     {
         link: '/grounds',
         title: 'Play Grounds',
-        icon: 'toys',
+        icon: "fas fa-map-marked-alt",
         component: GroundIndex,
-        
-        
     },
 ];
 const userRoutes = [
     {
         link: '/teams',
         title: 'Teams',
-        icon: 'toll',
-        component: TeamIndex,
-        backgroundColor:"primary"
+        icon: "fas fa-users",
+        component: TeamIndex
+    },
+    // {
+    //     link: '/sports',
+    //     title: 'Sports',
+    //     icon: "fas fa-volleyball-ball",
+    //     component: SportsIndex
+    // },
+    {
+        link: '/friends',
+        title: 'Find Friends',
+        icon: "fas fa-user-friends",
+        component: FriendIndex
     },
     {
         link: '/events',
         title: 'Events',
-        icon: 'videogame_asset',
+        icon: "far fa-calendar-alt",
         component: EventIndex,
     },
-    {
-        link: '/friends',
-        title: 'Find Friends',
-        icon: 'videogame_asset',
-        component: FriendIndex
-    },
+    // {
+    //     link: '/users',
+    //     title: 'Users',
+    //     icon: "fas fa-users",
+    //     component: UsersList
+    // },
     {
         link: '/news',
         title: 'Match Highlights',
-        icon: 'toys',
+        icon: "fab fa-youtube",
         component: Facebook,
-        
+
     },
+    {
+        link: '/grounds',
+        title: 'Play Grounds',
+        icon: "fas fa-map-marked-alt",
+        component: GroundIndex,
+    },
+
 ];
 class Sidebar extends React.Component {
     constructor(props) {
@@ -193,7 +220,7 @@ class Sidebar extends React.Component {
     componentDidMount() {
         this.setState({ open: this.props.open });
     }
-    componentWillReceiveProps = props => {
+    UNSAFE_componentWillReceiveProps = props => {
         this.setState({ open: props.open });
     };
     render() {
@@ -211,7 +238,7 @@ class Sidebar extends React.Component {
                     key={index}>
                     <MenuItem button key={route}>
                         <ListItemIcon title={route.title} classes={actionClasses}>
-                            <Icon>{route.icon}</Icon>
+                        <i className={route.icon}/>                            
                         </ListItemIcon>
                         <ListItemText primary={route.title} />
                     </MenuItem>
@@ -226,7 +253,7 @@ class Sidebar extends React.Component {
                     key={index}>
                     <MenuItem button key={index}>
                         <ListItemIcon title={route.title} classes={actionClasses}>
-                            <Icon>{route.icon}</Icon>
+                        <i className={route.icon}/>
                         </ListItemIcon>
                         <ListItemText primary={route.title} />
                     </MenuItem>
@@ -239,11 +266,11 @@ class Sidebar extends React.Component {
                 to={route.link}
                 style={{ textDecoration: 'none' }}
                 key={index}>
-                <MenuItem button key={route}>
-                    <ListItemIcon classes={actionClasses}>
-                        <Icon>{route.icon}</Icon>
+                <MenuItem button key={index}>
+                    <ListItemIcon title={route.title} classes={actionClasses}>
+                        <i className={route.icon}/>
                     </ListItemIcon>
-                    <ListItemText primary={route.text} />
+                    <ListItemText primary={route.title} />
                 </MenuItem>
             </Link>
         ));
@@ -265,20 +292,10 @@ class Sidebar extends React.Component {
                     {/* type something here */}
                     {/* <Typography>Bash</Typography> */}
                 </div>
-                <Divider/>
+                <Divider />
 
                 <MenuList>{isAuthenticated ? authLinks : guestLinks}</MenuList>
-                <Divider/>
-                {/* <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon classes={actionClasses}>
-                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List> */}
+                <Divider />
             </Drawer>
         );
     }

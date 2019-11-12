@@ -27,10 +27,8 @@ import socket from '../../socket';
 import Notifications from '../Header/notifications';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
 import { fetchAllUsers } from '../../actions/user';
-import Profile from '../Users/Profile';
-import notifications from '../Header/notifications';
-import Paper from '@material-ui/core/Paper';
-import Logo from '../../assets/logo1.png';
+// import Profile from '../Users/Profile';
+import Logo from '../../assets/slider-logo.png';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -198,12 +196,13 @@ class Navbar extends React.Component {
     //     store.dispatch(deleteNotificationSuccess(order));
     //   }
     componentDidMount() {
+        console.log('------------Navbar--------')
         let notifications = this.props.notifications;
         console.log('notifications' + notifications);
         console.log('Listening to notifications_for_' + this.props.auth.user.id);
         store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
         store.dispatch(fetchAllUsers());
-        // console.log('------------0-0-0-0---noti-----', this.props.notifications)
+        console.log('------------0-0-0-0---noti-----', this.props.notifications)
         socket.on('notifications_for_' + this.props.auth.user.id, (data) => {
             console.log('data-------notification------added', data)
             switch (data.action) {
@@ -234,7 +233,8 @@ class Navbar extends React.Component {
         this.setState({ open: this.props.open });
     }
 
-    componentWillReceiveProps = props => {
+    UNSAFE_componentWillReceiveProps = props => {
+        // store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
         this.setState({
             open: props.open,
             [this.state.notifications]: props.notifications
@@ -352,11 +352,11 @@ class Navbar extends React.Component {
             <React.Fragment>
                 <div className={classes.grow} />
                 <div className={classes.sectionDesktop}>
-                    <IconButton color='inherit'>
+                    {/* <IconButton color='inherit'>
                         <Badge badgeContent={4} color='secondary'>
                             <MailIcon />
                         </Badge>
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                         aria-owns={isRenderNotificationMenuOpen ? 'material-appbar' : undefined}
                         aria-haspopup='true'
@@ -416,7 +416,6 @@ class Navbar extends React.Component {
         return (
             <div>
                 <AppBar
-                    // color='#FF5900'
                     position='fixed'
                     className={classNames(classes.appBar, {
                         [classes.appBarShift]: this.state.open
@@ -433,7 +432,7 @@ class Navbar extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Link to='/'>
-                            <img height='70' width='200' src={Logo}/>
+                            <img height='60' width='100' src={Logo}/>
                         </Link>
                         {/* <Typography
                             component={Link}

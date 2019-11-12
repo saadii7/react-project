@@ -123,7 +123,7 @@ function ProductCategories(props) {
     return (
         <Container className={classes.root} component="section">
             <Typography variant="h4" marked="center" align="center" component="h2">
-                For all tastes and all desires
+            Play like a Champion Today
       </Typography>
 
             <Grid container className={classes.root}>

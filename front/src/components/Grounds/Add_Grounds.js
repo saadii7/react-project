@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import { fetchAllSports } from '../../actions/sports';
+import ground from '../../assets/ground2.jpg';
 
 
 const styles = theme => ({
@@ -117,6 +118,7 @@ class AddGrounds extends React.Component {
                         type='text'
                         name='name'
                         label='Ground Name'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.name}
                         onChange={this.handleInputChange}
@@ -146,6 +148,7 @@ class AddGrounds extends React.Component {
                         type='file'
                         name='image'
                         label='Ground Image'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.image}
                         onChange={this.handleInputChange}
@@ -167,6 +170,7 @@ class AddGrounds extends React.Component {
                         type='text'
                         name='description'
                         label='Description'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.Description}
                         onChange={this.handleInputChange}
@@ -174,19 +178,25 @@ class AddGrounds extends React.Component {
                         variant='outlined'
                     />
                 </div>
-                <GooglePlacesAutocomplete
-                    onSelect={console.log}
-                    onSelect={({ description }) => (
-                        this.location_address(description),
-                        this.setState({ location: description })
-                    )}
-                />
+                <div className='form-group'>
+                    <GooglePlacesAutocomplete
+                        className={classes.textField}
+                        loader={<img src={ground} />}
+                        inputStyle={{ variant: "outlined", width: "100%", height: 50,  borderColor: '#181C1F',borderWidth: 5 }}
+                        onSelect={console.log}
+                        onSelect={({ description }) => (
+                            this.location_address(description),
+                            this.setState({ location: description })
+                        )}
+                    />
+                </div>
                 < div className='form-group'>
                     <div>
                         <TextField
                             // id=''
                             select
                             label='Sports'
+                            fullWidth
                             className={classes.textField}
                             value={this.state.selectedSport}
                             onChange={e =>

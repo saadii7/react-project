@@ -67,7 +67,7 @@ class EditProfile extends Component {
     componentDidMount() {
         this.props.onGetUser(this.props.auth.user.id);
     }
-    componentWillReceiveProps = (props) => {
+    UNSAFE_componentWillReceiveProps = (props) => {
         this.setState({ user: props.user })
     }
     render() {

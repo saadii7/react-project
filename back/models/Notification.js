@@ -19,7 +19,7 @@ const Schema = new mongoose.Schema(
         },
         type: {
             type: String,
-            enum : ['friendship', 'admission'],
+            enum : ['friendship', 'admission','selection'],
             required: true
         },
         data:{

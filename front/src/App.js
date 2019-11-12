@@ -17,6 +17,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Navbar from './components/Header/header';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
+import Reset from './components/Auth/Reset';
 import Home from './components/Home/Home';
 import Profile from './components/Users/Profile';
 import editProfile from './components/Users/edit';
@@ -40,7 +41,9 @@ import MapContainer from './components/Events/FullEvent';
 import User_Profile from './components/Users/User_Profile';
 import GroundIndex from './components/Grounds/Index';
 import GroundList from './components/Grounds/Gorunds_List';
-
+import Reset_Password from './components/Auth/Reset_Password';
+import Video from './components/Video/Video';
+import Terms from './components/Terms';
 
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -126,8 +129,28 @@ class App extends Component {
                             />
                             <Route
                                 exact
+                                path='/reset'
+                                component={Reset}
+                            />
+                            <Route
+                                exact
+                                path='/reset/:token'
+                                component={Reset_Password}
+                            />
+                            <Route
+                                exact
+                                path='/:url/video'
+                                component={Video}
+                            />
+                            <Route
+                                exact
                                 path='/Error404'
                                 component={Error404}
+                            />
+                             <Route
+                                exact
+                                path='/Terms'
+                                component={Terms}
                             />
                             <Route
                                 exact

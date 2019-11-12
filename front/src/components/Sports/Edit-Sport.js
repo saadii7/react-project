@@ -55,7 +55,7 @@ class EditSport extends React.Component {
 
         this.setState({ sport: props.sport });
     }
-    componentWillReceiveProps = props => {
+    UNSAFE_componentWillReceiveProps = props => {
         console.log('-------2--->',props);
         this.setState({ sport: props.sport });
     };

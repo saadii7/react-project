@@ -1,7 +1,7 @@
 // authentication.js
 
 import axios from 'axios';
-import { GET_ERRORS, SET_CURRENT_USER,FORGOT_PASSWORD} from './types';
+import { GET_ERRORS, SET_CURRENT_USER,FORGOT_PASSWORD,RESET_PASSWORD} from './types';
 import setAuthToken from '../setAuthToken';
 import jwt_decode from 'jwt-decode';
 
@@ -83,11 +83,11 @@ export const registerUser = (user, history) => dispatch => {
                     console.log(response.data);
                 })
                 .catch(err => {
-                    throw err,
-                    dispatch({
-                        type: GET_ERRORS,
-                        payload: err.response.data,
-                    });
+                    throw err
+                    // dispatch({
+                        //     type: GET_ERRORS,
+                        //     payload: err.response.data,
+                        // });
                 });
         };
     };
@@ -95,6 +95,31 @@ export const registerUser = (user, history) => dispatch => {
     export const forgotPasswordSuccess = data => {
         return {
             type: FORGOT_PASSWORD,
+            payload: data
+        };
+    };
+    export const PasswordReset = (token , password) => {
+        return dispatch => {
+            console.log('-------password------->',token,password)
+            return axios
+                .post(`/auth/reset/${token}`,password)
+                .then(response => {
+                    dispatch(PasswordResetSuccess(response.data));
+                    console.log(response.data);
+                })
+                .catch(err => {
+                    throw err,
+                    dispatch({
+                            type: GET_ERRORS,
+                            payload: err.response.data,
+                        });
+                });
+        };
+    };
+    
+    export const PasswordResetSuccess = data => {
+        return {
+            type: RESET_PASSWORD,
             payload: data
         };
     };

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
+import store from '../../store';
 import Divider from '@material-ui/core/Divider';
 // import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,6 +19,7 @@ import { acceptFriendRequest } from '../../actions/friend';
 import socket from '../../socket';
 import { deleteNotification } from '../../actions/notifications';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
 
 const styles = theme => ({
   root: {
@@ -70,8 +72,10 @@ class Notifications extends React.Component {
     this.props.ondeleteNotification(id);
     // window.location = window.location
   }
-
-  componentWillReceiveProps = props => {
+  componentDidMount(){
+    store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
+  }
+  UNSAFE_componentWillReceiveProps = props => {
     { console.log('NOtification data props------>', props) }
     this.setState({
       [this.state.notifications]: props.notifications
@@ -85,7 +89,28 @@ class Notifications extends React.Component {
         <List className={classes.root}>
           {
             this.props.notifications.map((notification) => {
+              let button;
               if (this.props.auth.user.id !== notification.from) {
+                if (notification.type === 'selection') {
+                  return (
+                    button = (
+                      <React.Fragment>>
+                      <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
+                        <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
+                      </React.Fragment>
+                    )
+                  )
+                } else {
+                  return (
+
+                    button = (
+                      <React.Fragment>>
+                    <Button variant="contained" color="primary" className={classes.button} >View</Button>
+                        {/* <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button> */}
+                      </React.Fragment>
+                    )
+                  )
+                }
                 return (
                   <Paper>
 
@@ -110,9 +135,7 @@ class Notifications extends React.Component {
                           </React.Fragment>
                         }
                       />
-                      <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
-                      <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
-
+                      {this.button}
                     </ListItem>
                   </Paper>
                   // <Divider variant="inset" component="li" />

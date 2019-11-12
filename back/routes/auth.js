@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
-
+var async = require('async');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const crypto = require("crypto");
@@ -157,11 +157,11 @@ router.post('/forgot', function (req, res, next) {
         },
         function (token, user, done) {
             var smtpTransport = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
+                service: 'Gmail',
+                // port: 587,
                 auth: {
-                    user: 'ottis.gorczany@ethereal.email',
-                    pass: 'yXFZaaHAeENWRT9uRe'
+                    user: 'asad4572@gmail.com',
+                    pass: 'Oldspot9827'
                 }
             });
             var mailOptions = {
@@ -170,7 +170,7 @@ router.post('/forgot', function (req, res, next) {
                 subject: 'GameOn Password Reset',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                    'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                    'http://' + 'localhost:3000' + '/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
             smtpTransport.sendMail(mailOptions, function (err) {
@@ -196,6 +196,7 @@ router.get('/reset/:token', function (req, res) {
 });
 
 router.post('/reset/:token', function (req, res) {
+    console.log('-----forgot------->>>',req.body)
     async.waterfall([
         function (done) {
             User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
@@ -207,7 +208,6 @@ router.post('/reset/:token', function (req, res) {
                     user.setPassword(req.body.password, function (err) {
                         user.resetPasswordToken = undefined;
                         user.resetPasswordExpires = undefined;
-
                         user.save(function (err) {
                             req.logIn(user, function (err) {
                                 done(err, user);
@@ -222,15 +222,15 @@ router.post('/reset/:token', function (req, res) {
         },
         function (user, done) {
             var smtpTransport = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
+                service: 'Gmail',
+                // port: 587,
                 auth: {
-                    user: 'ottis.gorczany@ethereal.email',
-                    pass: 'yXFZaaHAeENWRT9uRe'
+                    user: 'asad4572@gmail.com',
+                    pass: ''
                 }
             });
             var mailOptions = {
-                to: user.email,
+                to: 'asad4572@gmail.com',
                 from: 'learntocodeinfo@mail.com',
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +

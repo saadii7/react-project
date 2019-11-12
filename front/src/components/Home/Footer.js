@@ -133,10 +133,10 @@ export default function AppFooter() {
             </Typography>
               <ul className={classes.list}>
                 <li className={classes.listItem}>
-                  <Link href="/premium-themes/onepirate/terms/">Terms</Link>
+                  <Link href="/Terms">Terms</Link>
                 </li>
                 <li className={classes.listItem}>
-                  <Link href="/premium-themes/onepirate/privacy/">Privacy</Link>
+                  <Link href="/Terms">Privacy</Link>
                 </li>
               </ul>
             </Grid>

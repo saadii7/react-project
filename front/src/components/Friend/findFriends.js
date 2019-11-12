@@ -3,21 +3,18 @@ import { connect } from 'react-redux';
 import store from '../../store';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-// import Avatar from '@material-ui/core/Avatar';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import { Paper } from '@material-ui/core';
-import { Card, CardImg, CardBody, CardTitle } from 'reactstrap';
-
-// import { shadows } from '@material-ui/system';
+import { Card} from 'reactstrap';
 import {Grid,CardContent,Typography} from '@material-ui/core/';
-import { fetchAllUsers, deleteUser } from '../../actions/user';
+import { deleteUser } from '../../actions/user';
 import { fetchAllFriends } from '../../actions/friend';
 import ProfileImg from '../../assets/profile.png';
 import Icon from '@material-ui/core/Icon';
-import { checkFriendship, makeFriendRequest, endFriendship } from '../../actions/notifications';
+import {makeFriendRequest} from '../../actions/notifications';
 import {deleteFriend} from '../../actions/friend';
 const styles = theme => ({
     card: {

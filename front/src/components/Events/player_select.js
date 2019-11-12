@@ -84,7 +84,7 @@ class FullScreenDialog extends Component {
         this.props.onAddPlayers(this.state.eventId,team)
     }
 
-    componentWillReceiveProps(props) {
+    UNSAFE_componentWillReceiveProps(props) {
         // this.userFilter(props)
         // console.log("--------------ndsfkjbsdfhkjsb kjrhkfs,jgkjs-------->", props.players.Non_faulty_players)
         this.setState({ players_list: props.players.Non_faulty_players });
