@@ -14,7 +14,8 @@ import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing()
+        margin: theme.spacing(),
+        float: 'right'
     },
     input: {
         display: 'none'
@@ -100,8 +101,8 @@ class AddEvent extends React.Component {
         this.props.onFetchMyTeams([this.props.auth.user.id], ['captain'])
 
     }
-    reloadHandler(){
-        window.location.reload();   
+    reloadHandler() {
+        window.location.reload();
     }
     location_address = (location) => {
         console.log('Successfully got latitude and longitude-----###', location)
@@ -130,6 +131,7 @@ class AddEvent extends React.Component {
                         type='text'
                         name='eventName'
                         label='Event Name'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.eventName}
                         onChange={this.handleInputChange}
@@ -143,6 +145,7 @@ class AddEvent extends React.Component {
                         type='datetime-local'
                         name='date'
                         label='Event Date'
+                        fullWidth
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true
@@ -158,6 +161,7 @@ class AddEvent extends React.Component {
                         id='outlined-name'
                         type='text'
                         name='time'
+                        fullWidth
                         label='Event Duration'
                         className={classes.textField}
                         InputLabelProps={{
@@ -175,6 +179,7 @@ class AddEvent extends React.Component {
                         type='file'
                         name='eventImage'
                         label='Event Image'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.eventImage}
                         onChange={this.handleInputChange}
@@ -198,6 +203,7 @@ class AddEvent extends React.Component {
                         type='text'
                         name='Discription'
                         label='Discription'
+                        fullWidth
                         className={classes.textField}
                         value={this.state.Discription}
                         onChange={this.handleInputChange}
@@ -207,6 +213,7 @@ class AddEvent extends React.Component {
                 </div>
                 <GooglePlacesAutocomplete
                     onSelect={console.log}
+                    fullWidth
                     onSelect={({ description }) => (
                         this.location_address(description),
                         this.setState({ location: description })
@@ -230,6 +237,7 @@ class AddEvent extends React.Component {
                             id='outlined-select-currency-native'
                             select
                             label='Sports'
+                            fullWidth
                             className={classes.textField}
                             value={this.state.selectedSport}
                             onChange={e =>

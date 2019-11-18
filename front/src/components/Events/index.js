@@ -60,16 +60,16 @@ const styles = theme => ({
         },
     },
     modal: {
-        display: 'flex',
+        // display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
     paper: {
-        overflow: 'auto',
-        maxHeight: 500,
+        // overflow: 'auto',
+        // maxHeight: 700,
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
+        // border: '2px solid #000',
+        // boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
 
@@ -125,7 +125,7 @@ class EventIndex extends Component {
                     }}
                 >
                     <Fade in={this.state.open}>
-                        <div className={classes.paper}>
+                        <div>
                             <Typography variant='h6' id='modal-title'>
                                 {this.state.add && <p> Create Event</p>}
                                 {this.state.add && <AddEvent />}

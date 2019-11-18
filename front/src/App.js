@@ -45,6 +45,9 @@ import Reset_Password from './components/Auth/Reset_Password';
 import Video from './components/Video/Video';
 import Terms from './components/Terms';
 
+// import { checkNotifications} from './actions/notifications';
+
+
 if (localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
     const decoded = jwt_decode(localStorage.jwtToken);
@@ -86,7 +89,9 @@ class App extends Component {
     handleDrawerClose = () => {
         this.setState({ open: false });
     };
-
+    // componentDidMount(){
+    //     store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
+    // }
     render() {
         const PrivateRoute = ({ component: Component, ...rest }) => (
             <Route

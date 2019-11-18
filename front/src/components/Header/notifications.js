@@ -20,6 +20,7 @@ import socket from '../../socket';
 import { deleteNotification } from '../../actions/notifications';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { checkNotifications, CheckSocketNotifications, deleteNotificationSuccess } from '../../actions/notifications';
+import ProfileImg from '../../assets/profile.png';
 
 const styles = theme => ({
   root: {
@@ -49,7 +50,8 @@ const styles = theme => ({
     display: 'inline',
   },
   button: {
-    marginLeft: theme.spacing(4),
+    marginLeft: theme.spacing(0.5),
+    display: "flex"
   },
 
 });
@@ -70,9 +72,8 @@ class Notifications extends React.Component {
   deleteNotification = (id) => {
     // console.log('idkjandjan-------->', id,friendId)
     this.props.ondeleteNotification(id);
-    // window.location = window.location
   }
-  componentDidMount(){
+  componentDidMount() {
     store.dispatch(checkNotifications([this.props.auth.user.id], ['to']));
   }
   UNSAFE_componentWillReceiveProps = props => {
@@ -81,86 +82,112 @@ class Notifications extends React.Component {
       [this.state.notifications]: props.notifications
     });
   };
-  render() {
+  listView(notification) {
     const { classes } = this.props;
-    return (
-      <div>
+    let img;
+    if (notification.user._id !== this.props.auth.user.id) {
+      if (notification.user.avatar && notification.user.avatar.length > 0) {
+        img = notification.user.avatar
+        // img = ProfileImg
+      } else {
+        img = ProfileImg
+      }
+      if (this.props.auth.user.id !== notification.from) {
+        if (notification.type === 'selection') {
+          return (
+            <Paper>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar alt="Profile Picture" src={img} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={notification.user.name}
+                  // secondary={this.props.auth.user.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                      >
+                        {"Team selection"}
+                        {/* {this.props.auth.user.name} */}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <Button color="primary" className={classes.button} >View</Button>
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </Paper>
+          )
+        } else {
+          return (
+            <Paper>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar alt="Profile Picture" src={img} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={notification.user.name}
+                  // secondary={this.props.auth.user.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                      >
+                        {"Friendship"}
+                        {/* {this.props.auth.user.name} */}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                {/* <React.Fragment> */}
 
-        <List className={classes.root}>
-          {
-            this.props.notifications.map((notification) => {
-              let button;
-              if (this.props.auth.user.id !== notification.from) {
-                if (notification.type === 'selection') {
-                  return (
-                    button = (
-                      <React.Fragment>>
-                      <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
-                        <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
-                      </React.Fragment>
-                    )
-                  )
-                } else {
-                  return (
+                <Button variant="contained" color="primary" className={classes.button} onClick={() => this.friendRequestHandler(this.props.auth.user.id, notification.from, notification._id)}>Accept</Button>
+                <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button>
+                {/* </React.Fragment> */}
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </Paper>
 
-                    button = (
-                      <React.Fragment>>
-                    <Button variant="contained" color="primary" className={classes.button} >View</Button>
-                        {/* <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteNotification(notification._id)}>Cancel</Button> */}
-                      </React.Fragment>
-                    )
-                  )
-                }
-                return (
-                  <Paper>
 
-                    <ListItem alignItems="flex-start">
-                      <ListItemAvatar>
-                        <Avatar alt="Profile Picture" src={notification.user.avatar} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={notification.user.name}
-                        // secondary={this.props.auth.user.name}
-                        secondary={
-                          <React.Fragment>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.inline}
-                              color="textPrimary"
-                            >
-                              {/* {" — I'll be in your neighborhood doing errands this…"} */}
-                              {this.props.auth.user.name}
-                            </Typography>
-                          </React.Fragment>
-                        }
-                      />
-                      {this.button}
-                    </ListItem>
-                  </Paper>
-                  // <Divider variant="inset" component="li" />
-                );
-              }
-            })
-          }
-        </List>
-      </div>
-    );
+          )
+        }
+
+      }
+    }
   }
-}
-const mapStateToProps = state => ({
-  auth: state.auth,
-  notifications: state.notifications,
+    render() {
+      const { classes } = this.props;
+      return (
+        <div>
+          <List className={classes.root}>
+            {
+              this.props.notifications.map((notification) => this.listView(notification))
+            }
+          </List>
+        </div>
+      );
+    }
+  }
+  const mapStateToProps = state => ({
+    auth: state.auth,
+    notifications: state.notifications,
 
-});
-const mapDispatchToProps = dispatch => {
-  return {
-    onAcceptFriendRequest: (id, friendId, notificationId) => {
-      dispatch(acceptFriendRequest(id, friendId, notificationId));
-    },
-    ondeleteNotification: (id) => {
-      dispatch(deleteNotification(id));
-    },
+  });
+  const mapDispatchToProps = dispatch => {
+    return {
+      onAcceptFriendRequest: (id, friendId, notificationId) => {
+        dispatch(acceptFriendRequest(id, friendId, notificationId));
+      },
+      ondeleteNotification: (id) => {
+        dispatch(deleteNotification(id));
+      },
+    };
   };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(Notifications)));
+  export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(withRouter(Notifications)));
